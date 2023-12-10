@@ -23,3 +23,9 @@ Once installed, edit the NPA Core's _appConfig.json_ file like this:
     }
 
 so that NPA can load these plugins.
+
+Start the NPA server with the default application with a command-line like:
+
+    $>node app.js --application default --port 9080
+
+Then open your browser on url http://localhost:9080/uiTools/
