@@ -1,0 +1,46 @@
+{
+    "id":"navBar_01",
+    "version": "1.0.0",
+    "type": "NavBar",
+    "configuration": {
+        "icon": "/uiTools/img/silk/application_view_tile.png",
+        "applicationName": "NPA UI Tools example",
+        "homeRef": "/uiTools",
+        "menus": [
+        	{
+        		"id": "menu1",
+        		"label": "",
+        		"actionId": "menu1",
+        		"tooltip": "save",
+		        "icon": "/uiTools/img/silk/disk.png"
+        	},
+        	{
+        		"id": "menu2",
+        		"label": "Menu 2",
+        		"items": [
+        			{
+        				"id": "menu21",
+		        		"label": "Menu 2.1",
+		        		"actionId": "menu21",
+		        		"icon": "/uiTools/img/silk/cog_edit.png"
+        			},
+        			{
+        				"id": "menu22",
+		        		"label": "Menu 2.2",
+		        		"actionId": "menu22"
+        			},
+        			{
+        				"type": "separator"
+        			},
+        			{
+        				"id": "menu23",
+		        		"label": "Menu 2.3",
+		        		"actionId": "menu23",
+        				"tooltip": "whatever!",
+		        		"icon": "/uiTools/img/silk/page_white_edit.png"
+        			}
+        		]
+        	}
+        ]
+    }
+}

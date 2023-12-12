@@ -1,0 +1,7 @@
+{
+    "id":"notifier_01",
+    "version": "1.0.0",
+    "type": "Notifier",
+    "configuration": {
+    }
+}

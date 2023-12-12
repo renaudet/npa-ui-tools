@@ -11,17 +11,18 @@
 		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
 	    <meta name='viewport' content='width=device-width, initial-scale=1'>
 		<link rel="icon" type="image/png" href="/img/tango/16x16/mimetypes/x-office-presentation.png?version=1.0"/>
+		<link href="/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/npaUiTheme.css" rel="stylesheet">
 		<title>NPA UI Tools test page</title>
 	</head>
 	<body>
-		<h2>Hello, from NPA UI Tools</h2>
-		<div id="myComponent" class="npaUi" data-config="myComponentConfig.json"></div>
+		<div id="navBarPlaceholder" class="npaUi" data-config="/uiTools/sample/navBarConfig.json"></div>
+		<div id="cardPlaceholder" class="npaUi" data-config="/uiTools/sample/cardConfig.json"></div>
+		<div id="notifierPlaceholder" class="npaUi" data-config="/uiTools/sample/notifierConfig.json"></div>
+		
 		<script src="/js/jquery-3.6.3.min.js"></script>
+		<script src="/js/bootstrap.bundle.min.js"></script>
 		<script src="/uiTools/js/npaUiCore.js"></script>
-		<script>
-$(document).ready(function(){
-	npaUi.render();
-});
-		</script>
+		<script src="/uiTools/js/index.js"></script>
 	</body>
 </html>
