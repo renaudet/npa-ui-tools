@@ -1,5 +1,5 @@
 /*
- * npaUtil.js - NPA plugin adapter class
+ * npaUtil.js - NPA plugin adapter class for external installation site
  * Copyright 2023 Nicolas Renaudet - All rights reserved
  */
 

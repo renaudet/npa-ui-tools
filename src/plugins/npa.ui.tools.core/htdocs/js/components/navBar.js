@@ -4,6 +4,7 @@
  */
  
 class NavBar extends NpaUiComponent{
+	actionIdToItem = {};
 	render(){
 		let html = '';
 		let style='padding-top: 0px;padding-bottom: 0px;padding-left: 5px;margin-bottom: 3px;';
@@ -22,7 +23,7 @@ class NavBar extends NpaUiComponent{
 		this.generateNavBarMenu(function(){
 			$('.npa-navbar-menu').on('click',function(){
 				let actionId = $(this).data('actionid');
-				alert('Triggering action '+actionId);
+				npaUi.fireEvent(actionId,navBar.actionIdToItem[actionId]);
 			});
 		});
 	}
@@ -52,6 +53,7 @@ class NavBar extends NpaUiComponent{
 					html += '<hr class="dropdown-divider">';
 					html += '</li>';
 				}else{
+					this.actionIdToItem[item.actionId] = item;
 					html += '<li id="'+item.id+'">';
 					html += '<a class="dropdown-item npa-navbar-menu" href="#" data-actionid="'+item.actionId+'">';
 					if(typeof item.icon!='undefined'){
@@ -69,6 +71,7 @@ class NavBar extends NpaUiComponent{
 			html += '</ul>';
 			html += '</li>';
 		}else{
+			this.actionIdToItem[menuConfig.actionId] = menuConfig;
 			html += '<li id="'+menuConfig.id+'" class="nav-item">';
 			html += '<a class="nav-link npa-navbar-menu" href="#" aria-current="page" data-actionid="'+menuConfig.actionId+'">';
 			if(typeof menuConfig.icon!='undefined'){

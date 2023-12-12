@@ -45,6 +45,38 @@ jQuery.loadCss = function (cssUrl, callback){
     });
 }
 
+function makeRESTCall(action,uri,params,onSuccess,onError){
+	$.ajax(
+	   {
+	      url        : uri,
+	      type       : action,
+	      dataType   : 'json',
+	      contentType: 'application/json',
+	      success    : function(){},
+	      data       : (action=='POST' || action=='PUT')?JSON.stringify(params):null
+	   }
+	)
+	.done(function (response) {
+		onSuccess(response);
+	})
+	.fail(function(jqXHR, textStatus) {
+		console.log('makeRESTCall#fail() textStatus='+textStatus);
+		var errorMsg = jqXHR.responseText;
+		if(jqXHR.status!=200){
+			errorMsg = jqXHR.statusText;
+		}
+		if(onError){
+			onError({"message": errorMsg,"httpStatus": jqXHR.status});
+		}else{
+			if(showError){
+				showError('Error invoking "'+uri+'": '+errorMsg);
+			}else{
+				console.log('Error invoking "'+uri+'": '+errorMsg);
+			}
+		}
+	});
+}
+
 function loadDeps(depArray,then){
 	var jsonResources = [];
 	var internalLoadDep = function(depLst,index,onceDone){
@@ -103,6 +135,7 @@ class NpaUiComponentProxy {
 npaUi = {
 	componentCache: {},
 	componentInstances: {},
+	actionHandlers: {},
 	loadingComponent: 0,
     render: function(){
         $('.npaUi').each(function(){
@@ -159,5 +192,16 @@ npaUi = {
 	},
 	onComponentLoaded: function(){
 		console.log('NPA UI runtime: all components loaded!');
+	},
+	registerActionHandler: function(actionId,handler){
+		this.actionHandlers[actionId] = handler;
+	},
+	fireEvent: function(actionId,event){
+		let handler = this.actionHandlers[actionId];
+		if(typeof handler!='undefined'){
+			try{
+				handler.handleEvent(event);
+			}catch(t){}
+		}
 	}
 }
