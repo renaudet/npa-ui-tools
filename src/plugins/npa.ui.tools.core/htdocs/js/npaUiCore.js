@@ -118,76 +118,105 @@ class NpaUiComponent {
 		this.id = id;
 		this.config = configuration;
 	}
+	initialize(then){
+		if(then){
+			then();
+		}
+	}
 	render(){
 		console.log('NpaUiComponent#render() was called');
 	}
 }
 
 class NpaUiComponentProxy {
-	constructor(id,configuration){
+	constructor(namespace,type,id,configuration){
 		let instance = null;
-		let toEval = 'instance = new '+configuration.type+'(id,configuration);';
+		let toEval = 'instance = new '+namespace+'.'+type+'(id,configuration);';
 		eval(toEval);
 		return instance;
 	}
 }
 
+// default namespace declaration
+npaUiCore = {}
+
 npaUi = {
-	componentCache: {},
 	componentInstances: {},
+	componentByDivId: {},
 	actionHandlers: {},
 	loadingComponent: 0,
     render: function(){
-        $('.npaUi').each(function(){
-			npaUi.loadingComponent++;
-            let c = $(this);
-            console.log('rendering component #'+c.attr('id'));
-            let configFileUri = c.data('config');
-            console.log('configuration file: '+configFileUri);
-            $.loadJson(configFileUri,function(json){
-				console.log(json);
-				let cachedComponent = npaUi.componentCache[json.type];
-				if(typeof cachedComponent!='undefined'){
-					npaUi.loadingComponent--;
-					npaUi.componentInstances[json.id] = new NpaUiComponentProxy(c.attr('id'),json);
-					npaUi.componentInstances[json.id].render();
-				}else{
-					npaUi.loadComponent(json.type,json.version,function(){
-						npaUi.componentInstances[json.id] = new NpaUiComponentProxy(c.attr('id'),json);
-						npaUi.componentInstances[json.id].render();
-						if(npaUi.loadingComponent==0){
-							npaUi.onComponentLoaded();
-						}
+		this.loadingComponent = $('.npaUi').length;
+		$('.npaUi').each(function(index,element){
+			let c = $(this);
+			var divId = c.attr('id');
+            console.log('rendering component #'+divId);
+            let cachedComponent = npaUi.componentByDivId[divId];
+            if(typeof cachedComponent=='undefined'){
+				console.log('no cached component found. Loading configuration...');
+	            let configFileUri = c.data('config');
+	            console.log('configuration file: '+configFileUri);
+	            $.loadJson(configFileUri,function(json){
+					console.log(json);
+					npaUi.loadComponent(json.type,json.version,function(namespace,type){
+						console.log('creating new instance of the '+type+' component from namespace '+namespace);
+						npaUi.componentInstances[json.id] = new NpaUiComponentProxy(namespace,type,divId,json);
+						npaUi.componentByDivId[divId] = npaUi.componentInstances[json.id];
+						npaUi.componentInstances[json.id].initialize(function(){
+							npaUi.loadingComponent--;
+							console.log('first rendering for component '+type+' from namespace '+namespace);
+							npaUi.componentInstances[json.id].render();
+							$('#'+divId).data('loaded','true');
+							if(npaUi.loadingComponent==0){
+								npaUi.onComponentLoaded();
+							}
+						});
+						
 					});
+				});
+			}else{
+				npaUi.loadingComponent--;
+				cachedComponent.render();
+				if(npaUi.loadingComponent==0){
+					npaUi.onComponentLoaded();
 				}
-			});
+			}
         });
     },
     loadComponent: function(componentType,version,then){
-		let componentDef = this.componentMap[componentType];
+		let namespace = 'npaUiCore';
+		let type = componentType;
+		if(componentType.indexOf('.')>0){
+			let tokens = componentType.split('.');
+			namespace = tokens[0];
+			type = tokens[1];
+		}
+		let componentDef = this.componentMap[namespace][type];
 		if(typeof componentDef!='undefined'){
-			$.loadScript(componentDef.dependency,function(){
-				npaUi.loadingComponent--;
-				npaUi.componentCache[componentType] = componentType;
-				then();
-			});
+			if(componentDef.loaded){
+				then(namespace,type);
+			}else{
+				console.log('component '+componentType+' not in cache - loading...');
+				$.loadScript(componentDef.dependency,function(){
+					componentDef.loaded = true;
+					then(namespace,type);
+				});
+			}
 		}else{
-			npaUi.loadingComponent--;
-			console.log('NPA UI Component type '+componentType+' not known!');
+			console.log('NPA UI - undefined Component type '+componentType);
 		}
 	},
     initialize: function(then){
 		var deps = [
-			{"type": "css","uri": "/uiTools/css/npaUiTheme.css"},
-			{"type": "json","uri": "/uiTools/js/components/componentMap.json"}
+			{"type": "css","uri": "/uiTools/css/npaUiTheme.css"}
 		];
-		loadDeps(deps,function(jsonResources){
-			if(jsonResources && jsonResources.length>0){
-				npaUi.componentMap = jsonResources[0];
-			}else{
-				npaUi.componentMap = {};
-			}
-			then();
+		loadDeps(deps,function(){
+			makeRESTCall('GET','/uiToolsApis/getComponentMap',{},function(response){
+				npaUi.componentMap = response.data;
+				then();
+			},function(){
+				console.error('NPA-UI was unable to load the Component Map from server!');
+			});
 		});
 	},
 	onComponentLoaded: function(){

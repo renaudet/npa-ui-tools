@@ -69,7 +69,7 @@ function showConfirm(msg){
 	showNotification('confirm',msg);
 }
  
-class Notifier extends NpaUiComponent{
+npaUiCore.Notifier = class Notifier extends NpaUiComponent{
 	render(){
 		let html = '';
 		html += '<div id="uiToolsNotifications" class="toast-container top-0 end-0 p-3">';

@@ -3,7 +3,7 @@
  * Copyright 2023 Nicolas Renaudet - All rights reserved
  */
  
-class Panel extends NpaUiComponent{
+npaUiCore.Panel = class Panel extends NpaUiComponent{
 	render(){
 		let html = '';
 		let style='';

@@ -27,13 +27,14 @@
   	},
   	{
   		"point": "npa.http.handler",
-  		"id": "npa.ui.tools.core.hello.handler",
+  		"id": "npa.ui.tools.core.getMap.handler",
   		"router": "npa.ui.tools.core.router",
   		"method": "GET",
-  		"schema": "/sayHello",
-  		"handler": "helloRequestHandler"
+  		"schema": "/getComponentMap",
+  		"handler": "getComponentMapHandler"
   	}
   ],
   "provides": [
+  	{"id": "npa.ui.tools.core.component"}
   ]
 }

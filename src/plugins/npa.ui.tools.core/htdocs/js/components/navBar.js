@@ -3,7 +3,8 @@
  * Copyright 2023 Nicolas Renaudet - All rights reserved
  */
  
-class NavBar extends NpaUiComponent{
+
+npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 	actionIdToItem = {};
 	render(){
 		let html = '';
