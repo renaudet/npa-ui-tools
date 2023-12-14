@@ -4,6 +4,9 @@
  */
  
 npaUiCore.Panel = class Panel extends NpaUiComponent{
+	initialize(then){
+		$.loadCss('/uiTools/css/npaUiTheme.css',then);
+	}
 	render(){
 		let html = '';
 		let style='';

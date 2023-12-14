@@ -70,6 +70,9 @@ function showConfirm(msg){
 }
  
 npaUiCore.Notifier = class Notifier extends NpaUiComponent{
+	initialize(then){
+		$.loadCss('/uiTools/css/npaUiTheme.css',then);
+	}
 	render(){
 		let html = '';
 		html += '<div id="uiToolsNotifications" class="toast-container top-0 end-0 p-3">';

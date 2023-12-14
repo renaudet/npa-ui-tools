@@ -6,6 +6,9 @@
 
 npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 	actionIdToItem = {};
+	initialize(then){
+		$.loadCss('/uiTools/css/npaUiTheme.css',then);
+	}
 	render(){
 		let html = '';
 		let style='padding-top: 0px;padding-bottom: 0px;padding-left: 5px;margin-bottom: 3px;';

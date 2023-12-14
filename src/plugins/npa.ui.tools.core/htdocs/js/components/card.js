@@ -11,6 +11,9 @@ function stretchWorkArea(){
 }
  
 npaUiCore.Card = class Card extends NpaUiComponent{
+	initialize(then){
+		$.loadCss('/uiTools/css/npaUiTheme.css',then);
+	}
 	render(){
 		if($('#'+this.id).data('loaded')!='true'){
 			let child = null;
