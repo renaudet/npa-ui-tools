@@ -25,7 +25,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			if('local'==type){
 				makeRESTCall(method,datasource.uri,payload,function(response){
 					if(response.status==200){
-						then(response.data);
+						then(response);
 					}else{
 						console.log(response);
 					}
@@ -42,7 +42,19 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			dsType = datasource.type;
 		}
 		if('local'==dsType){
-			return inputData;
+			if(datasource.adapter){
+				var data = [];
+				var toEval = 'data = '+datasource.adapter.replace(/@/g,'inputData')+';'
+				try{
+					eval(toEval);
+					return data;
+				}catch(t){
+					console.log('datatable.js#adaptFormat(inputData) - exception evaluating adapter for datasource');
+					return [];
+				}
+			}else{
+				return inputData;
+			}
 		}
 		console.log('datatable.js#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
 		return [];
@@ -51,12 +63,13 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		let config = this.getConfiguration();
 		if($('#'+this.getId()+'_table').length==0){
 			let html = '';
+			html += '<div id="'+this.getId()+'" style="max-height: '+config.maxHeight+'px;overflow: auto;">';
 			html += '<table id="'+this.getId()+'_table" class="table table-striped table-hover table-sm">';
 			html += '  <thead class="table-dark">';
 			html += '    <tr>';
 			for(var i=0;i<config.columns.length;i++){
 				let column = config.columns[i];
-				html += '<th scope="col">';
+				html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
 				html += column.label;
 				html += '</th>';
 			}
@@ -65,6 +78,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			html += '  </thead>';
 			html += '  <tbody class="table-group-divider">';
 			html += '  </tbody>';
+			html += '</table>';
 			html += '</div>';
 			this.parentDiv().html(html);
 		}else{
