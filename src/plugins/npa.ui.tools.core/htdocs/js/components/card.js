@@ -15,26 +15,27 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 		$.loadCss('/uiTools/css/npaUiTheme.css',then);
 	}
 	render(){
-		if($('#'+this.id).data('loaded')!='true'){
+		let config = this.getConfiguration();
+		if(this.parentDiv().data('loaded')!='true'){
 			let child = null;
-			if($('#'+this.id+' div').length>0){
-				 child = $('#'+this.id+' div').detach();
+			if($('#'+this.parentDivId+' div').length>0){
+				 child = $('#'+this.parentDivId+' div').detach();
 			}
 			let html = '';
 			let style='';
-			if(typeof this.config.configuration.height!='undefined'){
-				style += 'height: '+this.config.configuration.height+'px;';
+			if(typeof config.height!='undefined'){
+				style += 'height: '+config.height+'px;';
 			}
-			html += '<div id="'+this.config.id+'" class="card" style="margin-left: 3px;margin-right: 3px;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;'+style+'">';
+			html += '<div id="'+this.getId()+'" class="card" style="margin-left: 3px;margin-right: 3px;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;'+style+'">';
 			html += '  <div class="card-header">';
-			html += '    <img src="'+this.config.configuration.icon+'" width="20" style="padding-bottom: 3px;"><span id="scafPageTitle" style="padding-left: 15px;">'+this.config.configuration.label+'</span>&nbsp;&nbsp;&nbsp;<span class="visually-hidden spinner-border spinner-border-sm text-secondary" aria-hidden="true"></span>';
+			html += '    <img src="'+config.icon+'" width="20" style="padding-bottom: 3px;"><span id="scafPageTitle" style="padding-left: 15px;">'+config.label+'</span>&nbsp;&nbsp;&nbsp;<span class="visually-hidden spinner-border spinner-border-sm text-secondary" aria-hidden="true"></span>';
 			html += '  </div>';
 			html += '  <ul class="list-group list-group-flush">';
 			html += '    <li id="workArea" class="list-group-item"></li>';
 			html += '  </ul>';
 			html += '  <div id="statusBar" class="card-footer" style="padding-top: 0px;padding-bottom: 0px;padding-left: 5px;">&nbsp;</div>';
 			html += '</div>';
-			$('#'+this.id).html(html);
+			this.parentDiv().html(html);
 			stretchWorkArea();
 			if(child){
 				$('#workArea').append(child);

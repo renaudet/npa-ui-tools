@@ -2,5 +2,6 @@
 	"Panel": {"version": "1.0.0","dependency":"/uiTools/js/components/panel.js"},
 	"NavBar": {"version": "1.0.0","dependency":"/uiTools/js/components/navBar.js"},
 	"Notifier": {"version": "1.0.0","dependency":"/uiTools/js/components/notifier.js"},
-	"Card": {"version": "1.0.0","dependency":"/uiTools/js/components/card.js"}
+	"Card": {"version": "1.0.0","dependency":"/uiTools/js/components/card.js"},
+	"Datatable": {"version": "1.0.0","dependency":"/uiTools/js/components/datatable.js"}
 }

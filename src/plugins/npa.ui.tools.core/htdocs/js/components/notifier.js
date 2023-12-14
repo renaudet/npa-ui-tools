@@ -77,6 +77,6 @@ npaUiCore.Notifier = class Notifier extends NpaUiComponent{
 		let html = '';
 		html += '<div id="uiToolsNotifications" class="toast-container top-0 end-0 p-3">';
 		html += '</div>';
-		$('#'+this.id).html(html);
+		this.parentDiv().html(html);
 	}
 }

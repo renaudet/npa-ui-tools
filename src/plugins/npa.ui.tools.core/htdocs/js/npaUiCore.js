@@ -113,10 +113,19 @@ function loadDeps(depArray,then){
 
 class NpaUiComponent {
 	config = null;
-	id = null;
-	constructor(id,configuration){
-		this.id = id;
+	parentDivId = null;
+	constructor(parentDivId,configuration){
+		this.parentDivId = parentDivId;
 		this.config = configuration;
+	}
+	getId(){
+		return this.config.id;
+	}
+	getConfiguration(){
+		return this.config.configuration;
+	}
+	parentDiv(){
+		return $('#'+this.parentDivId);
 	}
 	initialize(then){
 		if(then){
@@ -144,6 +153,7 @@ npaUi = {
 	componentInstances: {},
 	componentByDivId: {},
 	actionHandlers: {},
+	selectionListeners: {},
 	loadingComponent: 0,
     render: function(){
 		this.loadingComponent = $('.npaUi').length;
@@ -225,12 +235,32 @@ npaUi = {
 	registerActionHandler: function(actionId,handler){
 		this.actionHandlers[actionId] = handler;
 	},
+	registerSelectionListener: function(source,listener){
+		let listeners = this.selectionListeners[source];
+		if(typeof listeners=='undefined'){
+			this.selectionListeners[source] = [];
+			listeners = this.selectionListeners[source];
+		}
+		listeners.push(listener);
+	},
 	fireEvent: function(actionId,event){
-		let handler = this.actionHandlers[actionId];
-		if(typeof handler!='undefined'){
-			try{
-				handler.handleEvent(event);
-			}catch(t){}
+		if('select'==actionId){
+			let listeners = this.selectionListeners[event.source];
+			if(listeners && listeners.length>0){
+				for(var i=0;i<listeners.length;i++){
+					let listener = listeners[i];
+					try{
+						listener.onItemSelected(event.item);
+					}catch(t){}
+				}
+			}
+		}else{
+			let handler = this.actionHandlers[actionId];
+			if(typeof handler!='undefined'){
+				try{
+					handler.handleEvent(event);
+				}catch(t){}
+			}
 		}
 	}
 }

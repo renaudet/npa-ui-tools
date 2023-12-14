@@ -8,12 +8,13 @@ npaUiCore.Panel = class Panel extends NpaUiComponent{
 		$.loadCss('/uiTools/css/npaUiTheme.css',then);
 	}
 	render(){
+		let config = this.getConfiguration();
 		let html = '';
 		let style='';
-		if(typeof this.config.configuration.height!='undefined'){
-			style += 'height: '+this.config.configuration.height+'px;';
+		if(typeof config.height!='undefined'){
+			style += 'height: '+config.height+'px;';
 		}
-		html += '<div id="'+this.config.id+'" class="panel" style="'+style+'"></div>';
-		$('#'+this.id).html(html);
+		html += '<div id="'+this.getId()+'" class="panel" style="'+style+'"></div>';
+		this.parentDiv().html(html);
 	}
 }

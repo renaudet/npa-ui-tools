@@ -10,10 +10,11 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		$.loadCss('/uiTools/css/npaUiTheme.css',then);
 	}
 	render(){
+		let config = this.getConfiguration();
 		let html = '';
 		let style='padding-top: 0px;padding-bottom: 0px;padding-left: 5px;margin-bottom: 3px;';
-		html += '<nav id="'+this.config.id+'" class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark" style="'+style+'">';
-		html += '  <a class="navbar-brand" href="'+this.config.configuration.homeRef+'"><img src="'+this.config.configuration.icon+'" width="30">&nbsp;'+this.config.configuration.applicationName+'</a>';
+		html += '<nav id="'+this.getId()+'" class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark" style="'+style+'">';
+		html += '  <a class="navbar-brand" href="'+config.homeRef+'"><img src="'+config.icon+'" width="30">&nbsp;'+config.applicationName+'</a>';
 		html += '  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">';
 		html += '    <span class="navbar-toggler-icon"></span>';
 		html += '  </button>';
@@ -22,7 +23,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		html += '    </ul>';
 		html += '  </div>';
 		html += '</nav>';
-		$('#'+this.id).html(html);
+		this.parentDiv().html(html);
 		var navBar = this;
 		this.generateNavBarMenu(function(){
 			$('.npa-navbar-menu').on('click',function(){
@@ -32,9 +33,10 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		});
 	}
 	generateNavBarMenu(then){
-		if(typeof this.config.configuration.menus!='undefined'){
-			for(var i=0;i<this.config.configuration.menus.length;i++){
-				let menuConfig = this.config.configuration.menus[i];
+		let config = this.getConfiguration();
+		if(typeof config.menus!='undefined'){
+			for(var i=0;i<config.menus.length;i++){
+				let menuConfig = config.menus[i];
 				let menu = '';
 				menu = this.generateMenu(menuConfig);
 				$('#navbarMenu_'+this.config.id).append(menu);

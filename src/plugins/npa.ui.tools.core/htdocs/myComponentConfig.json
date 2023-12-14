@@ -1,8 +1,0 @@
-{
-    "id":"panel_01",
-    "version": "1.0.0",
-    "type": "Panel",
-    "configuration": {
-        "height": 300
-    }
-}
