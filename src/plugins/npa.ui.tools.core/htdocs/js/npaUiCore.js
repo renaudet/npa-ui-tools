@@ -244,6 +244,8 @@ npaUi = {
 		listeners.push(listener);
 	},
 	fireEvent: function(actionId,event){
+		console.log('fireEvent('+actionId+')');
+		console.log(event);
 		if('select'==actionId){
 			let listeners = this.selectionListeners[event.source];
 			if(listeners && listeners.length>0){
@@ -259,7 +261,9 @@ npaUi = {
 			if(typeof handler!='undefined'){
 				try{
 					handler.handleEvent(event);
-				}catch(t){}
+				}catch(t){
+					console.log(t);
+				}
 			}
 		}
 	}

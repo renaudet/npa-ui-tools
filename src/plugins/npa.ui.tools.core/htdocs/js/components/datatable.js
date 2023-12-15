@@ -5,7 +5,7 @@
  
 npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 	initialize(then){
-		$.loadCss('/uiTools/css/npaUiTheme.css',then);
+		$.loadCss('/uiTools/css/datatable.css',then);
 	}
 	fetchDataFromDatasource(then){
 		let datasource = this.getConfiguration().datasource;
@@ -69,9 +69,17 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			html += '    <tr>';
 			for(var i=0;i<config.columns.length;i++){
 				let column = config.columns[i];
-				html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
-				html += column.label;
-				html += '</th>';
+				if(typeof column.type!='undefined'){
+					if('rowActions'==column.type){
+						html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
+						html += column.label;
+						html += '</th>';
+					}
+				}else{
+					html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
+					html += column.label;
+					html += '</th>';
+				}
 			}
 			
 			html += '    </tr>';
@@ -87,16 +95,33 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		var datatable = this;
 		this.fetchDataFromDatasource(function(data){
 			$('.'+datatable.getId()+'_row').off('.'+datatable.getId());
-			datatable.adaptFormat(data).map(function(item,index){
+			$('.datatableAction').off('.'+datatable.getId());
+			var adapted = datatable.adaptFormat(data);
+			adapted.map(function(item,index){
 				let row = '';
 				row += '<tr data-index="'+index+'" class="'+datatable.getId()+'_row">';
 				row += '';
 				for(var i=0;i<config.columns.length;i++){
 					let column = config.columns[i];
 					row += '<td>';
+					if(typeof column.type!='undefined'){
+						if('rowActions'==column.type){
+							for(var j=0;j<column.actions.length;j++){
+								let actionDef = column.actions[j];
+								if(j>0){
+									row += '&nbsp;';
+								}
+								row += '<img src="'+actionDef.icon+'" class="datatableAction" title="'+actionDef.label+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
+							}
+						}else{
+							row += '?';
+						}
+					}else
 					if(typeof column.field!='undefined'){
 						let value = item[column.field];
 						row += value;
+					}else{
+						row += '?';
 					}
 					row += '</td>';
 				}
@@ -105,7 +130,12 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			});
 			$('.'+datatable.getId()+'_row').on('click.'+datatable.getId(),function(){
 				let rowIndex = $(this).data('index');
-				npaUi.fireEvent('select',{"source": datatable.getId(),"item": data[rowIndex]});
+				npaUi.fireEvent('select',{"source": datatable.getId(),"item": adapted[rowIndex]});
+			});
+			$('.datatableAction').on('click.'+datatable.getId(),function(){
+				let rowIndex = $(this).data('index');
+				let actionId = $(this).data('action');
+				npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": adapted[rowIndex]});
 			});
 		});
 	}
