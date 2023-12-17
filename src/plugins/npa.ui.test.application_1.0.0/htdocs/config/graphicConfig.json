@@ -1,0 +1,10 @@
+{
+    "id":"graphic_01",
+    "version": "1.0.0",
+    "type": "npaTest.Graphic",
+    "configuration": {
+    	"width": 800,
+    	"height": 600,
+    	"backgroundColor": "#9860f7"
+    }
+}

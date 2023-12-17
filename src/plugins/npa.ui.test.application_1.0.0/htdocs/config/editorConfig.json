@@ -1,0 +1,8 @@
+{
+    "id":"editor_01",
+    "version": "1.0.0",
+    "type": "Editor",
+    "configuration": {
+        "height": 500
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "id":"table_01",
+    "version": "1.0.0",
+    "type": "Datatable",
+    "configuration": {
+        "datasource": {
+            "type": "local",
+            "uri": "/test/queryFragments",
+            "method": "POST",
+            "payload": {},
+            "adapter": "@.data"
+        },
+        "maxHeight": 300,
+        "columns": [
+            {
+                "label": "#ID",
+                "field": "id"
+            },
+            {
+                "label": "Category",
+                "field": "category"
+            },
+            {
+                "label": "Name",
+                "field": "name"
+            },
+            {
+                "label": "Version",
+                "field": "version"
+            },
+            {
+                "label": "Actions",
+                "type": "rowActions",
+                "actions": [
+                    {
+                        "label": "Edit",
+                        "actionId": "edit",
+                        "icon": "/uiTools/img/silk/computer_edit.png"
+                    },
+                    {
+                        "label": "Edit",
+                        "actionId": "delete",
+                        "icon": "/uiTools/img/silk/computer_delete.png"
+                    }
+                ]
+            }
+        ]
+    }
+}

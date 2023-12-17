@@ -193,6 +193,9 @@ npaUi = {
 			}
         });
     },
+	getComponent: function(componentId){
+		return npaUi.componentInstances[componentId];
+	},
     loadComponent: function(componentType,version,then){
 		let namespace = 'npaUiCore';
 		let type = componentType;

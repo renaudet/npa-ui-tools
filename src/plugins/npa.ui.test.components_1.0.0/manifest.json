@@ -1,0 +1,29 @@
+{
+  "id": "npa.ui.test.components",
+  "name": "Test components for NPA and NPA Tools",
+  "version": "1.0.0",
+  "plugin": "plugin.js",
+  "requires": [
+  	{"type": "plugin","id": "npa.ui.tools.core","version": "1.0.0"}
+  ],
+  "extends": [
+  	{
+  		"point": "npa.ui.tools.core.component",
+  		"id": "npa.ui.test.components.graphic",
+  		"namespace": "npaTest",
+  		"name": "Graphic",
+  		"version": "1.0.0",
+  		"dependency": "/static/js/components/graphic.js"
+  	},
+  	{
+  		"point": "npa.ui.tools.core.component",
+  		"id": "npa.ui.test.components.card",
+  		"namespace": "npaTest",
+  		"name": "Card",
+  		"version": "1.0.0",
+  		"dependency": "/static/js/components/card.js"
+  	}
+  ],
+  "provides": [
+  ]
+}

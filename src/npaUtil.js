@@ -6,6 +6,10 @@
 const Plugin = require(process.cwd()+'/core/plugin.js');
 
 class UIPlugin extends Plugin{
+	getService(name){
+		var core = this.runtime.getPlugin('npa.core');
+		return core.getService(name);
+	}
 }
 
 module.exports = UIPlugin;

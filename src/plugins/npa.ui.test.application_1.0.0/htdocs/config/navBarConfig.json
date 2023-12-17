@@ -4,7 +4,7 @@
     "type": "NavBar",
     "configuration": {
         "icon": "/uiTools/img/silk/application_view_tile.png",
-        "applicationName": "NPA UI Tools example",
+        "applicationName": "NPA Test Application",
         "homeRef": "/uiTools",
         "menus": [
         	{
@@ -20,9 +20,9 @@
         		"items": [
         			{
         				"id": "menu21",
-		        		"label": "Menu 2.1",
+		        		"label": "Query datasource",
 		        		"actionId": "menu21",
-		        		"icon": "/uiTools/img/silk/cog_edit.png"
+		        		"icon": "/uiTools/img/silk/database_go.png"
         			},
         			{
         				"id": "menu22",
@@ -34,10 +34,10 @@
         			},
         			{
         				"id": "menu23",
-		        		"label": "Menu 2.3",
+		        		"label": "Refresh UI",
 		        		"actionId": "menu23",
-        				"tooltip": "whatever!",
-		        		"icon": "/uiTools/img/silk/page_white_edit.png"
+        				"tooltip": "Call the UI framework for a complete refresh",
+		        		"icon": "/uiTools/img/silk/arrow_refresh.png"
         			}
         		]
         	}

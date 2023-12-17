@@ -1,0 +1,68 @@
+{
+  "id": "npa.ui.test.application",
+  "name": "Test application for NPA and NPA Tools",
+  "version": "1.0.0",
+  "plugin": "plugin.js",
+  "requires": [
+  	{"type": "plugin","id": "npa.core","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.logging","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.http","version": "1.0.0"}
+  ],
+  "extends": [
+  	{
+  		"point": "npa.log.provider",
+  		"id": "npa.ui.test.application.logger",
+  		"dir": "npa.ui.test"
+  	},
+  	{
+  		"point": "npa.couchdb.adapter.datasource",
+  		"id": "npa.ui.test.application.datasource",
+  		"reference": "fragments",
+  		"hostname": "127.0.0.1",
+  		"port": "5984",
+  		"username": "admin",
+  		"password": "admin4couch",
+  		"dbname": "fragments",
+  		"maxPageSize": 500
+  	},
+  	{
+  		"point": "npa.core.application",
+  		"id": "npa.ui.test.application.application",
+  		"name": "test"
+  	},
+  	{
+  		"point": "npa.http.router",
+  		"id": "npa.ui.test.application.router",
+  		"path": "/test"
+  	},
+  	{
+  		"point": "npa.http.static",
+  		"id": "npa.ui.test.application.htdocs",
+  		"path": "/static",
+  		"localDir": "htdocs"
+  	},
+  	{
+  		"point": "npa.http.home",
+  		"id": "npa.ui.test.application.home",
+  		"uri": "/static/home.html"
+  	},
+  	{
+  		"point": "npa.http.handler",
+  		"id": "npa.ui.test.application.hello.handler",
+  		"router": "npa.ui.test.application.router",
+  		"method": "GET",
+  		"schema": "/sayHello",
+  		"handler": "helloRequestHandler"
+  	},
+  	{
+  		"point": "npa.http.handler",
+  		"id": "npa.ui.test.application.query.fragments.handler",
+  		"router": "npa.ui.test.application.router",
+  		"method": "POST",
+  		"schema": "/queryFragments",
+  		"handler": "queryFragmentsHandler"
+  	}
+  ],
+  "provides": [
+  ]
+}
