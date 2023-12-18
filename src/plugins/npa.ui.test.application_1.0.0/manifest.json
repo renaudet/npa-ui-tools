@@ -20,9 +20,9 @@
   		"reference": "fragments",
   		"hostname": "127.0.0.1",
   		"port": "5984",
-  		"username": "admin",
-  		"password": "admin4couch",
-  		"dbname": "fragments",
+  		"username_": "admin",
+  		"password_": "admin4couch",
+  		"dbname": "scaf_fragments",
   		"maxPageSize": 500
   	},
   	{
@@ -48,19 +48,11 @@
   	},
   	{
   		"point": "npa.http.handler",
-  		"id": "npa.ui.test.application.hello.handler",
-  		"router": "npa.ui.test.application.router",
-  		"method": "GET",
-  		"schema": "/sayHello",
-  		"handler": "helloRequestHandler"
-  	},
-  	{
-  		"point": "npa.http.handler",
   		"id": "npa.ui.test.application.query.fragments.handler",
   		"router": "npa.ui.test.application.router",
   		"method": "POST",
-  		"schema": "/queryFragments",
-  		"handler": "queryFragmentsHandler"
+  		"schema": "/getRecords",
+  		"handler": "getRecordsHandler"
   	}
   ],
   "provides": [

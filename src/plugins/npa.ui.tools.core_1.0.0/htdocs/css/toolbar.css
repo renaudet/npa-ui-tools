@@ -1,30 +1,22 @@
 /***
- * datatable.css - default CSS file for the NPA UI Datatable
+ * toolbar.css - default CSS file for the NPA UI Toolbar Component
  * Copyright 2023 Nicolas Renaudet - All rights reserved
  *
  ***/
-.datatableAction{
-	cursor: pointer;
-}
-
-.datatableAction:hover{
-	border: 1px solid #000000;
-	padding: 1px;
-}
-
+ 
 .toolbar {
 	border: 1px solid #c3c3c3;
 	border-radius: 0.2rem;
 	box-shadow: 1px 1px 3px #a0a0a0;
 	background-color: #ffffff;
-	margin-bottom: 1px;
+	margin-bottom: 0px;
 	padding: 2px;
 }
 
 .toolbar-btn {
 	margin-left: 4px;
-	padding-top: 3px;
-	padding-bottom: 3px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	padding-left: 5px;
 	padding-right: 5px;
 }
@@ -33,7 +25,16 @@
 	border: 1px solid #000000;
 }
 
+.toolbar-btn:disabled {
+	border-color: #ffffff;
+}
+
 .toolbar-icon {
 	vertical-align: top;
 	padding-top: 2px;
+}
+
+.toolbar-separator {
+	border-left: 1px solid #a0a0a0;
+	padding-bottom: 5px;
 }

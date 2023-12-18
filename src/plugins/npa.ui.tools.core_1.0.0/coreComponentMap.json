@@ -4,5 +4,6 @@
 	"Notifier": {"version": "1.0.0","dependency":"/uiTools/js/components/notifier.js"},
 	"Card": {"version": "1.0.0","dependency":"/uiTools/js/components/card.js"},
 	"Datatable": {"version": "1.0.0","dependency":"/uiTools/js/components/datatable.js"},
-	"Editor": {"version": "1.0.0","dependency":"/uiTools/js/components/editor.js"}
+	"Editor": {"version": "1.0.0","dependency":"/uiTools/js/components/editor.js"},
+	"Toolbar": {"version": "1.0.0","dependency":"/uiTools/js/components/toolbar.js"}
 }

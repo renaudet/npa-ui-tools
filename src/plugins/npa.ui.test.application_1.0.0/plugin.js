@@ -16,15 +16,8 @@ plugin.initialize = function(){
 	httpServer.startListener();
 }
 
-plugin.helloRequestHandler = function(req,res){
-	plugin.debug('->helloRequestHandler');
-	res.set('Content-Type','application/json');
-	plugin.debug('<-helloRequestHandler');
-	res.json({"status": 200,"message": "ok","data": "Hello, World! (from npa.test.application)"});
-}
-
-plugin.queryFragmentsHandler = function(req,res){
-	plugin.debug('->queryFragmentsHandler');
+plugin.getRecordsHandler = function(req,res){
+	plugin.debug('->getRecordsHandler');
 	res.set('Content-Type','application/json');
 	let couch = plugin.getService('couchdb');
 	let query = {"selector": {}};
@@ -32,7 +25,7 @@ plugin.queryFragmentsHandler = function(req,res){
 		query = req.body;
 	}
 	couch.query(DS_REFERENCE,query,function(err,data){
-		plugin.debug('<-queryFragmentsHandler');
+		plugin.debug('<-getRecordsHandler');
 		if(err){
 			res.json({"status": 500,"message": "Data access error","data": err});
 		}else{

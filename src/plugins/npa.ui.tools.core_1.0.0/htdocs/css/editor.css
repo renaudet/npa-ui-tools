@@ -1,39 +1,39 @@
 /***
- * datatable.css - default CSS file for the NPA UI Datatable
+ * editor.css - default CSS file for the NPA UI editor Component
  * Copyright 2023 Nicolas Renaudet - All rights reserved
  *
  ***/
-.datatableAction{
-	cursor: pointer;
-}
-
-.datatableAction:hover{
-	border: 1px solid #000000;
-	padding: 1px;
-}
-
-.toolbar {
+.editor-toolbar {
 	border: 1px solid #c3c3c3;
 	border-radius: 0.2rem;
 	box-shadow: 1px 1px 3px #a0a0a0;
 	background-color: #ffffff;
-	margin-bottom: 1px;
+	margin-bottom: 0px;
 	padding: 2px;
 }
 
-.toolbar-btn {
+.editor-btn {
 	margin-left: 4px;
-	padding-top: 3px;
-	padding-bottom: 3px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	padding-left: 5px;
 	padding-right: 5px;
 }
 
-.toolbar-btn:hover {
+.editor-btn:hover {
 	border: 1px solid #000000;
 }
 
-.toolbar-icon {
+.editor-btn:disabled {
+	border-color: #ffffff;
+}
+
+.editor-icon {
 	vertical-align: top;
 	padding-top: 2px;
+}
+
+.editor-separator {
+	border-left: 1px solid #a0a0a0;
+	padding-bottom: 5px;
 }

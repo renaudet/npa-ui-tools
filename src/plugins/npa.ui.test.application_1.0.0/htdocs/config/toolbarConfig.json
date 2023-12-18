@@ -1,0 +1,37 @@
+{
+    "id":"toolbar_01",
+    "version": "1.0.0",
+    "type": "Toolbar",
+    "configuration": {
+    	"actions": [
+    		{
+                "label": "Print",
+                "actionId": "print",
+                "icon": "/uiTools/img/silk/printer.png"
+            },
+    		{
+                "type": "separator"
+            },
+    		{
+                "label": "Save",
+                "actionId": "save",
+                "icon": "/uiTools/img/silk/table_save.png"
+            },
+    		{
+                "label": "Edit",
+                "actionId": "edit",
+                "icon": "/uiTools/img/silk/table_edit.png"
+            },
+    		{
+                "label": "Insert",
+                "actionId": "insert",
+                "icon": "/uiTools/img/silk/table_row_insert.png"
+            },
+    		{
+                "label": "Delete",
+                "actionId": "delete",
+                "icon": "/uiTools/img/silk/table_row_delete.png"
+            }
+    	]
+    }
+}

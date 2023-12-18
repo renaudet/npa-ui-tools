@@ -5,7 +5,7 @@
     "configuration": {
         "datasource": {
             "type": "local",
-            "uri": "/test/queryFragments",
+            "uri": "/test/getRecords",
             "method": "POST",
             "payload": {},
             "adapter": "@.data"

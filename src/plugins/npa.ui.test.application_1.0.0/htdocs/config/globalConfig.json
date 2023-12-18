@@ -1,0 +1,35 @@
+{
+	"components": {
+		"editor": {
+		    "id":"editor_01",
+		    "version": "1.0.0",
+		    "type": "Editor",
+		    "configuration": {
+		        "height": 450,
+		        "toolbar": {
+		        	"position": "top",
+		        	"actions": [
+		        		{
+		                    "label": "Save",
+		                    "actionId": "save",
+		                    "icon": "/uiTools/img/silk/disk.png"
+		                },
+		        		{
+		                    "label": "Edit",
+		                    "actionId": "edit",
+		                    "icon": "/uiTools/img/silk/page_edit.png"
+		                },
+			    		{
+			                "type": "separator"
+			            },
+		        		{
+		                    "label": "New",
+		                    "actionId": "new",
+		                    "icon": "/uiTools/img/silk/page_add.png"
+		                }
+		        	]
+		        }
+		    }
+		}
+	}
+}

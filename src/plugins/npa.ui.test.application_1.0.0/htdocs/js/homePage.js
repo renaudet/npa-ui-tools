@@ -21,6 +21,7 @@ var tableHandler = {
 		showInfo('Selected item: '+item.name);
 		let editor = npaUi.getComponent('editor_01');
 		editor.setText(item.code);
+		npaUi.getComponent('toolbar_01').setEnabled('delete',true);
 	},
 	handleEvent: function(event){
 		if('edit'==event.actionId){
@@ -33,19 +34,23 @@ var tableHandler = {
 }
  
 $(document).ready(function(){
-	npaUi.initialize(function(){
-		npaUi.registerActionHandler('menu21',menuHandler);
-		npaUi.registerActionHandler('menu23',menuHandler);
-		npaUi.registerActionHandler('edit',tableHandler);
-		npaUi.registerActionHandler('delete',tableHandler);
-		npaUi.registerSelectionListener('table_01',tableHandler);
-		npaUi.onComponentLoaded = onPageReady;
-		npaUi.render();
+	npaUi.loadConfigFrom('/static/config/globalConfig.json',function(){
+		npaUi.initialize(function(){
+			npaUi.registerActionHandler('menu21',menuHandler);
+			npaUi.registerActionHandler('menu23',menuHandler);
+			npaUi.registerActionHandler('edit',tableHandler);
+			npaUi.registerActionHandler('delete',tableHandler);
+			npaUi.registerSelectionListener('table_01',tableHandler);
+			npaUi.onComponentLoaded = onPageReady;
+			npaUi.render();
+		});
 	});
 });
 
 onPageReady = function(){
-	showConfirm('Notifier component has been loaded!');
+	//showConfirm('Notifier component has been loaded!');
+	npaUi.getComponent('toolbar_01').setEnabled('delete',false);
+	npaUi.getComponent('editor_01').setEnabled('new',false);
 }
 
 queryDatasource = function(){

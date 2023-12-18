@@ -150,6 +150,7 @@ class NpaUiComponentProxy {
 npaUiCore = {}
 
 npaUi = {
+	globalConfig: null,
 	componentInstances: {},
 	componentByDivId: {},
 	actionHandlers: {},
@@ -165,25 +166,56 @@ npaUi = {
             if(typeof cachedComponent=='undefined'){
 				console.log('no cached component found. Loading configuration...');
 	            let configFileUri = c.data('config');
-	            console.log('configuration file: '+configFileUri);
-	            $.loadJson(configFileUri,function(json){
-					console.log(json);
-					npaUi.loadComponent(json.type,json.version,function(namespace,type){
-						console.log('creating new instance of the '+type+' component from namespace '+namespace);
-						npaUi.componentInstances[json.id] = new NpaUiComponentProxy(namespace,type,divId,json);
-						npaUi.componentByDivId[divId] = npaUi.componentInstances[json.id];
-						npaUi.componentInstances[json.id].initialize(function(){
-							npaUi.loadingComponent--;
-							console.log('first rendering for component '+type+' from namespace '+namespace);
-							npaUi.componentInstances[json.id].render();
-							$('#'+divId).data('loaded','true');
-							if(npaUi.loadingComponent==0){
-								npaUi.onComponentLoaded();
-							}
+	            if(configFileUri){
+	            	console.log('configuration file: '+configFileUri);
+		            $.loadJson(configFileUri,function(json){
+						console.log(json);
+						npaUi.loadComponent(json.type,json.version,function(namespace,type){
+							console.log('creating new instance of the '+type+' component from namespace '+namespace);
+							npaUi.componentInstances[json.id] = new NpaUiComponentProxy(namespace,type,divId,json);
+							npaUi.componentByDivId[divId] = npaUi.componentInstances[json.id];
+							npaUi.componentInstances[json.id].initialize(function(){
+								npaUi.loadingComponent--;
+								console.log('first rendering for component '+type+' from namespace '+namespace);
+								npaUi.componentInstances[json.id].render();
+								$('#'+divId).data('loaded','true');
+								if(npaUi.loadingComponent==0){
+									npaUi.onComponentLoaded();
+								}
+							});
+							
 						});
-						
 					});
-				});
+				}else{
+					console.log('no local configuration file detected - looking for a reference in globalConfig');
+					let ref = c.data('ref');
+					if(ref){
+						let globalComponentDef = npaUi.globalConfig.components[ref];
+						if(globalComponentDef){
+							npaUi.loadComponent(globalComponentDef.type,globalComponentDef.version,function(namespace,type){
+								console.log('creating new instance of the '+type+' component from namespace '+namespace);
+								npaUi.componentInstances[globalComponentDef.id] = new NpaUiComponentProxy(namespace,type,divId,globalComponentDef);
+								npaUi.componentByDivId[divId] = npaUi.componentInstances[globalComponentDef.id];
+								npaUi.componentInstances[globalComponentDef.id].initialize(function(){
+									npaUi.loadingComponent--;
+									console.log('first rendering for component '+type+' from namespace '+namespace);
+									npaUi.componentInstances[globalComponentDef.id].render();
+									$('#'+divId).data('loaded','true');
+									if(npaUi.loadingComponent==0){
+										npaUi.onComponentLoaded();
+									}
+								});
+								
+							});
+						}else{
+							console.log('no component found in global configuration from reference '+ref+' - skipping...');
+							npaUi.loadingComponent--;
+						}
+					}else{
+						console.log('no configuration file nor global configuration reference found - skipping...');
+						npaUi.loadingComponent--;
+					}
+				}
 			}else{
 				npaUi.loadingComponent--;
 				cachedComponent.render();
@@ -193,6 +225,12 @@ npaUi = {
 			}
         });
     },
+    loadConfigFrom: function(configFileUri,then){
+		$.loadJson(configFileUri,function(json){
+			npaUi.globalConfig = json;
+			then();
+		});
+	},
 	getComponent: function(componentId){
 		return npaUi.componentInstances[componentId];
 	},
