@@ -16,6 +16,20 @@ var menuHandler = {
 	}
 }
 
+var actionHandler = {
+	handleEvent: function(event){
+		if('insert'==event.actionId){
+			let form = npaUi.getComponent('form_01');
+			form.setEditMode(true);
+			let dialog = npaUi.getComponent('dialog_01');
+			dialog.onClose(function(){
+				showConfirm('ModalDialog was closed!');
+			});
+			dialog.open();
+		}
+	}
+}
+
 var tableHandler = {
 	onItemSelected: function(item){
 		showInfo('Selected item: '+item.name);
@@ -30,6 +44,18 @@ var tableHandler = {
 		if('delete'==event.actionId){
 			showWarning('Deleting row '+event.item.name);
 		}
+		if('new'==event.actionId){
+			let dataManager = npaUi.getComponent('manager_01');
+			let newRecord = {};
+			newRecord.category = 'NPA';
+			newRecord.name = 'Test NPA';
+			newRecord.version = '0.1.0';
+			newRecord.code = '//Test NPA'
+			dataManager.create(newRecord).then(function(data){
+				console.log(data);
+				refreshUI();
+			});
+		}
 	}
 }
  
@@ -40,6 +66,8 @@ $(document).ready(function(){
 			npaUi.registerActionHandler('menu23',menuHandler);
 			npaUi.registerActionHandler('edit',tableHandler);
 			npaUi.registerActionHandler('delete',tableHandler);
+			npaUi.registerActionHandler('new',tableHandler);
+			npaUi.registerActionHandler('insert',actionHandler);
 			npaUi.registerSelectionListener('table_01',tableHandler);
 			npaUi.onComponentLoaded = onPageReady;
 			npaUi.render();
@@ -54,11 +82,13 @@ onPageReady = function(){
 }
 
 queryDatasource = function(){
-	makeRESTCall('POST','/test/queryFragments',{},function(response){
-		console.log(response);
+	let dataManager = npaUi.getComponent('manager_01');
+	dataManager.query().then(function(data){
+		console.log(data);
 	});
 }
 
 refreshUI = function(){
 	npaUi.render();
+	npaUi.getComponent('editor_01').setEnabled('new',true);
 }

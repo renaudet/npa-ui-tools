@@ -1,0 +1,9 @@
+/***
+ * modal.css - default CSS file for the NPA UI ModalDialog Component
+ * Copyright 2023 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+.modal-dialog-header {
+	background-color: #7cb5d9;
+}

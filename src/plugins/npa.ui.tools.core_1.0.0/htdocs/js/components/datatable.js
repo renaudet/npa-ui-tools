@@ -23,15 +23,24 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 				payload = datasource.payload;
 			}
 			if('local'==type){
+				console.log('Datatable#fetchDataFromDatasource() - using local data from '+datasource.uri);
+				var datatable = this;
 				makeRESTCall(method,datasource.uri,payload,function(response){
 					if(response.status==200){
-						then(response);
+						then(datatable.adaptFormat(response));
 					}else{
 						console.log(response);
 					}
 				},function(errorMsg){
 					console.log(errorMsg);
 				});
+			}
+			if('managed'==type){
+				console.log('Datatable#fetchDataFromDatasource() - using DataManager #'+datasource.manager);
+				let dataManager = npaUi.getComponent(datasource.manager);
+				if(typeof dataManager!='undefined'){
+					dataManager.query(payload).then(then);
+				}
 			}
 		}
 	}
@@ -96,8 +105,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		this.fetchDataFromDatasource(function(data){
 			$('.'+datatable.getId()+'_row').off('.'+datatable.getId());
 			$('.datatableAction').off('.'+datatable.getId());
-			var adapted = datatable.adaptFormat(data);
-			adapted.map(function(item,index){
+			data.map(function(item,index){
 				let row = '';
 				row += '<tr data-index="'+index+'" class="'+datatable.getId()+'_row">';
 				row += '';
@@ -130,12 +138,12 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			});
 			$('.'+datatable.getId()+'_row').on('click.'+datatable.getId(),function(){
 				let rowIndex = $(this).data('index');
-				npaUi.fireEvent('select',{"source": datatable.getId(),"item": adapted[rowIndex]});
+				npaUi.fireEvent('select',{"source": datatable.getId(),"item": data[rowIndex]});
 			});
 			$('.datatableAction').on('click.'+datatable.getId(),function(){
 				let rowIndex = $(this).data('index');
 				let actionId = $(this).data('action');
-				npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": adapted[rowIndex]});
+				npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": data[rowIndex]});
 			});
 		});
 	}

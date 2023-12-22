@@ -16,16 +16,19 @@
 		<title>NPA Test Application Home Page</title>
 	</head>
 	<body>
+		<div id="dataManagerPlaceholder" class="npaUi" data-ref="dataManager"></div>
 		<div id="navBarPlaceholder" class="npaUi" data-config="/static/config/navBarConfig.json"></div>
 		<div id="cardPlaceholder" class="npaUi" data-config="/static/config/cardConfig.json">
 			<div>
 				<div id="toolbarPlaceholder" class="npaUi" data-config="/static/config/toolbarConfig.json"></div>
-				<div id="datatablePlaceholder" class="npaUi" data-config="/static/config/datatableConfig.json"></div>
+				<div id="datatablePlaceholder" class="npaUi" data-ref="dataTable"></div>
 				<div id="editoPlaceholder" class="npaUi" data-ref="editor"></div>
 			</div>
 		</div>
+		<div id="modalPlaceholder" class="npaUi" data-ref="dialog">
+			<div id="formPlaceholder" class="npaUi" data-ref="form"></div>
+		</div>
 		<div id="notifierPlaceholder" class="npaUi" data-config="/static/config/notifierConfig.json"></div>
-		
 		<script src="/js/jquery-3.6.3.min.js"></script>
 		<script src="/js/bootstrap.bundle.min.js"></script>
 		<script src="/uiTools/js/npaUiCore.js"></script>

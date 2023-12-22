@@ -1,0 +1,48 @@
+/***
+ * form.css - default CSS file for the NPA UI Form Component
+ * Copyright 2023 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+.form-frame {
+	border: 1px solid #c3c3c3;
+	border-radius: 0.2rem;
+	box-shadow: 1px 1px 3px #a0a0a0;
+	background-color: #ffffff;
+	padding: 5px;
+	margin: 2px;
+} 
+
+.form-frame-noborder {
+	background-color: #ffffff;
+	padding: 5px;
+	margin: 2px;
+}
+ 
+.form-title {
+	font-weight: bold;
+	font-size: 1.1rem;
+	margin-bottom: 10px;
+}
+ 
+.form-row {
+	margin-top: 5px;
+}
+
+.form-row-label {
+	font-weight: bold;
+	text-align: right;
+	padding-top: 5px;
+}
+ 
+.form-help {
+	background-color: #dae3f5;
+}
+
+.form-checkbox {
+	margin-top: 7px;
+}
+
+.form-slider {
+	margin-top: 7px;
+}

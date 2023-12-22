@@ -5,7 +5,7 @@
  
 const Plugin = require('../../npaUtil.js');
 const ENV_NAME = 'APPLICATION_NAME';
-const DS_REFERENCE = 'fragments';
+const DS_REFERENCE = 'test-ds';
 
 var plugin = new Plugin();
 
@@ -28,6 +28,20 @@ plugin.getRecordsHandler = function(req,res){
 		plugin.debug('<-getRecordsHandler');
 		if(err){
 			res.json({"status": 500,"message": "Data access error","data": err});
+		}else{
+			res.json({"status": 200,"message": "ok","data": data});
+		}
+	});
+}
+
+plugin.createRecordHandler = function(req,res){
+	plugin.debug('->createRecordHandler');
+	res.set('Content-Type','application/json');
+	let couch = plugin.getService('couchdb');
+	couch.createRecord(DS_REFERENCE,req.body,function(err,data){
+		plugin.debug('<-createRecordHandler');
+		if(err){
+			res.json({"status": 500,"message": "Error creating new record","data": err});
 		}else{
 			res.json({"status": 200,"message": "ok","data": data});
 		}

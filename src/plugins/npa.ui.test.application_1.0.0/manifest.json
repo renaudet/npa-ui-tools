@@ -17,7 +17,7 @@
   	{
   		"point": "npa.couchdb.adapter.datasource",
   		"id": "npa.ui.test.application.datasource",
-  		"reference": "fragments",
+  		"reference": "test-ds",
   		"hostname": "127.0.0.1",
   		"port": "5984",
   		"username_": "admin",
@@ -48,11 +48,19 @@
   	},
   	{
   		"point": "npa.http.handler",
-  		"id": "npa.ui.test.application.query.fragments.handler",
+  		"id": "npa.ui.test.application.query.record.handler",
   		"router": "npa.ui.test.application.router",
   		"method": "POST",
   		"schema": "/getRecords",
   		"handler": "getRecordsHandler"
+  	},
+  	{
+  		"point": "npa.http.handler",
+  		"id": "npa.ui.test.application.create.record.handler",
+  		"router": "npa.ui.test.application.router",
+  		"method": "POST",
+  		"schema": "/record",
+  		"handler": "createRecordHandler"
   	}
   ],
   "provides": [

@@ -5,5 +5,8 @@
 	"Card": {"version": "1.0.0","dependency":"/uiTools/js/components/card.js"},
 	"Datatable": {"version": "1.0.0","dependency":"/uiTools/js/components/datatable.js"},
 	"Editor": {"version": "1.0.0","dependency":"/uiTools/js/components/editor.js"},
-	"Toolbar": {"version": "1.0.0","dependency":"/uiTools/js/components/toolbar.js"}
+	"Toolbar": {"version": "1.0.0","dependency":"/uiTools/js/components/toolbar.js"},
+	"DataManager": {"version": "1.0.0","dependency":"/uiTools/js/utils/dataManager.js"},
+	"ModalDialog": {"version": "1.0.0","dependency":"/uiTools/js/components/modal.js"},
+	"Form": {"version": "1.0.0","dependency":"/uiTools/js/components/form.js"}
 }

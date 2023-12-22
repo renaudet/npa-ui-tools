@@ -1,5 +1,56 @@
 {
 	"components": {
+		"dataTable": {
+		    "id":"table_01",
+		    "version": "1.0.0",
+		    "type": "Datatable",
+		    "configuration": {
+		        "datasource": {
+		            "type_": "local",
+		            "type": "managed",
+		            "manager": "manager_01",
+		            "uri": "/test/getRecords",
+		            "method": "POST",
+		            "payload": {},
+		            "adapter": "@.data"
+		        },
+		        "maxHeight": 300,
+		        "columns": [
+		            {
+		                "label": "#ID",
+		                "field": "id"
+		            },
+		            {
+		                "label": "Category",
+		                "field": "category"
+		            },
+		            {
+		                "label": "Name",
+		                "field": "name"
+		            },
+		            {
+		                "label": "Version",
+		                "field": "version"
+		            },
+		            {
+		                "label": "Actions",
+		                "type": "rowActions",
+		                "actions": [
+		                    {
+		                        "label": "Edit",
+		                        "actionId": "edit",
+		                        "icon": "/uiTools/img/silk/computer_edit.png"
+		                    },
+		                    {
+		                        "label": "Edit",
+		                        "actionId": "delete",
+		                        "icon": "/uiTools/img/silk/computer_delete.png"
+		                    }
+		                ]
+		            }
+		        ]
+		    }
+		},
 		"editor": {
 		    "id":"editor_01",
 		    "version": "1.0.0",
@@ -29,6 +80,157 @@
 		                }
 		        	]
 		        }
+		    }
+		},
+		"dataManager": {
+		    "id":"manager_01",
+		    "version": "1.0.0",
+		    "type": "DataManager",
+		    "configuration": {
+		    	"query": {
+		    		"type": "local",
+		    		"uri": "/test/getRecords",
+		    		"method": "POST",
+		            "adapter": "@.data"
+		    	},
+		    	"create": {
+		    		"type": "local",
+		    		"uri": "/test/record",
+		    		"method": "POST",
+		            "adapter": "@.data"
+		    	},
+		    	"update": {
+		    	},
+		    	"delete": {
+		    	}
+		    }
+		},
+		"dialog": {
+		    "id":"dialog_01",
+		    "version": "1.0.0",
+		    "type": "ModalDialog",
+		    "configuration": {
+		    	"title": "Some Modal Dialog",
+		    	"size": "XL",
+		    	"buttons": [
+		    		{
+		    			"label": "Cancel",
+		    			"action": "cancel"
+		    		},
+		    		{
+		    			"label": "Close",
+		    			"action": "close"
+		    		}
+		    	]
+		    }
+		},
+		"form": {
+		    "id":"form_01",
+		    "version": "1.0.0",
+		    "type": "Form",
+		    "configuration": {
+		    	"title": "Sample NPA UI form",
+		    	"class": "form-frame-noborder",
+		    	"fields": [
+		    		{
+		    			"name": "name",
+		    			"label": "Name",
+		    			"size": 8,
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "password",
+		    			"label": "Password",
+		    			"type": "password",
+		    			"size": 7
+		    		},
+		    		{
+		    			"name": "age",
+		    			"label": "Age",
+		    			"type": "integer",
+		    			"default": 33,
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "birthday",
+		    			"label": "Birthday",
+		    			"type": "date"
+		    		},
+		    		{
+		    			"name": "isCustomer",
+		    			"label": "Customer",
+		    			"type": "check",
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "genre",
+		    			"label": "Genre",
+		    			"type": "radio",
+		    			"choices": [
+		    				{"label": "Male","value": "male"},
+		    				{"label": "Female","value": "female"},
+		    				{"label": "Other","value": "-"}
+		    			]
+		    		},
+		    		{
+		    			"name": "favoriteColor",
+		    			"label": "Color",
+		    			"type": "color",
+		    			"default": "#dae3f5",
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "rank",
+		    			"label": "Rank",
+		    			"type": "range",
+		    			"default": 50,
+		    			"min": 0,
+		    			"max": 100,
+		    			"step": 5,
+		    			"size": 9,
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "type",
+		    			"label": "Type",
+		    			"type": "select",
+		    			"size": 4,
+		    			"values": ["Bronze","Silver","Gold"]
+		    		},
+		    		{
+		    			"name": "custom",
+		    			"label": "Customization",
+		    			"type": "javascript",
+		    			"height": 200
+		    		},
+		    		{
+		    			"name": "comment",
+		    			"label": "Comment",
+		    			"type": "textarea",
+		    			"size": 9
+		    		},
+		    		{
+		    			"name": "dates",
+		    			"label": "Dates",
+		    			"type": "array"
+		    		},
+		    		{
+		    			"name": "bulletin",
+		    			"label": "Etat-civil",
+		    			"type": "upload"
+		    		},
+		    		{
+		    			"name": "validateBtn",
+		    			"label": "Validate",
+		    			"type": "button",
+		    			"buttonType": "warning"
+		    		},
+		    		{
+		    			"name": "footMail",
+		    			"label": "Foot-Mail",
+		    			"type": "richText"
+		    		}
+		    	]
 		    }
 		}
 	}
