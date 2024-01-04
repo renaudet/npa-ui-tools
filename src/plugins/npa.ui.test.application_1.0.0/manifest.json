@@ -23,7 +23,14 @@
   		"username_": "admin",
   		"password_": "admin4couch",
   		"dbname": "scaf_fragments",
-  		"maxPageSize": 500
+  		"maxPageSize": 500,
+  		"environment": {
+  			"hostname": "COUCH_DB_HOST",
+	  		"port": "COUCH_DB_PORT",
+	  		"username_": "COUCH_DB_USER",
+	  		"password_": "COUCH_DB_USER_PASSWD",
+	  		"dbname": "COUCH_DB_BASE"
+  		}
   	},
   	{
   		"point": "npa.core.application",

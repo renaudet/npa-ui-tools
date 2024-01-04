@@ -5,6 +5,7 @@
  
 const Plugin = require('../../npaUtil.js');
 const ENV_NAME = 'APPLICATION_NAME';
+const ENV_APPLICATION_PORT = 'APPLICATION_PORT';
 const DS_REFERENCE = 'test-ds';
 
 var plugin = new Plugin();
@@ -13,7 +14,11 @@ plugin.initialize = function(){
 	this.name = process.env[ENV_NAME];
 	this.info('Application '+this.name+' starting...');
 	var httpServer = this.getService('http');
-	httpServer.startListener();
+	if(typeof process.env[ENV_APPLICATION_PORT]!='undefined'){
+		httpServer.startListener(process.env[ENV_APPLICATION_PORT]);
+	}else{
+		httpServer.startListener();
+	}
 }
 
 plugin.getRecordsHandler = function(req,res){
