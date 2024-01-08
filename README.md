@@ -11,18 +11,20 @@ The related plugins are package as an NPA's installation site, which means that 
 
 Once installed, edit the NPA Core's _appConfig.json_ file like this:
 
-    { 
-        "sites": [
-            {
-                "id": "default",
-                "location": "./plugins"
-            },
-            {
-                "id": "npa-ui-tools",
-                "location": "<npa-ui-tools-install-location>/plugins"
-            }
-        ]
-    }
+```json
+{ 
+    "sites": [
+        {
+            "id": "default",
+            "location": "./plugins"
+        },
+        {
+            "id": "npa-ui-tools",
+            "location": "<npa-ui-tools-install-location>/plugins"
+        }
+    ]
+}
+```
 
 so that NPA can load these plugins.
 
@@ -38,75 +40,85 @@ NPA UI uses externaly defined Components that can be configured through JSON fil
 
 The base page should include the necessary dependencies: jQuery, Bootstrap, and the provided npaUiCore.js library:
 
-    <!doctype html>
-    <html>
-        <head>
-            <meta charset="ISO-8859-1">
-            <meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
-            <meta http-equiv="Pragma" content="no-cache">
-            <meta http-equiv="Content-Style-Type" content="text/css">
-            <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-            <meta name='viewport' content='width=device-width, initial-scale=1'>
-            <link href="/css/bootstrap.min.css" rel="stylesheet">
-            <title>NPA test page</title>
-        </head>
-        <body>
-            <script src="/js/jquery-3.6.3.min.js"></script>
-            <script src="/js/bootstrap.bundle.min.js"></script>
-            <script src="/uiTools/js/npaUiCore.js"></script>
-        </body>
-    </html>
+```html
+<!doctype html>
+<html>
+    <head>
+        <meta charset="ISO-8859-1">
+        <meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Content-Style-Type" content="text/css">
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <title>NPA test page</title>
+    </head>
+    <body>
+        <script src="/js/jquery-3.6.3.min.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <script src="/uiTools/js/npaUiCore.js"></script>
+    </body>
+</html>
+```
 
 Then, NPA components are added to the page using `<div>` declarations by adding the _npUi_ class:
 
-    <body>
-		<div id="navBarPlaceholder" class="npaUi" data-config="/static/config/navBarConfig.json"></div>
-		<div id="cardPlaceholder" class="npaUi" data-config="/static/config/cardConfig.json">
-			<div>
-				<div id="datatablePlaceholder" class="npaUi" data-config="/static/config/datatableConfig.json"></div>
-				<div id="editoPlaceholder" class="npaUi" data-config="/static/config/editorConfig.json"></div>
-			</div>
+```html
+<body>
+	<div id="navBarPlaceholder" class="npaUi" data-config="/static/config/navBarConfig.json"></div>
+	<div id="cardPlaceholder" class="npaUi" data-config="/static/config/cardConfig.json">
+		<div>
+			<div id="datatablePlaceholder" class="npaUi" data-config="/static/config/datatableConfig.json"></div>
+			<div id="editoPlaceholder" class="npaUi" data-config="/static/config/editorConfig.json"></div>
 		</div>
-		<div id="notifierPlaceholder" class="npaUi" data-config="/static/config/notifierConfig.json"></div>
-		
-		<script src="/js/jquery-3.6.3.min.js"></script>
-		<script src="/js/bootstrap.bundle.min.js"></script>
-		<script src="/uiTools/js/npaUiCore.js"></script>
-		<script src="/static/js/homePage.js"></script>
-	</body>
+	</div>
+	<div id="notifierPlaceholder" class="npaUi" data-config="/static/config/notifierConfig.json"></div>
+	
+	<script src="/js/jquery-3.6.3.min.js"></script>
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/uiTools/js/npaUiCore.js"></script>
+	<script src="/static/js/homePage.js"></script>
+</body>
+```
 
 Components are then configured using an external JSON configuration file defined by the _data-config_ attribute.
 Such JSON configuration file provides some basic metadata:
 
-    {
-        "id":"card_01",
-        "version": "1.0.0",
-        "type": "Card",
-        "configuration": {
-            ...
-        }
+```json
+{
+    "id":"card_01",
+    "version": "1.0.0",
+    "type": "Card",
+    "configuration": {
+        ...
     }
+}
+```
 
-The runtime will use these metadata to load the right component (here `Card`) at the right version.
+The runtime will use these metadata to load the right component (here `Card`) at the right version (here `1.0.0`).
 Notice that the component is by default looked for in the default namespace. To specifiy an alternate namespace, one must prefix the component name with the namespace followed by a single dot:
 
-    {
-        "id":"card_01",
-        "version": "1.0.0",
-        "type": "npaTest.Card",
-        "configuration": {
-            ...
-        }
+```json
+{
+    "id":"card_01",
+    "version": "1.0.0",
+    "type": "npaTest.Card",
+    "configuration": {
+        ...
     }
+}
+```
 
-The `configuration` section is component-dependent and might be completely different from one component to the other.
+The `configuration` section is component-dependent and might be completely different from one component to another.
 
 In the main javascript file for the page, the runtime may be called from the `$(document).ready()` callback:
 
-    $(document).ready(function(){
-        npaUi.initialize(function(){
-            npaUi.onComponentLoaded = onPageReady;
-            npaUi.render();
-        });
+```javascript
+$(document).ready(function(){
+    npaUi.initialize(function(){
+        npaUi.onComponentLoaded = onPageReady;
+        npaUi.render();
     });
+});
+```
 
