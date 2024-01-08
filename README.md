@@ -122,3 +122,166 @@ $(document).ready(function(){
 });
 ```
 
+## Built-in components
+
+### NavBar
+
+**Description:**
+
+NavBar components are top-level component for the HTML Page that provide branding and menu facilities
+
+**Integration:**
+
+**HTML**
+
+```html
+<div id="<some-unique-id>" class="npaUi" data-config="<path-to-config.json>"></div>
+```
+
+**JSON Configuration file**
+
+```json
+{
+    "id":"<component-id>",
+    "version": "1.0.0",
+    "type": "NavBar",
+    "configuration": {
+        "icon": "<path-to-upper-left-application-icon>",
+        "applicationName": "<application-title-on-the-navbar>",
+        "homeRef": "<Home page URI>",
+        "menus": [
+        	{
+        		"id": "<menu-id>",
+        		"label": "<leave-blank-for-icon-only>",
+        		"actionId": "<action-id-for-this-menu>",
+        		"tooltip": "save",
+		      "icon": "<icon-path-for-the-menu>"
+        	},
+        	{
+        		"id": "<menu-id>",
+        		"label": "<menu-label-visible-on-the-navbar>",
+        		"items": [
+        			{
+        				"id": "<menu-item-id>",
+		        		"label": "<menu-item-label>",
+		        		"actionId": "<action-id-for-this-menu-item>",
+		        		"icon": "<icon-path-for-the-menu-item>"
+        			},
+        			{
+        				"type": "separator"
+        			},
+        			{
+        				"id": "<menu-item-id>",
+		        		"label": "<menu-item-label>",
+		        		"actionId": "<action-id-for-this-menu-item>",
+        				"tooltip": "<tooltip/description-for-this-menu-item>",
+		        		"icon": "icon-path-for-the-menu-item"
+        			}
+        		]
+        	}
+        ]
+    }
+}
+```
+
+### Card
+
+**Description:**
+
+A Card is a component container with a header, a body and footer. Child components are contained within the body.
+
+The header can be customized with and icon ond title, making it perfect to act as the container for an inner application page.
+
+**Integration:**
+
+**HTML**
+
+```html
+<div id="<some-unique-id>" class="npaUi" data-config="<path-to-config.json>">
+	<div>
+		[...] <!-- some other inner components -->
+	</div>
+</div>
+```
+
+**JSON Configuration file**
+
+```json
+{
+    "id":"<component-id>",
+    "version": "1.0.0",
+    "type": "Card",
+    "configuration": {
+        "icon": "<path-to-card-icon>",
+        "label": "<label/title-for-this-card>"
+    }
+}
+```
+
+### Toolbar
+
+**Description:**
+
+A Toolbar is a ruban-like rectangular area containing several icons aimed at providing button-like access to features through  _action_  events
+
+**Integration:**
+
+**HTML**
+
+```html
+<div id="<some-unique-id>" class="npaUi" data-config="<path-to-config.json>"></div>
+```
+
+**JSON Configuration file**
+
+```json
+{
+	"id":"<component-id>",
+	"version": "1.0.0",
+	"type": "Toolbar",
+	"configuration": {
+		"actions": [
+			{
+				"label": "<Tooltip-label-for-the-icon>",
+				"actionId": "<action-id-for the icon>",
+				"icon": "<path-to-icon>"
+			},
+			{
+				"type": "separator"
+			},
+			{
+				"label": "<Tooltip-label-for-the-icon>",
+				"actionId": "<action-id-for the icon>",
+				"icon": "<path-to-icon>"
+			}
+		]
+	}
+}
+```
+
+### Component-id
+
+**Description:**
+
+	<put-some-description-here>
+
+**Integration:**
+
+**HTML**
+
+```html
+<div id="<some-unique-id>" class="npaUi" data-config="<path-to-config.json>"></div>
+```
+
+**JSON Configuration file**
+
+```json
+{
+    "id":"<component-id>",
+    "version": "1.0.0",
+    "type": "<component-id>",
+    "configuration": {
+        [...]
+    }
+}
+```
