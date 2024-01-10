@@ -17,32 +17,45 @@
 		        "maxHeight": 300,
 		        "columns": [
 		            {
-		                "label": "#ID",
-		                "field": "id"
-		            },
-		            {
-		                "label": "Category",
-		                "field": "category"
-		            },
-		            {
 		                "label": "Name",
 		                "field": "name"
 		            },
 		            {
-		                "label": "Version",
-		                "field": "version"
+		                "label": "Age",
+		                "field": "age"
+		            },
+		            {
+		                "label": "Birthday",
+		                "field": "birthday"
+		            },
+		            {
+		                "label": "Customer",
+		                "field": "isCustomer",
+		                "type": "boolean"
+		            },
+		            {
+		                "label": "Genre",
+		                "field": "genre"
+		            },
+		            {
+		                "label": "Type",
+		                "field": "type"
+		            },
+		            {
+		                "label": "Rank",
+		                "field": "rank"
 		            },
 		            {
 		                "label": "Actions",
 		                "type": "rowActions",
 		                "actions": [
 		                    {
-		                        "label": "Edit",
+		                        "label": "Edit record",
 		                        "actionId": "edit",
 		                        "icon": "/uiTools/img/silk/computer_edit.png"
 		                    },
 		                    {
-		                        "label": "Edit",
+		                        "label": "Delete record",
 		                        "actionId": "delete",
 		                        "icon": "/uiTools/img/silk/computer_delete.png"
 		                    }
@@ -62,21 +75,16 @@
 		        	"actions": [
 		        		{
 		                    "label": "Save",
-		                    "actionId": "save",
+		                    "actionId": "saveSource",
 		                    "icon": "/uiTools/img/silk/disk.png"
-		                },
-		        		{
-		                    "label": "Edit",
-		                    "actionId": "edit",
-		                    "icon": "/uiTools/img/silk/page_edit.png"
 		                },
 			    		{
 			                "type": "separator"
 			            },
 		        		{
-		                    "label": "New",
-		                    "actionId": "new",
-		                    "icon": "/uiTools/img/silk/page_add.png"
+		                    "label": "Edit",
+		                    "actionId": "editSource",
+		                    "icon": "/uiTools/img/silk/page_edit.png"
 		                }
 		        	]
 		        }
@@ -90,6 +98,7 @@
 		    	"query": {
 		    		"type": "local",
 		    		"uri": "/test/getRecords",
+		    		"payload": {"selector": {}},
 		    		"method": "POST",
 		            "adapter": "@.data"
 		    	},
@@ -97,11 +106,22 @@
 		    		"type": "local",
 		    		"uri": "/test/record",
 		    		"method": "POST",
+		    		"payload": "@",
 		            "adapter": "@.data"
 		    	},
 		    	"update": {
+		    		"type": "local",
+		    		"uri": "/test/record",
+		    		"method": "PUT",
+		    		"payload": "@",
+		            "adapter": "@.data"
 		    	},
 		    	"delete": {
+		    		"type": "local",
+		    		"uri": "/test/record/@.id",
+		    		"method": "DELETE",
+		    		"payload": "{}",
+		            "adapter": "@.data"
 		    	}
 		    }
 		},
@@ -110,21 +130,21 @@
 		    "version": "1.0.0",
 		    "type": "ModalDialog",
 		    "configuration": {
-		    	"title": "Some Modal Dialog",
-		    	"size": "XL",
+		    	"title": "NPA-test Modal Dialog",
+		    	"size": "XXL",
 		    	"buttons": [
 		    		{
 		    			"label": "Cancel",
 		    			"action": "cancel"
 		    		},
 		    		{
-		    			"label": "Close",
+		    			"label": "Save",
 		    			"action": "close"
 		    		}
 		    	]
 		    }
 		},
-		"form": {
+		"form.sample": {
 		    "id":"form_01",
 		    "version": "1.0.0",
 		    "type": "Form",
@@ -230,6 +250,124 @@
 		    			"label": "Foot-Mail",
 		    			"type": "richText"
 		    		}
+		    	]
+		    }
+		},
+		"form": {
+		    "id":"form_01",
+		    "version": "1.0.0",
+		    "type": "Form",
+		    "configuration": {
+		    	"title": "NPA Sample Record edition",
+		    	"class": "form-frame-noborder",
+		    	"fields": [
+		    		{
+		    			"name": "name",
+		    			"label": "Customer Name",
+		    			"required": true,
+		    			"size": 8,
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "password",
+		    			"label": "Password",
+		    			"type": "password",
+		    			"size": 4
+		    		},
+		    		{
+		    			"name": "age",
+		    			"label": "Age",
+		    			"type": "integer",
+		    			"required": true,
+		    			"default": 33,
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "birthday",
+		    			"label": "Birthday",
+		    			"type": "date"
+		    		},
+		    		{
+		    			"name": "isCustomer",
+		    			"label": "Customer",
+		    			"type": "check",
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "genre",
+		    			"label": "Genre",
+		    			"type": "radio",
+		    			"choices": [
+		    				{"label": "Male","value": "male"},
+		    				{"label": "Female","value": "female"},
+		    				{"label": "Other","value": "-"}
+		    			]
+		    		},
+		    		{
+		    			"name": "favoriteColor",
+		    			"label": "Color",
+		    			"type": "color",
+		    			"default": "#dae3f5",
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "rank",
+		    			"label": "Rank",
+		    			"type": "range",
+		    			"default": 50,
+		    			"min": 0,
+		    			"max": 100,
+		    			"step": 5,
+		    			"size": 9,
+		    			"help": "Put here some helping info for this field"
+		    		},
+		    		{
+		    			"name": "type",
+		    			"label": "Type",
+		    			"type": "select",
+		    			"size": 4,
+		    			"values": ["Bronze","Silver","Gold"]
+		    		}
+		    	]
+		    }
+		},
+		"toolbar": {
+		    "id":"toolbar_01",
+		    "version": "1.0.0",
+		    "type": "Toolbar",
+		    "configuration": {
+		    	"actions": [
+		    		{
+		                "label": "Print",
+		                "actionId": "print",
+		                "icon": "/uiTools/img/silk/printer.png"
+		            },
+		    		{
+		                "type": "separator"
+		            },
+		    		{
+		                "label": "Insert a new record",
+		                "actionId": "insert",
+		                "icon": "/uiTools/img/silk/table_row_insert.png"
+		            },
+		    		{
+		                "label": "Edit the current record",
+		                "actionId": "edit",
+		                "icon": "/uiTools/img/silk/table_edit.png"
+		            },
+		    		{
+		                "label": "Save the current record",
+		                "actionId": "save",
+		                "icon": "/uiTools/img/silk/disk.png"
+		            },
+		    		{
+		                "type": "separator"
+		            },
+		    		{
+		                "label": "Delete the current record",
+		                "actionId": "delete",
+		                "icon": "/uiTools/img/silk/table_row_delete.png"
+		            }
 		    	]
 		    }
 		}

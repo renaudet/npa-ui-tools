@@ -84,6 +84,11 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 						html += column.label;
 						html += '</th>';
 					}
+					if('boolean'==column.type){
+						html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
+						html += column.label;
+						html += '</th>';
+					}
 				}else{
 					html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
 					html += column.label;
@@ -122,7 +127,16 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 								row += '<img src="'+actionDef.icon+'" class="datatableAction" title="'+actionDef.label+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
 							}
 						}else{
-							row += '?';
+							if('boolean'==column.type){
+								let booleanValue = item[column.field];
+								if(booleanValue){
+									row += '<img src="/uiTools/img/silk/accept.png">';
+								}else{
+									row += '<img src="/uiTools/img/silk/cross.png">';
+								}
+							}else{
+								row += '?';
+							}
 						}
 					}else
 					if(typeof column.field!='undefined'){

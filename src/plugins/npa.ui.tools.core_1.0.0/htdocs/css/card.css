@@ -1,0 +1,9 @@
+/***
+ * card.css - default CSS file for the NPA UI Card component
+ * Copyright 2024 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+.npa-card-header {
+	background-color: #d3d3d3;
+}

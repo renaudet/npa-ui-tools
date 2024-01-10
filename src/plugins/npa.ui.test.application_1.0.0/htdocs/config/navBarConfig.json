@@ -3,15 +3,15 @@
     "version": "1.0.0",
     "type": "NavBar",
     "configuration": {
-        "icon": "/uiTools/img/silk/application_view_tile.png",
+        "icon": "/uiTools/img/silk/application_home.png",
         "applicationName": "NPA Test Application",
-        "homeRef": "/uiTools",
+        "homeRef": "/static/home.html",
         "menus": [
         	{
         		"id": "menu1",
         		"label": "",
         		"actionId": "menu1",
-        		"tooltip": "save",
+        		"tooltip": "Global Save action (sample)",
 		        "icon": "/uiTools/img/silk/disk.png"
         	},
         	{
@@ -26,8 +26,9 @@
         			},
         			{
         				"id": "menu22",
-		        		"label": "Menu 2.2",
-		        		"actionId": "menu22"
+		        		"label": "Switch to Page 2",
+		        		"actionId": "redirect",
+		        		"uri": "/static/page2.html"
         			},
         			{
         				"type": "separator"

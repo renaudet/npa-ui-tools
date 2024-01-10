@@ -1,0 +1,27 @@
+/***
+ * selectionList.css - default CSS file for the NPA UI SelectionList component
+ * Copyright 2024 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+.npa-selection-list {
+	background-color: #ffffff;
+}
+
+.npa-selection-list-header {
+	background-color: #eeeeee;
+	border-bottom: 1px solid #d3d3d3;
+	font-weight: bold;
+	font-size: 1.1rem;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 10px;
+	margin-bottom: 5px;
+}
+
+.npa-selection-list-filter-icon {
+	vertical-align: top;
+	padding-top: 5px;
+	cursor: pointer;
+}

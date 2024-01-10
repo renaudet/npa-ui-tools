@@ -546,7 +546,7 @@ class RangeSelectorField extends LabeledFormField{
 	}
 	assignData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
-		parentObj[this.config.name] = $('input[name='+inputFieldId+']').val();
+		parentObj[this.config.name] = parseInt($('input[name='+inputFieldId+']').val());
 	}
 	vetoRaised(){
 		return false;
@@ -1126,7 +1126,7 @@ class PlaceholderField extends LabeledFormField{
 const RICH_TEXT_EDITOR_DEPTS = [
 	 {"type": "css","uri": "/css/rte/rte.css"},
      {"type": "js","uri": "/js/richText/rte.js"},
-     {"type": "js","uri": "/js/richText/rteControls.js"}
+     {"type": "js","uri": "/uiTools/js/richText/rteControls.js"}
 ];
 
 class RichTextEditorField extends LabeledFormField{
@@ -1135,41 +1135,47 @@ class RichTextEditorField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
 		html += '<div class="row form-row">';
 		html += this.generateLabel();
 		html += '  <div class="col-10">';
 		if(typeof this.config.buttons!='undefined'){
-			html += '<div id="'+this.baseId+'_'+this.config.name+'_buttonBar" class="d-grid gap-2 d-md-flex">';//justify-content-md-end
+			html += '<div id="'+inputFieldId+'_buttonBar" class="d-grid gap-2 d-md-flex">';//justify-content-md-end
 			for(var i=0;i<this.config.buttons.length;i++){
 				var button = this.config.buttons[i];
 				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="img-icon" src="'+button.icon+'" title="'+button.label+'"></button>';
 			}
 			html += '</div>';
 		}
-		html += '    <div id="'+this.baseId+'_'+this.config.name+'"></div>';
+		html += '    <div id="'+inputFieldId+'"></div>';
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
 		var source = this;
-		$('#'+this.baseId+'_'+this.config.name+'_buttonBar button').on('click',function(){
+		$('#'+inputFieldId+'_buttonBar button').on('click',function(){
 			var actionId = $(this).data('actionid');
 			npaUi.fireEvent(actionId,{"action": actionId,"editor": source.form.editors[source.config.name]});
 		});
 		loadDeps(RICH_TEXT_EDITOR_DEPTS,function(){
+			var width = 800; // default width
 			var height = 300; // default height
 			if(typeof source.config.height!='undefined'){
 				height = source.config.height;
 			}
+			if(typeof source.config.width!='undefined'){
+				width = source.config.width;
+			}
 			var parentId = source.baseId+'_'+source.config.name;
-			var editor = new RichTextEditor(parentId+'_rte',$('#'+parentId).width()-10,height);
-			editor.controlObject = 'ForumEditorControls';
+			var editor = new RichTextEditor(parentId+'_rte',width,height);
+			editor.controlObject = 'NpaEditorControls';
 			editor.init($('#'+parentId).get(0));
 			setTimeout(function(){ editor.disable(); },500);
 			source.form.editors[source.config.name] = editor;
 		});
 	}
 	setEditMode(editing){
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			this.form.editors[this.config.name].enable();
 			if(typeof this.config.buttons!='undefined'){
@@ -1329,12 +1335,14 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 		return data;
 	}
-	checkFormData(){
+	isValid(){
 		var errorFound = false;
 		for(var fieldId in this.fieldCache){
 			let field = this.fieldCache[fieldId];
-			console.log('checking veto for field '+fieldId+' of type '+this.configuration.fields[i].type);
-			errorFound = field.vetoRaised();
+			console.log('checking veto for field '+fieldId);
+			if(field.vetoRaised()){
+				errorFound = true;
+			}
 			console.log('veto: '+errorFound);
 		}
 		return !errorFound;

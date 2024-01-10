@@ -13,24 +13,9 @@
                 "type": "separator"
             },
     		{
-                "label": "Save",
-                "actionId": "save",
-                "icon": "/uiTools/img/silk/table_save.png"
-            },
-    		{
-                "label": "Edit",
-                "actionId": "edit",
-                "icon": "/uiTools/img/silk/table_edit.png"
-            },
-    		{
-                "label": "Insert",
+                "label": "Insert new record",
                 "actionId": "insert",
                 "icon": "/uiTools/img/silk/table_row_insert.png"
-            },
-    		{
-                "label": "Delete",
-                "actionId": "delete",
-                "icon": "/uiTools/img/silk/table_row_delete.png"
             }
     	]
     }

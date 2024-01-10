@@ -22,7 +22,7 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 			}
 			let child = null;
 			if($('#'+this.parentDivId+' div').length>0){
-				 child = $('#'+this.parentDivId+' div').detach();
+				 child = $('#'+this.parentDivId+' div').first().detach();
 			}
 			let html = '';
 			html += '<div class="modal fade" id="'+this.getId()+'" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="'+config.title+'" aria-hidden="true">';

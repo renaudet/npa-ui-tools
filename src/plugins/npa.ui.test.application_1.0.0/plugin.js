@@ -13,23 +13,48 @@ var plugin = new Plugin();
 plugin.initialize = function(){
 	this.name = process.env[ENV_NAME];
 	this.info('Application '+this.name+' starting...');
-	var httpServer = this.getService('http');
-	if(typeof process.env[ENV_APPLICATION_PORT]!='undefined'){
-		httpServer.startListener(process.env[ENV_APPLICATION_PORT]);
-	}else{
-		httpServer.startListener();
-	}
+	// check that database exists
+	let couchService = plugin.getService('couchdb');
+	couchService.checkDatabase(DS_REFERENCE,function(err,exists){
+		if(err){
+			plugin.error('Error checking for CouchDB database '+DS_REFERENCE);
+			plugin.error(JSON.stringify(err));
+		}else{
+			if(exists){
+				var httpServer = plugin.getService('http');
+				if(typeof process.env[ENV_APPLICATION_PORT]!='undefined'){
+					httpServer.startListener(process.env[ENV_APPLICATION_PORT]);
+				}else{
+					httpServer.startListener();
+				}
+			}else{
+				couchService.createDatabase(DS_REFERENCE,function(err,created){
+					if(err){
+						plugin.error('Error creating CouchDB database '+DS_REFERENCE);
+						plugin.error(JSON.stringify(err));
+					}else{
+						var httpServer = plugin.getService('http');
+						if(typeof process.env[ENV_APPLICATION_PORT]!='undefined'){
+							httpServer.startListener(process.env[ENV_APPLICATION_PORT]);
+						}else{
+							httpServer.startListener();
+						}
+					}
+				});
+			}
+		}
+	});
 }
 
 plugin.getRecordsHandler = function(req,res){
 	plugin.debug('->getRecordsHandler');
 	res.set('Content-Type','application/json');
-	let couch = plugin.getService('couchdb');
+	let couchService = plugin.getService('couchdb');
 	let query = {"selector": {}};
 	if(req.body && req.body.selector){
 		query = req.body;
 	}
-	couch.query(DS_REFERENCE,query,function(err,data){
+	couchService.query(DS_REFERENCE,query,function(err,data){
 		plugin.debug('<-getRecordsHandler');
 		if(err){
 			res.json({"status": 500,"message": "Data access error","data": err});
@@ -42,13 +67,41 @@ plugin.getRecordsHandler = function(req,res){
 plugin.createRecordHandler = function(req,res){
 	plugin.debug('->createRecordHandler');
 	res.set('Content-Type','application/json');
-	let couch = plugin.getService('couchdb');
-	couch.createRecord(DS_REFERENCE,req.body,function(err,data){
+	let couchService = plugin.getService('couchdb');
+	couchService.createRecord(DS_REFERENCE,req.body,function(err,data){
 		plugin.debug('<-createRecordHandler');
 		if(err){
 			res.json({"status": 500,"message": "Error creating new record","data": err});
 		}else{
 			res.json({"status": 200,"message": "ok","data": data});
+		}
+	});
+}
+
+plugin.updateRecordHandler = function(req,res){
+	plugin.debug('->updateRecordHandler');
+	res.set('Content-Type','application/json');
+	let couchService = plugin.getService('couchdb');
+	couchService.updateRecord(DS_REFERENCE,req.body,function(err,data){
+		plugin.debug('<-updateRecordHandler');
+		if(err){
+			res.json({"status": 500,"message": "Error updating record","data": err});
+		}else{
+			res.json({"status": 200,"message": "ok","data": data});
+		}
+	});
+}
+
+plugin.deleteRecordHandler = function(req,res){
+	plugin.debug('->deleteRecordHandler');
+	res.set('Content-Type','application/json');
+	let couchService = plugin.getService('couchdb');
+	couchService.deleteRecord(DS_REFERENCE,{"id": req.params.uuid },function(err,data){
+		plugin.debug('<-deleteRecordHandler');
+		if(err){
+			res.json({"status": 500,"message": "Error deleting record","data": err});
+		}else{
+			res.json({"status": 200,"message": "deleted","data": req.params.uuid});
 		}
 	});
 }

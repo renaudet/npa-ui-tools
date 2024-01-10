@@ -11,6 +11,7 @@ function createNotification(type,message){
 	var icon = '/uiTools/img/info.png';
 	var theme = ' text-bg-info';
 	var autoHide = 'false';
+	var autoHideDelay = 4000;
 	if('error'==type){
 		msgType = 'Error';
 		icon = '/uiTools/img/error.png';
@@ -27,8 +28,15 @@ function createNotification(type,message){
 		theme = ' text-bg-success';
 		autoHide = 'true';
 	}
+	if('flash'==type){
+		msgType = 'Notice!';
+		icon = '/uiTools/img/silk/flag_green.png';
+		theme = ' text-bg-success';
+		autoHide = 'true';
+		autoHideDelay = 2000;
+	}
 	var html = '';
-	html += '<div id="'+notifId+'" class="toast uiToolsNotification" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="'+autoHide+'"'+(autoHide?' data-bs-delay="4000"':'')+'>';
+	html += '<div id="'+notifId+'" class="toast uiToolsNotification" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="'+autoHide+'"'+(autoHide?' data-bs-delay="'+autoHideDelay+'"':'')+'>';
 	html += '  <div class="toast-header'+theme+'">';
 	html += '    <img src="'+icon+'" class="rounded me-2" width="16">';
 	html += '    <strong class="me-auto">'+title+'</strong>';
@@ -67,6 +75,10 @@ function showError(msg){
 
 function showConfirm(msg){
 	showNotification('confirm',msg);
+}
+
+function flash(msg){
+	showNotification('flash',msg);
 }
  
 npaUiCore.Notifier = class Notifier extends NpaUiComponent{

@@ -146,6 +146,37 @@ class NpaUiComponentProxy {
 	}
 }
 
+class ItemRenderer {
+	config = null;
+	constructor(configuration){
+		this.config = configuration;
+	}
+	render(item){
+		// by default return the Type
+		return typeof item;
+	}
+}
+
+window.FieldItemRenderer = class FieldItemRenderer extends ItemRenderer{
+	render(item){
+		console.log('FieldItemRenderer#render()');
+		if(typeof this.config.field!='undefined'){
+			console.log('using field name '+this.config.field);
+			return item[this.config.field];
+		}else
+		if(typeof this.config.processor!='undefined'){
+			console.log('using processor '+this.config.processor);
+			let result = '';
+			let toEval = 'result = '+this.config.processor.replace(/@/g,'item')+';';
+			try{
+				eval(toEval);
+			}catch(t){ console.log(t);}
+			return result;
+		}else
+			return super.render(item);
+	}
+}
+
 // default namespace declaration
 npaUiCore = {}
 
@@ -296,6 +327,11 @@ npaUi = {
 						listener.onItemSelected(event.item);
 					}catch(t){}
 				}
+			}
+		}else
+		if('redirect'==actionId){
+			if(typeof event.uri!='undefined'){
+				window.location.assign(event.uri);
 			}
 		}else{
 			let handler = this.actionHandlers[actionId];
