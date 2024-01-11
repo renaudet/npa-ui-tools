@@ -18,9 +18,12 @@
         },
         "renderer": {
         	"type": "FieldItemRenderer",
-        	"configuration": {
-        		"processor": "(@.genre=='male'?'<b>'+@.name+'</b>':@.name)+'<span class=\"badge bg-primary rounded-pill\">'+@.rank+'</span>'"
-        	}
+        	"processor": "(@.genre=='male'?'<b>'+@.name+'</b>':@.name)+'<span class=\"badge bg-primary rounded-pill\">'+@.rank+'</span>'"
+        },
+        "sorter": {
+        	"type": "FieldItemSorter",
+        	"field": "name",
+        	"ascending": false
         }
     }
 }

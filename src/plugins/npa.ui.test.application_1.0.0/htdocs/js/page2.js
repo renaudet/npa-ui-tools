@@ -28,6 +28,7 @@ var actionHandler = {
 			if(form.isValid()){
 				let updatedRecord = form.getData();
 				dataManager.update(updatedRecord).then(function(data){
+					form.setData(data);
 					toolbar.setEnabled('save',false);
 					toolbar.setEnabled('edit',true);
 					form.setEditMode(false);
@@ -42,6 +43,7 @@ var actionHandler = {
 			let dataManager = npaUi.getComponent('manager_01');
 			if(confirm('Do you really want to delete the record "'+list.getSelectedItem().name+'"?')){
 				dataManager.delete(list.getSelectedItem()).then(function(data){
+					list.select(-1);
 					list.refresh();
 					let form = npaUi.getComponent('form_01');
 					let toolbar = npaUi.getComponent('toolbar_01');

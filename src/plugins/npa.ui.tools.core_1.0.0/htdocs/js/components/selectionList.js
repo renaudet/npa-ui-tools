@@ -6,6 +6,7 @@
 npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 	items = [];
 	itemRenderer = null;
+	itemSorter = null;
 	selectedIndex = -1;
 	initialize(then){
 		if(this.getConfiguration().stylesheet){
@@ -14,9 +15,14 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 			$.loadCss('/uiTools/css/selectionList.css',then);
 		}
 		if(this.getConfiguration().renderer){
-			this.itemRenderer = new window[this.getConfiguration().renderer.type](this.getConfiguration().renderer.configuration);
+			this.itemRenderer = new window[this.getConfiguration().renderer.type](this.getConfiguration().renderer);
 		}else{
 			this.itemRenderer = new ItemRenderer({});
+		}
+		if(this.getConfiguration().sorter){
+			this.itemSorter = new window[this.getConfiguration().sorter.type](this.getConfiguration().sorter);
+		}else{
+			this.itemSorter = new ItemSorter({});
 		}
 	}
 	fetchDataFromDatasource(then){
@@ -94,7 +100,8 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 		}
 		var source = this;
 		this.fetchDataFromDatasource(function(data){
-			source.load(data);
+			let sortedData = source.itemSorter.sort(data);
+			source.load(sortedData);
 		});
 	}
 	filter(filterStr){
@@ -119,17 +126,18 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 		$('.'+this.getId()+'_selection_provider').off('.'+this.getId());
 		$('.'+this.getId()+'_selection_provider').on('click.'+this.getId(),function(){
 			source.select(parseInt($(this).data('index')));
+			$('#'+source.getId()+' li').removeClass('active');
+			$(this).addClass('active');
 		});
 	}
 	select(itemIndex){
 		this.selectedIndex = itemIndex;
-		if(this.selectedIndex<this.items.length){
+		if(this.selectedIndex>=0 && this.selectedIndex<this.items.length){
 			let selectedItem = this.items[this.selectedIndex];
 			npaUi.fireEvent('select',{"source": this.getId(),"item": selectedItem});
 		}
 	}
 	addItem(item){
-		//let config = this.getConfiguration();
 		let itemIndex = this.items.length;
 		this.items.push(item);
 		let html = '';
@@ -137,6 +145,9 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 		html += this.renderItem(item);
 		html += '</li>';
 		$('#'+this.getId()).append(html);
+		if(itemIndex==this.selectedIndex){
+			$('#'+this.getId()+'_line_'+itemIndex).addClass('active');
+		}
 	}
 	renderItem(item){
 		return this.itemRenderer.render(item);

@@ -4,8 +4,14 @@
  */
  
 npaUiCore.Datatable = class Datatable extends NpaUiComponent{
+	itemSorter = null;
 	initialize(then){
 		$.loadCss('/uiTools/css/datatable.css',then);
+		if(this.getConfiguration().sorter){
+			this.itemSorter = new window[this.getConfiguration().sorter.type](this.getConfiguration().sorter);
+		}else{
+			this.itemSorter = new ItemSorter({});
+		}
 	}
 	fetchDataFromDatasource(then){
 		let datasource = this.getConfiguration().datasource;
@@ -108,9 +114,10 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		}
 		var datatable = this;
 		this.fetchDataFromDatasource(function(data){
+			let sortedData = datatable.itemSorter.sort(data);
 			$('.'+datatable.getId()+'_row').off('.'+datatable.getId());
 			$('.datatableAction').off('.'+datatable.getId());
-			data.map(function(item,index){
+			sortedData.map(function(item,index){
 				let row = '';
 				row += '<tr data-index="'+index+'" class="'+datatable.getId()+'_row">';
 				row += '';
@@ -152,12 +159,12 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			});
 			$('.'+datatable.getId()+'_row').on('click.'+datatable.getId(),function(){
 				let rowIndex = $(this).data('index');
-				npaUi.fireEvent('select',{"source": datatable.getId(),"item": data[rowIndex]});
+				npaUi.fireEvent('select',{"source": datatable.getId(),"item": sortedData[rowIndex]});
 			});
 			$('.datatableAction').on('click.'+datatable.getId(),function(){
 				let rowIndex = $(this).data('index');
 				let actionId = $(this).data('action');
-				npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": data[rowIndex]});
+				npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": sortedData[rowIndex]});
 			});
 		});
 	}

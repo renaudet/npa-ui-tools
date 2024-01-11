@@ -10,7 +10,7 @@ const DS_REFERENCE = 'test-ds';
 
 var plugin = new Plugin();
 
-plugin.initialize = function(){
+plugin.start = function(){
 	this.name = process.env[ENV_NAME];
 	this.info('Application '+this.name+' starting...');
 	// check that database exists

@@ -82,7 +82,7 @@ function loadDeps(depArray,then){
 	var internalLoadDep = function(depLst,index,onceDone){
 		if(index<depLst.length){
 			var dep = depLst[index];
-			if('library'==dep.type || 'js'==dep.type){
+			if('js'==dep.type || 'library'==dep.type || 'javascript'==dep.type){
 				$.loadScript(dep.uri,function(){
 					internalLoadDep(depLst,index+1,onceDone);
 				});
@@ -111,70 +111,46 @@ function loadDeps(depArray,then){
 	});
 }
 
-class NpaUiComponent {
-	config = null;
-	parentDivId = null;
-	constructor(parentDivId,configuration){
-		this.parentDivId = parentDivId;
-		this.config = configuration;
+function sortOn(list,attributeName,descending=true){
+	if(typeof attributeName=='undefined'){
+		console.log('sortOn('+attributeName+')');
+		console.trace();
 	}
-	getId(){
-		return this.config.id;
-	}
-	getConfiguration(){
-		return this.config.configuration;
-	}
-	parentDiv(){
-		return $('#'+this.parentDivId);
-	}
-	initialize(then){
-		if(then){
-			then();
+	if(list.length>1){
+		for(var i=0;i<list.length-1;i++){
+			for(var j=i+1;j<list.length;j++){
+				var listi = list[i];
+				var listj = list[j];
+				if(listj[attributeName] || listj[attributeName]==0){
+					if(Number.isInteger(listj[attributeName])){
+						if(listj[attributeName]<listi[attributeName]){
+							var tmp = listi;
+							list[i] = listj;
+							list[j] = tmp;
+						}
+					}else{
+						if(descending){
+							if(listj[attributeName].localeCompare(listi[attributeName])<0){
+								var tmp = listi;
+								list[i] = listj;
+								list[j] = tmp;
+							}
+						}else{
+							if(listj[attributeName].localeCompare(listi[attributeName])>0){
+								var tmp = listi;
+								list[i] = listj;
+								list[j] = tmp;
+							}
+						}
+					}
+				}else{
+					console.log('sortOn(): invalid listj');
+					console.log(listj);
+				}
+			}
 		}
 	}
-	render(){
-		console.log('NpaUiComponent#render() was called');
-	}
-}
-
-class NpaUiComponentProxy {
-	constructor(namespace,type,id,configuration){
-		let instance = null;
-		let toEval = 'instance = new '+namespace+'.'+type+'(id,configuration);';
-		eval(toEval);
-		return instance;
-	}
-}
-
-class ItemRenderer {
-	config = null;
-	constructor(configuration){
-		this.config = configuration;
-	}
-	render(item){
-		// by default return the Type
-		return typeof item;
-	}
-}
-
-window.FieldItemRenderer = class FieldItemRenderer extends ItemRenderer{
-	render(item){
-		console.log('FieldItemRenderer#render()');
-		if(typeof this.config.field!='undefined'){
-			console.log('using field name '+this.config.field);
-			return item[this.config.field];
-		}else
-		if(typeof this.config.processor!='undefined'){
-			console.log('using processor '+this.config.processor);
-			let result = '';
-			let toEval = 'result = '+this.config.processor.replace(/@/g,'item')+';';
-			try{
-				eval(toEval);
-			}catch(t){ console.log(t);}
-			return result;
-		}else
-			return super.render(item);
-	}
+	return list;
 }
 
 // default namespace declaration
@@ -290,7 +266,8 @@ npaUi = {
 	},
     initialize: function(then){
 		var deps = [
-			{"type": "css","uri": "/uiTools/css/npaUiTheme.css"}
+			{"type": "css","uri": "/uiTools/css/npaUiTheme.css"},
+			{"type": "js","uri": "/uiTools/js/npaUiComponentModel.js"}
 		];
 		loadDeps(deps,function(){
 			makeRESTCall('GET','/uiToolsApis/getComponentMap',{},function(response){

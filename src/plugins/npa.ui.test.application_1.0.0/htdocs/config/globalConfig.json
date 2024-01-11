@@ -14,6 +14,11 @@
 		            "payload": {},
 		            "adapter": "@.data"
 		        },
+		        "sorter": {
+		        	"type": "FieldItemSorter",
+		        	"field": "name",
+		        	"ascending": true
+		        },
 		        "maxHeight": 300,
 		        "columns": [
 		            {

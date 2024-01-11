@@ -2,7 +2,6 @@
   "id": "npa.ui.test.components",
   "name": "Test components for NPA and NPA Tools",
   "version": "1.0.0",
-  "plugin": "plugin.js",
   "requires": [
   	{"type": "plugin","id": "npa.ui.tools.core","version": "1.0.0"}
   ],

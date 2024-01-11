@@ -9,15 +9,14 @@ const DEFAULT_NAMESPACE = 'npaUiCore';
 var plugin = new UIPlugin();
 plugin.compMap = {};
 
-plugin.start = function(then){
+plugin.beforeExtensionPlugged = function(){
 	const baseMap = require('./coreComponentMap.json');
 	this.compMap[DEFAULT_NAMESPACE] = {};
 	Object.assign(this.compMap[DEFAULT_NAMESPACE],baseMap);
-	console.log(this.compMap);
-	then();
+	//console.log(this.compMap);
 }
 
-plugin.plug = function(extender,extensionPointConfig){
+plugin.lazzyPlug = function(extenderId,extensionPointConfig){
 	if('npa.ui.tools.core.component'==extensionPointConfig.point){
 		this.info('plugin in UI component "'+extensionPointConfig.namespace+':'+extensionPointConfig.name+'"');
 		if(typeof this.compMap[extensionPointConfig.namespace]=='undefined'){
