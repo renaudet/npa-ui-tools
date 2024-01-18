@@ -22,45 +22,60 @@
 		        "maxHeight": 300,
 		        "columns": [
 		            {
-		                "label": "Name",
+		                "label": "@table1.column.name.label",
 		                "field": "name"
 		            },
 		            {
-		                "label": "Age",
-		                "field": "age"
+		                "label": "@table1.column.age.label",
+		                "field": "age",
+		                "type": "number",
+		                "width": 50,
+		                "leftMarge": 10
 		            },
 		            {
-		                "label": "Birthday",
+		                "label": "@table1.column.birthday.label",
 		                "field": "birthday"
 		            },
 		            {
-		                "label": "Customer",
+		                "label": "@table1.column.customer.label",
 		                "field": "isCustomer",
 		                "type": "boolean"
 		            },
 		            {
-		                "label": "Genre",
-		                "field": "genre"
+		                "label": "@table1.column.genre.label",
+		                "renderer": "@.genre=='male'?'<img src=\"/uiTools/img/silk/male.png\">':@.genre=='female'?'<img src=\"/uiTools/img/silk/female.png\">':'<img src=\"/uiTools/img/silk/color_wheel.png\">'"
 		            },
 		            {
-		                "label": "Type",
-		                "field": "type"
+		                "label": "@table1.column.type.label",
+		                "field_": "type",
+		                "renderer": "@.type=='Gold'?'<img src=\"/uiTools/img/silk/medal_gold_3.png\"> Gold':@.type=='Silver'?'<img src=\"/uiTools/img/silk/medal_silver_3.png\"> Silver':@.type=='Bronze'?'<img src=\"/uiTools/img/silk/medal_bronze_3.png\"> Bronze':'n/a'"
 		            },
 		            {
-		                "label": "Rank",
-		                "field": "rank"
+		                "label": "@table1.column.rank.label",
+		                "field": "rank",
+		                "type": "number",
+		                "width": 50
+		            },
+		            {
+		                "label": "@table1.column.color.label",
+		                "renderer": "'<span style=\"background-color: {@.favoriteColor};padding-left: 10px;padding-right: 10px;\">&nbsp;</span>'"
+		            },
+		            {
+		                "label": "@table1.column.color.label",
+		                "field": "favoriteColor",
+		                "type": "color"
 		            },
 		            {
 		                "label": "Actions",
 		                "type": "rowActions",
 		                "actions": [
 		                    {
-		                        "label": "Edit record",
+		                        "label": "@table1.column.edit.label",
 		                        "actionId": "edit",
 		                        "icon": "/uiTools/img/silk/computer_edit.png"
 		                    },
 		                    {
-		                        "label": "Delete record",
+		                        "label": "@table1.column.delete.label",
 		                        "actionId": "delete",
 		                        "icon": "/uiTools/img/silk/computer_delete.png"
 		                    }

@@ -84,20 +84,17 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			html += '    <tr>';
 			for(var i=0;i<config.columns.length;i++){
 				let column = config.columns[i];
-				if(typeof column.type!='undefined'){
-					if('rowActions'==column.type){
-						html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
-						html += column.label;
-						html += '</th>';
-					}
-					if('boolean'==column.type){
-						html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
-						html += column.label;
-						html += '</th>';
-					}
+				let widthExpr = '';
+				if(typeof column.width!='undefined'){
+					widthExpr = 'width: '+column.width+'px;'
+				}
+				if(typeof column.label!='undefined'){
+					html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;'+widthExpr+'">';
+					html += this.getLocalizedString(column.label);
+					html += '</th>';
 				}else{
-					html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;">';
-					html += column.label;
+					html += '<th scope="col" style="position: sticky; top: 0;z-index: 1;'+widthExpr+'">';
+					html += typeof column.field!='undefined'?column.field:'';
 					html += '</th>';
 				}
 			}
@@ -109,9 +106,13 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			html += '</table>';
 			html += '</div>';
 			this.parentDiv().html(html);
-		}else{
-			$('#'+this.getId()+'_table tbody').empty();
 		}
+		this.refresh();
+	}
+	refresh(){
+		console.log('Datatable#refresh()');
+		let config = this.getConfiguration();
+		$('#'+this.getId()+'_table tbody').empty();
 		var datatable = this;
 		this.fetchDataFromDatasource(function(data){
 			let sortedData = datatable.itemSorter.sort(data);
@@ -123,36 +124,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 				row += '';
 				for(var i=0;i<config.columns.length;i++){
 					let column = config.columns[i];
-					row += '<td>';
-					if(typeof column.type!='undefined'){
-						if('rowActions'==column.type){
-							for(var j=0;j<column.actions.length;j++){
-								let actionDef = column.actions[j];
-								if(j>0){
-									row += '&nbsp;';
-								}
-								row += '<img src="'+actionDef.icon+'" class="datatableAction" title="'+actionDef.label+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
-							}
-						}else{
-							if('boolean'==column.type){
-								let booleanValue = item[column.field];
-								if(booleanValue){
-									row += '<img src="/uiTools/img/silk/accept.png">';
-								}else{
-									row += '<img src="/uiTools/img/silk/cross.png">';
-								}
-							}else{
-								row += '?';
-							}
-						}
-					}else
-					if(typeof column.field!='undefined'){
-						let value = item[column.field];
-						row += value;
-					}else{
-						row += '?';
-					}
-					row += '</td>';
+					row += datatable.renderColumn(item,index,column);
 				}
 				row += '</tr>';
 				$('#'+datatable.getId()+'_table tbody').append(row);
@@ -167,5 +139,61 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 				npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": sortedData[rowIndex]});
 			});
 		});
+	}
+	renderColumn(item,index,column){
+		let html = '';
+		html += '<td>';
+		if(typeof column.type!='undefined'){
+			if('rowActions'==column.type){
+				for(var j=0;j<column.actions.length;j++){
+					let actionDef = column.actions[j];
+					if(j>0){
+						html += '&nbsp;';
+					}
+					html += '<img src="'+actionDef.icon+'" class="datatableAction" title="'+actionDef.label+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
+				}
+			}else{
+				if('boolean'==column.type){
+					let booleanValue = item[column.field];
+					if(booleanValue){
+						html += '<img src="/uiTools/img/silk/accept.png">';
+					}else{
+						html += '<img src="/uiTools/img/silk/cross.png">';
+					}
+				}else
+				if('number'==column.type){
+					let numberValue = item[column.field];
+					let leftMarge = 15;
+					if(typeof column.leftMarge!='undefined'){
+						leftMarge = column.leftMarge;
+					}
+					html += '<div style="text-align: right;padding-right: '+leftMarge+'px;">'+numberValue+'</div>';
+				}else
+				if('color'==column.type){
+					let colorValue = item[column.field];
+					html += '<span class="column-type-color" style="background-color: '+colorValue+';">&nbsp;</span>';
+				}else{
+					html += '?';
+				}
+			}
+		}else
+		if(typeof column.field!='undefined'){
+			let value = item[column.field];
+			html += value;
+		}else
+		if(typeof column.renderer!='undefined'){
+			let toEval = 'html += '+column.renderer.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
+			try{
+				eval(toEval);
+			}catch(evalException){
+				console.log(toEval);
+				console.log(evalException);
+				html += '???';
+			}
+		}else{
+			html += '?';
+		}
+		html += '</td>';
+		return html;
 	}
 }

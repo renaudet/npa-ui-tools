@@ -6,7 +6,8 @@
   "requires": [
   	{"type": "plugin","id": "npa.core","version": "1.0.0"},
   	{"type": "plugin","id": "npa.logging","version": "1.0.0"},
-  	{"type": "plugin","id": "npa.http","version": "1.0.0"}
+  	{"type": "plugin","id": "npa.http","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.ui.locale","version": "1.0.0"}
   ],
   "extends": [
   	{
@@ -52,6 +53,18 @@
   		"point": "npa.http.home",
   		"id": "npa.ui.test.application.home",
   		"uri": "/static/home.html"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.test.locale.provider.us",
+  		"path": "i18n/testApplication_en_US.locale",
+  		"locale": "en-US"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.test.locale.provider.fr",
+  		"path": "i18n/testApplication_fr_FR.locale",
+  		"locale": "fr-FR"
   	},
   	{
   		"point": "npa.http.handler",

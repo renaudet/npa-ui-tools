@@ -1,0 +1,13 @@
+test.application.title=Node Plugin Architecture - Test Application
+test.application.home.title=Home Page
+test.application.page2.title=Page number 2
+table1.column.name.label=Name
+table1.column.age.label=Age
+table1.column.birthday.label=Birthday
+table1.column.customer.label=Customer
+table1.column.genre.label=Genre
+table1.column.type.label=Type
+table1.column.rank.label=Rank
+table1.column.color.label=Color
+table1.column.edit.label=Edit record
+table1.column.delete.label=Delete record

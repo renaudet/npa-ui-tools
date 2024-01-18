@@ -163,6 +163,7 @@ npaUi = {
 	actionHandlers: {},
 	selectionListeners: {},
 	loadingComponent: 0,
+	localizationMap: null,
     render: function(){
 		this.loadingComponent = $('.npaUi').length;
 		$('.npaUi').each(function(index,element){
@@ -272,7 +273,14 @@ npaUi = {
 		loadDeps(deps,function(){
 			makeRESTCall('GET','/uiToolsApis/getComponentMap',{},function(response){
 				npaUi.componentMap = response.data;
-				then();
+				makeRESTCall('GET','/i18n/localizationMap?locale='+navigator.language,{},function(response){
+					npaUi.localizationMap = response;
+					then();
+				},function(){
+					console.error('NPA-UI was unable to load the localization file from server!');
+					npaUi.localizationMap = {};
+					then();
+				});
 			},function(){
 				console.error('NPA-UI was unable to load the Component Map from server!');
 			});
@@ -320,5 +328,21 @@ npaUi = {
 				}
 			}
 		}
+	},
+	getLocalizedString: function(reference,data){
+		let localizedString = reference;
+		let unProcessedLocalizedString = this.localizationMap[reference];
+		if(typeof unProcessedLocalizedString!='undefined'){
+			if(typeof data!='undefined' && data && data.length>0){
+				for(var i=0;i<data.length;i++){
+					let value = data[i];
+					let expr = '\{'+i+'\}';
+					let regex = new RegExp(expr,'g');
+					unProcessedLocalizedString = unProcessedLocalizedString.replace(regex,value);
+				}
+			}
+			localizedString = unProcessedLocalizedString;
+		}
+		return localizedString;
 	}
 }

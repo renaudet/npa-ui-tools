@@ -74,7 +74,7 @@ class TextField extends LabeledFormField{
 			html += '  <div class="col-'+(10-this.config.size)+'">&nbsp;</div>';
 		}
 		html += '</div>';
-		console.log(html);
+		//console.log(html);
 		parent.append(html);
 	}
 	setEditMode(editing){

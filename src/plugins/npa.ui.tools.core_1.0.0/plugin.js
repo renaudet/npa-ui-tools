@@ -13,7 +13,6 @@ plugin.beforeExtensionPlugged = function(){
 	const baseMap = require('./coreComponentMap.json');
 	this.compMap[DEFAULT_NAMESPACE] = {};
 	Object.assign(this.compMap[DEFAULT_NAMESPACE],baseMap);
-	//console.log(this.compMap);
 }
 
 plugin.lazzyPlug = function(extenderId,extensionPointConfig){

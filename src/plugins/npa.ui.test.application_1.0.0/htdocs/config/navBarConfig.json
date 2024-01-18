@@ -4,7 +4,7 @@
     "type": "NavBar",
     "configuration": {
         "icon": "/uiTools/img/silk/application_home.png",
-        "applicationName": "NPA Test Application",
+        "applicationName": "@test.application.title",
         "homeRef": "/static/home.html",
         "menus": [
         	{
@@ -39,6 +39,13 @@
 		        		"actionId": "menu23",
         				"tooltip": "Call the UI framework for a complete refresh",
 		        		"icon": "/uiTools/img/silk/arrow_refresh.png"
+        			},
+        			{
+        				"id": "menu24",
+		        		"label": "Display localized message",
+		        		"actionId": "displayMessage",
+        				"tooltip": "Call the internationalization plugin to display a localized message",
+		        		"icon": "/uiTools/img/silk/book.png"
         			}
         		]
         	}

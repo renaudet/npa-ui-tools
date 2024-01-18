@@ -37,3 +37,11 @@
 	vertical-align: top;
 	padding-top: 2px;
 }
+
+.column-type-color {
+	border: 1px solid #c3c3c3;
+	border-radius: 0.2rem;
+	box-shadow: 1px 1px 3px #a0a0a0;
+	padding-left: 10px;
+	padding-right: 10px;
+}

@@ -27,6 +27,31 @@ class NpaUiComponent {
 	render(){
 		console.log('NpaUiComponent#render() was called');
 	}
+	getLocalizedString(stringExpr,data=[]){
+		if(stringExpr.startsWith('@')){
+			let reference = stringExpr.replace(/@/,'');
+			return npaUi.getLocalizedString(reference,data);
+		}else{
+			return stringExpr;
+		}
+	}
+	localize(reference,data,then){
+		let values = '';
+		for(var i=0;i<data.length;i++){
+			if(i>0){
+				values += ',';
+			}
+			values += data[i];
+		}
+		makeRESTCall('GET','/i18n/localize?ref='+reference+'&values='+values+'&locale='+navigator.language,{},function(response){
+			then(response.text);
+		});
+	}
+	localizeAndReplace(reference,data,id){
+		this.localize(reference,data,function(localizedString){
+			$('#'+id).html(localizedString);
+		});
+	}
 }
 
 class NpaUiComponentProxy {

@@ -14,7 +14,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		let html = '';
 		let style='padding-top: 0px;padding-bottom: 0px;padding-left: 5px;margin-bottom: 3px;';
 		html += '<nav id="'+this.getId()+'" class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark" style="'+style+'">';
-		html += '  <a class="navbar-brand" href="'+config.homeRef+'"><img src="'+config.icon+'" width="30">&nbsp;'+config.applicationName+'</a>';
+		html += '  <a class="navbar-brand" href="'+config.homeRef+'"><img src="'+config.icon+'" width="30">&nbsp;<span id="'+this.getId()+'_title">'+this.getLocalizedString(config.applicationName)+'</span></a>';
 		html += '  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">';
 		html += '    <span class="navbar-toggler-icon"></span>';
 		html += '  </button>';
@@ -24,6 +24,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		html += '  </div>';
 		html += '</nav>';
 		this.parentDiv().html(html);
+		//this.localizeAndReplace('test.application.title',[],this.getId()+'_title');
 		var navBar = this;
 		this.generateNavBarMenu(function(){
 			$('.npa-navbar-menu').on('click',function(){
