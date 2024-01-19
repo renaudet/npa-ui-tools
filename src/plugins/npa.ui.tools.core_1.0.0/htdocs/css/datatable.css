@@ -44,4 +44,29 @@
 	box-shadow: 1px 1px 3px #a0a0a0;
 	padding-left: 10px;
 	padding-right: 10px;
+	cursor: pointer;
+	position: relative;
+	display: inline-block;
+}
+
+.column-type-color-tooltip {
+	visibility: hidden;
+    background-color: #fffedb;
+    color: #000;
+    text-align: center;
+    padding: 5px;
+    margin-top: 10px;
+    border-radius: 8px;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 125%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.column-type-color:hover .column-type-color-tooltip {
+   visibility: visible;
+   opacity: 1;
 }

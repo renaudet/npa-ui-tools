@@ -171,7 +171,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 				}else
 				if('color'==column.type){
 					let colorValue = item[column.field];
-					html += '<span class="column-type-color" style="background-color: '+colorValue+';">&nbsp;</span>';
+					html += '<span class="column-type-color" style="background-color: '+colorValue+';"><span class="column-type-color-tooltip">&nbsp;'+colorValue+'&nbsp;</span>&nbsp;</span>';
 				}else{
 					html += '?';
 				}
