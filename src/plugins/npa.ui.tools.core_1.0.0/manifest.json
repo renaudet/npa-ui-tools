@@ -6,7 +6,8 @@
   "requires": [
   	{"type": "plugin","id": "npa.core","version": "1.0.0"},
   	{"type": "plugin","id": "npa.logging","version": "1.0.0"},
-  	{"type": "plugin","id": "npa.http","version": "1.0.0"}
+  	{"type": "plugin","id": "npa.http","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.ui.locale","version": "1.0.0"}
   ],
   "extends": [
   	{
@@ -32,6 +33,30 @@
   		"method": "GET",
   		"schema": "/getComponentMap",
   		"handler": "getComponentMapHandler"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.tools.core.locale.provider",
+  		"path": "i18n/npaComponents_en_US.locale",
+  		"locale": "en-US"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.tools.core.locale.provider",
+  		"path": "i18n/npaComponents_en_US.locale",
+  		"locale": "en"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.tools.core.locale.provider",
+  		"path": "i18n/npaComponents_fr_FR.locale",
+  		"locale": "fr-FR"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.tools.core.locale.provider",
+  		"path": "i18n/npaComponents_fr_FR.locale",
+  		"locale": "fr"
   	}
   ],
   "provides": [

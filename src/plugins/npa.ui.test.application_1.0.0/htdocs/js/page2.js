@@ -57,6 +57,9 @@ var actionHandler = {
 				});
 			}
 		}
+		if('displayMessage'==event.actionId){
+			displayMessage();
+		}
 	}
 }
 
@@ -82,6 +85,7 @@ $(document).ready(function(){
 			npaUi.registerActionHandler('edit',actionHandler);
 			npaUi.registerActionHandler('save',actionHandler);
 			npaUi.registerActionHandler('delete',actionHandler);
+			npaUi.registerActionHandler('displayMessage',actionHandler);
 			npaUi.registerSelectionListener('selectionList_01',selectionHandler);
 			npaUi.onComponentLoaded = onPageReady;
 			npaUi.render();
@@ -100,4 +104,11 @@ onPageReady = function(){
 
 refreshUI = function(){
 	npaUi.render();
+}
+
+displayMessage = function(){
+	makeRESTCall('GET','/i18n/localize?ref=test.application.title&values=&locale='+navigator.language,{},function(response){
+		console.log(response);
+		flash(response.text);
+	});
 }

@@ -4,6 +4,6 @@
     "type": "Card",
     "configuration": {
         "icon": "/uiTools/img/silk/application_home.png",
-        "label": "NPA Test Application Home"
+        "label": "@test.application.home.title"
     }
 }

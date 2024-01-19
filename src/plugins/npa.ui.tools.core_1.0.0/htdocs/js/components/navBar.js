@@ -14,7 +14,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		let html = '';
 		let style='padding-top: 0px;padding-bottom: 0px;padding-left: 5px;margin-bottom: 3px;';
 		html += '<nav id="'+this.getId()+'" class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark" style="'+style+'">';
-		html += '  <a class="navbar-brand" href="'+config.homeRef+'"><img src="'+config.icon+'" width="30">&nbsp;'+config.applicationName+'</a>';
+		html += '  <a class="navbar-brand" href="'+config.homeRef+'"><img src="'+config.icon+'" width="30">&nbsp;<span id="'+this.getId()+'_title">'+this.getLocalizedString(config.applicationName)+'</span></a>';
 		html += '  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">';
 		html += '    <span class="navbar-toggler-icon"></span>';
 		html += '  </button>';
@@ -49,7 +49,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		if(typeof menuConfig.items!='undefined'){
 			html += '<li class="nav-item dropdown">';
 			html += '<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">';
-			html += menuConfig.label;
+			html += this.getLocalizedString(menuConfig.label);
 			html += '</a>';
 			html += '<ul id="'+menuConfig.id+'" class="dropdown-menu" data-bs-popper="static">';
 			for(var i=0;i<menuConfig.items.length;i++){
@@ -65,11 +65,11 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 					if(typeof item.icon!='undefined'){
 						var title = '';
 						if(typeof item.tooltip!='undefined'){
-							title = ' title="'+item.tooltip+'"';
+							title = ' title="'+this.getLocalizedString(item.tooltip)+'"';
 						}
 						html += '<img src="'+item.icon+'" style="margin-right: 5px;" width="16"'+title+'>&nbsp;';
 					}
-					html += item.label;
+					html += this.getLocalizedString(item.label);
 					html += '</a>';
 					html += '</li>';
 				}
@@ -83,11 +83,11 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 			if(typeof menuConfig.icon!='undefined'){
 				var title = '';
 				if(typeof menuConfig.tooltip!='undefined'){
-					title = ' title="'+menuConfig.tooltip+'"';
+					title = ' title="'+this.getLocalizedString(menuConfig.tooltip)+'"';
 				}
 				html += '<img src="'+menuConfig.icon+'" style="margin-right: 5px;" width="16"'+title+'>&nbsp;';
 			}
-			html += menuConfig.label;
+			html += this.getLocalizedString(menuConfig.label);
 			html += '</a>';
 			html += '</li>';
 		}

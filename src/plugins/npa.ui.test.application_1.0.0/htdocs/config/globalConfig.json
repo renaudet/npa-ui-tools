@@ -22,45 +22,60 @@
 		        "maxHeight": 300,
 		        "columns": [
 		            {
-		                "label": "Name",
+		                "label": "@table1.column.name.label",
 		                "field": "name"
 		            },
 		            {
-		                "label": "Age",
-		                "field": "age"
+		                "label": "@table1.column.age.label",
+		                "field": "age",
+		                "type": "number",
+		                "width": 50,
+		                "leftMarge": 10
 		            },
 		            {
-		                "label": "Birthday",
+		                "label": "@table1.column.birthday.label",
 		                "field": "birthday"
 		            },
 		            {
-		                "label": "Customer",
+		                "label": "@table1.column.customer.label",
 		                "field": "isCustomer",
 		                "type": "boolean"
 		            },
 		            {
-		                "label": "Genre",
-		                "field": "genre"
+		                "label": "@table1.column.genre.label",
+		                "renderer": "@.genre=='male'?'<img src=\"/uiTools/img/silk/male.png\">':@.genre=='female'?'<img src=\"/uiTools/img/silk/female.png\">':'<img src=\"/uiTools/img/silk/color_wheel.png\">'"
 		            },
 		            {
-		                "label": "Type",
-		                "field": "type"
+		                "label": "@table1.column.type.label",
+		                "field_": "type",
+		                "renderer": "@.type=='Gold'?'<img src=\"/uiTools/img/silk/medal_gold_3.png\"> Gold':@.type=='Silver'?'<img src=\"/uiTools/img/silk/medal_silver_3.png\"> Silver':@.type=='Bronze'?'<img src=\"/uiTools/img/silk/medal_bronze_3.png\"> Bronze':'n/a'"
 		            },
 		            {
-		                "label": "Rank",
-		                "field": "rank"
+		                "label": "@table1.column.rank.label",
+		                "field": "rank",
+		                "type": "number",
+		                "width": 50
+		            },
+		            {
+		                "label": "@table1.column.color.label",
+		                "renderer": "'<span style=\"background-color: {@.favoriteColor};padding-left: 10px;padding-right: 10px;\">&nbsp;</span>'"
+		            },
+		            {
+		                "label": "@table1.column.color.label",
+		                "field": "favoriteColor",
+		                "type": "color"
 		            },
 		            {
 		                "label": "Actions",
 		                "type": "rowActions",
 		                "actions": [
 		                    {
-		                        "label": "Edit record",
+		                        "label": "@table1.column.edit.label",
 		                        "actionId": "edit",
 		                        "icon": "/uiTools/img/silk/computer_edit.png"
 		                    },
 		                    {
-		                        "label": "Delete record",
+		                        "label": "@table1.column.delete.label",
 		                        "actionId": "delete",
 		                        "icon": "/uiTools/img/silk/computer_delete.png"
 		                    }
@@ -220,7 +235,7 @@
 		    			"label": "Type",
 		    			"type": "select",
 		    			"size": 4,
-		    			"values": ["Bronze","Silver","Gold"]
+		    			"values": ["Bronze","Silver",{"label": "Or", "value": "Gold"}]
 		    		},
 		    		{
 		    			"name": "custom",
@@ -331,7 +346,7 @@
 		    			"label": "Type",
 		    			"type": "select",
 		    			"size": 4,
-		    			"values": ["Bronze","Silver","Gold"]
+		    			"values": [{"label": "@form1.field.type.value1", "value": "Gold"},{"label": "@form1.field.type.value2", "value": "Silver"},{"label": "@form1.field.type.value3", "value": "Bronze"}]
 		    		}
 		    	]
 		    }
@@ -343,7 +358,7 @@
 		    "configuration": {
 		    	"actions": [
 		    		{
-		                "label": "Print",
+		                "label": "@toolbar1.icon1.label",
 		                "actionId": "print",
 		                "icon": "/uiTools/img/silk/printer.png"
 		            },
@@ -351,17 +366,17 @@
 		                "type": "separator"
 		            },
 		    		{
-		                "label": "Insert a new record",
+		                "label": "@toolbar1.icon2.label",
 		                "actionId": "insert",
 		                "icon": "/uiTools/img/silk/table_row_insert.png"
 		            },
 		    		{
-		                "label": "Edit the current record",
+		                "label": "@toolbar1.icon3.label",
 		                "actionId": "edit",
 		                "icon": "/uiTools/img/silk/table_edit.png"
 		            },
 		    		{
-		                "label": "Save the current record",
+		                "label": "@toolbar1.icon4.label",
 		                "actionId": "save",
 		                "icon": "/uiTools/img/silk/disk.png"
 		            },
@@ -369,7 +384,7 @@
 		                "type": "separator"
 		            },
 		    		{
-		                "label": "Delete the current record",
+		                "label": "@toolbar1.icon5.label",
 		                "actionId": "delete",
 		                "icon": "/uiTools/img/silk/table_row_delete.png"
 		            }

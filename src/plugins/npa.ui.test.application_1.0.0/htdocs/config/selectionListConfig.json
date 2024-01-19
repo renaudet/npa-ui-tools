@@ -4,7 +4,7 @@
     "type": "SelectionList",
     "configuration": {
     	"header": {
-    		"title": "Customers",
+    		"title": "@selectionList1.title",
     		"showFilter": true
     	},
     	"datasource": {
