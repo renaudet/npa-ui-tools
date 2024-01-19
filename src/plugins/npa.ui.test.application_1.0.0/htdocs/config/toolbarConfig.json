@@ -5,7 +5,7 @@
     "configuration": {
     	"actions": [
     		{
-                "label": "Print",
+                "label": "@toolbar1.icon1.label",
                 "actionId": "print",
                 "icon": "/uiTools/img/silk/printer.png"
             },
@@ -13,7 +13,7 @@
                 "type": "separator"
             },
     		{
-                "label": "Insert new record",
+                "label": "@toolbar1.icon2.label",
                 "actionId": "insert",
                 "icon": "/uiTools/img/silk/table_row_insert.png"
             }

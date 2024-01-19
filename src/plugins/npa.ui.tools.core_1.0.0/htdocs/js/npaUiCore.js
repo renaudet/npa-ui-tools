@@ -336,7 +336,7 @@ npaUi = {
 			if(typeof data!='undefined' && data && data.length>0){
 				for(var i=0;i<data.length;i++){
 					let value = data[i];
-					let expr = '\{'+i+'\}';
+					let expr = '\\{'+i+'\\}';
 					let regex = new RegExp(expr,'g');
 					unProcessedLocalizedString = unProcessedLocalizedString.replace(regex,value);
 				}

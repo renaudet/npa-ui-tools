@@ -4,32 +4,32 @@
  */
  
 var notifCount = 0;
-function createNotification(type,message){
+function createNotification(type,message,data=[]){
 	var notifId = 'uiToolsNotification_'+(notifCount++);
-	var title = 'Notification';
-	var msgType = 'Information';
+	var title = npaUi.getLocalizedString('notifier.title');
+	var msgType = npaUi.getLocalizedString('notifier.info');
 	var icon = '/uiTools/img/info.png';
 	var theme = ' text-bg-info';
 	var autoHide = 'false';
 	var autoHideDelay = 4000;
 	if('error'==type){
-		msgType = 'Error';
+		msgType = npaUi.getLocalizedString('notifier.error');
 		icon = '/uiTools/img/error.png';
 		theme = ' text-bg-danger';
 	}
 	if('warning'==type){
-		msgType = 'Warning';
+		msgType = npaUi.getLocalizedString('notifier.warning');
 		icon = '/uiTools/img/warning.png';
 		theme = ' text-bg-warning';
 	}
 	if('confirm'==type){
-		msgType = 'Confirmation';
+		msgType = npaUi.getLocalizedString('notifier.confirm');
 		icon = '/uiTools/img/silk/accept.png';
 		theme = ' text-bg-success';
 		autoHide = 'true';
 	}
 	if('flash'==type){
-		msgType = 'Notice!';
+		msgType = npaUi.getLocalizedString('notifier.flash');
 		icon = '/uiTools/img/silk/flag_green.png';
 		theme = ' text-bg-success';
 		autoHide = 'true';
@@ -44,14 +44,14 @@ function createNotification(type,message){
 	html += '    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>';
 	html += '  </div>';
 	html += '  <div class="toast-body" style="background-color: #fff;">';
-	html += message;
+	html += npaUi.getLocalizedString(message,data);
 	html += '  </div>';
 	html += '</div>';
 	$('#uiToolsNotifications').append(html);
 	return notifId;
 }
 
-function showNotification(notificationType,msg){
+function showNotification(notificationType,msg,data=[]){
 	const toastId = createNotification(notificationType,msg);
 	const toastDiv = document.getElementById(toastId);
 	const toastObj = bootstrap.Toast.getOrCreateInstance(toastDiv);
@@ -61,24 +61,24 @@ function showNotification(notificationType,msg){
 	toastObj.show();
 }
 
-function showInfo(msg){
-	showNotification('info',msg);
+function showInfo(msg,data=[]){
+	showNotification('info',msg,data);
 }
 
-function showWarning(msg){
-	showNotification('warning',msg);
+function showWarning(msg,data=[]){
+	showNotification('warning',msg,data);
 }
 
-function showError(msg){
-	showNotification('error',msg);
+function showError(msg,data=[]){
+	showNotification('error',msg,data);
 }
 
-function showConfirm(msg){
-	showNotification('confirm',msg);
+function showConfirm(msg,data=[]){
+	showNotification('confirm',msg,data);
 }
 
-function flash(msg){
-	showNotification('flash',msg);
+function flash(msg,data=[]){
+	showNotification('flash',msg,data);
 }
  
 npaUiCore.Notifier = class Notifier extends NpaUiComponent{

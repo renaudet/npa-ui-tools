@@ -11,22 +11,22 @@
         		"id": "menu1",
         		"label": "",
         		"actionId": "menu1",
-        		"tooltip": "Global Save action (sample)",
+        		"tooltip": "@menu1.tooltip",
 		        "icon": "/uiTools/img/silk/disk.png"
         	},
         	{
         		"id": "menu2",
-        		"label": "Menu 2",
+        		"label": "@menu2.label",
         		"items": [
         			{
         				"id": "menu21",
-		        		"label": "Query datasource",
+		        		"label": "@menu21.label",
 		        		"actionId": "menu21",
 		        		"icon": "/uiTools/img/silk/database_go.png"
         			},
         			{
         				"id": "menu22",
-		        		"label": "Switch to Page 2",
+		        		"label": "@menu22.label",
 		        		"actionId": "redirect",
 		        		"uri": "/static/page2.html"
         			},
@@ -35,16 +35,16 @@
         			},
         			{
         				"id": "menu23",
-		        		"label": "Refresh UI",
+		        		"label": "@menu23.label",
 		        		"actionId": "menu23",
-        				"tooltip": "Call the UI framework for a complete refresh",
+        				"tooltip": "@menu23.tooltip",
 		        		"icon": "/uiTools/img/silk/arrow_refresh.png"
         			},
         			{
         				"id": "menu24",
-		        		"label": "Display localized message",
+		        		"label": "@menu24.label",
 		        		"actionId": "displayMessage",
-        				"tooltip": "Call the internationalization plugin to display a localized message",
+        				"tooltip": "@menu24.tooltip",
 		        		"icon": "/uiTools/img/silk/book.png"
         			}
         		]

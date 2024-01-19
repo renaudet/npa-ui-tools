@@ -29,7 +29,7 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 			html += '  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable'+size+'">';
 			html += '    <div class="modal-content">';
 			html += '      <div id="'+this.getId()+'_header" class="modal-header modal-dialog-header">';
-			html += '        <h1 class="modal-title fs-5" id="staticBackdropLabel">'+config.title+'</h1>';
+			html += '        <h1 class="modal-title fs-5" id="staticBackdropLabel">'+this.getLocalizedString(config.title)+'</h1>';
 			html += '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
 			html += '      </div>';
 			html += '      <div id="'+this.getId()+'_body" class="modal-body">';
@@ -39,14 +39,14 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 				for(var i=0;i<config.buttons.length;i++){
 					let button = config.buttons[i];
 					if('close'==button.action){
-						html += '<button id="'+this.getId()+'_closeBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">'+button.label+'</button>';
+						html += '<button id="'+this.getId()+'_closeBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">'+this.getLocalizedString(button.label)+'</button>';
 					}
 					if('cancel'==button.action){
-						html += '<button id="'+this.getId()+'_cancelBtn" type="button" class="btn btn-warning" data-bs-dismiss="modal">'+button.label+'</button>';
+						html += '<button id="'+this.getId()+'_cancelBtn" type="button" class="btn btn-warning" data-bs-dismiss="modal">'+this.getLocalizedString(button.label)+'</button>';
 					}
 				}
 			}else{
-				html += '        <button id="'+this.getId()+'_closeBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>';
+				html += '        <button id="'+this.getId()+'_closeBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">'+this.getLocalizedString('@modal.button.close')+'Close</button>';
 			}
 			html += '      </div>';
 			html += '    </div>';
@@ -63,7 +63,7 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 		$('#'+this.getId()+'_body').html(html);
 	}
 	setTitle(title){
-		$('#'+this.getId()+'_header h1').html(html);
+		$('#'+this.getId()+'_header h1').html(title);
 	}
 	open(){
 		const myModal = new bootstrap.Modal(document.getElementById(this.getId()));

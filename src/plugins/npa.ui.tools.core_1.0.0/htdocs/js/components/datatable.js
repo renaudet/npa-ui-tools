@@ -150,7 +150,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 					if(j>0){
 						html += '&nbsp;';
 					}
-					html += '<img src="'+actionDef.icon+'" class="datatableAction" title="'+actionDef.label+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
+					html += '<img src="'+actionDef.icon+'" class="datatableAction" title="'+this.getLocalizedString(actionDef.label)+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
 				}
 			}else{
 				if('boolean'==column.type){

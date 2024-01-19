@@ -33,7 +33,7 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 					html += '<span class="editor-separator"></span>';
 				}else{
 					html += '<button type="button" class="btn btn-sm editor-btn" data-action="'+action.actionId+'">';
-					html += '<img src="'+action.icon+'" title="'+action.label+'" class="editor-icon">';
+					html += '<img src="'+action.icon+'" title="'+this.getLocalizedString(action.label)+'" class="editor-icon">';
 					html += '</button>';
 				}
 			}
@@ -49,7 +49,7 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 					html += '<span class="editor-separator"></span>';
 				}else{
 					html += '<button type="button" class="btn btn-sm editor-btn" data-action="'+action.actionId+'">';
-					html += '<img src="'+action.icon+'" title="'+action.label+'" class="editor-icon">';
+					html += '<img src="'+action.icon+'" title="'+this.getLocalizedString(action.label)+'" class="editor-icon">';
 					html += '</button>';
 				}
 			}

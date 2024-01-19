@@ -25,6 +25,9 @@ class FormField {
 	vetoRaised(){
 		return false;
 	}
+	getLocalizedString(reference,data=[]){
+		return this.form.getLocalizedString(reference,data);
+	}
 }
 
 class LabeledFormField extends FormField{
@@ -35,7 +38,7 @@ class LabeledFormField extends FormField{
 		var html = '';
 		html += '<div class="col-2 form-row-label">';
 		if(typeof this.config.label!='undefined' && this.config.label.length>0){
-			html += this.config.label;
+			html += this.getLocalizedString(this.config.label);
 			if(this.config.isIdField){
 				html += '&nbsp;<span style="color: red;">*</span>';
 			}
@@ -63,10 +66,10 @@ class TextField extends LabeledFormField{
 		html += '<div class="row form-row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+this.config.size+'">';
-		html += '    <input type="text" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" placeholder="'+placeholder+'" readonly>';
+		html += '    <input type="text" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" placeholder="'+this.getLocalizedString(placeholder)+'" readonly>';
 		if(this.config.help){
 			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
-			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
+			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
 		html += '  </div>';
@@ -74,7 +77,6 @@ class TextField extends LabeledFormField{
 			html += '  <div class="col-'+(10-this.config.size)+'">&nbsp;</div>';
 		}
 		html += '</div>';
-		//console.log(html);
 		parent.append(html);
 	}
 	setEditMode(editing){
@@ -103,14 +105,12 @@ class TextField extends LabeledFormField{
 		parentObj[this.config.name] = $('#'+inputFieldId).val();
 	}
 	vetoRaised(){
-		console.log('TextField#vetoRaised()');
-		console.log(this.config);
 		var inputFieldId = this.baseId+'_'+this.config.name;
 		var fieldValue = $('#'+inputFieldId).val();
 		if(this.config.required && (typeof fieldValue=='undefined' || fieldValue.length==0)){
 			$('#'+inputFieldId).addClass('is-invalid');
 			$('#'+inputFieldId).focus();
-			showError('The '+this.config.name+' field cannot be empty!');
+			showError(this.getLocalizedString('@form.textField.error',[this.config.name]));
 			return true;
 		}else{
 			$('#'+inputFieldId).removeClass('is-invalid');
@@ -136,7 +136,7 @@ class PasswordField extends TextField{
 		html += '    <input type="password" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" placeholder="'+placeholder+'" readonly>';
 		if(this.config.help){
 			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
-			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
+			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
 		html += '  </div>';
@@ -168,15 +168,13 @@ class PasswordField extends TextField{
 		}
 	}
 	vetoRaised(){
-		console.log('PasswordField#vetoRaised()');
-		console.log(this.config);
 		var inputFieldId = this.baseId+'_'+this.config.name;
 		if('password'==this.config.type){
 			var fieldValue = $('#'+inputFieldId).val();
 			if(this.config.required && (typeof fieldValue=='undefined' || fieldValue.length==0)){
 				$('#'+inputFieldId).addClass('is-invalid');
 				$('#'+inputFieldId).focus();
-				showError('The '+this.config.name+' field cannot be empty!');
+				showError(this.getLocalizedString('@form.textField.error',[this.config.name]));
 				return true;
 			}else{
 				$('#'+inputFieldId).removeClass('is-invalid');
@@ -190,7 +188,7 @@ class PasswordField extends TextField{
 				$('#'+inputFieldId).addClass('is-invalid');
 				$('#'+inputFieldId).focus();
 				$('#'+this.baseId+'_'+this.config.checkField).addClass('is-invalid');
-				showError('Values do not match!');
+				showError(this.getLocalizedString('@form.passwordField.error.match'));
 				return true;
 			}else{
 				$('#'+inputFieldId).removeClass('is-invalid');
@@ -223,7 +221,7 @@ class NumericField extends TextField{
 		html += '    <input type="number" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" placeholder="'+placeholder+'" value="'+this.config.default+'" readonly>';
 		if(this.config.help){
 			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
-			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
+			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
 		html += '  </div>';
@@ -260,7 +258,7 @@ class NumericField extends TextField{
 		if(this.config.required && isNaN(parsed)){
 			$('#'+inputFieldId).addClass('is-invalid');
 			$('#'+inputFieldId).focus();
-			showError('The '+this.config.name+' field value must be numeric!');
+			showError(this.getLocalizedString('@form.numericField.error',[this.config.name]));
 			return true;
 		}else{
 			$('#'+inputFieldId).removeClass('is-invalid');
@@ -289,7 +287,7 @@ class DateField extends TextField{
 		html += '    <input type="text" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" style="'+this.config.style+'" placeholder="YYYY/MM/DD" data-provide="datepicker" data-date-format="yyyy/mm/dd" readonly>';
 		if(this.config.help){
 			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
-			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
+			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
 		html += '  </div>';
@@ -309,7 +307,7 @@ class DateField extends TextField{
 		if(this.config.required && (typeof fieldValue=='undefined' || fieldValue.length<10 || fieldValue.indexOf('/')<0)){
 			$('#'+inputFieldId).addClass('is-invalid');
 			$('#'+inputFieldId).focus();
-			showError('The '+this.config.name+' field cannot be empty or does not match the expected format!');
+			showError(this.getLocalizedString('@form.dateField.error',[this.config.name]));
 			return true;
 		}else{
 			$('#'+inputFieldId).removeClass('is-invalid');
@@ -338,14 +336,14 @@ class CheckField extends FormField{
 		html += '  <div class="col-9'+divClass+'">';
 		html += '    <input type="checkbox" id="'+this.baseId+'_'+this.config.name+'"'+role+' disabled class="form-check-input'+checkClass+'" style="margin-left: -10px;margin-right: 8px;" value="true"'+(this.config.default?' checked>':'>');
 		html += '    <label class="form-check-label" for="'+this.baseId+'_'+this.config.name+'">';
-		html += this.config.label;
+		html += this.getLocalizedString(this.config.label);
 		if(this.config.help){
 			html += '<button class="btn btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#'+this.baseId+'_'+this.config.name+'_help"><img src="/uiTools/img/silk/information.png" title="help" style="padding-bottom: 5px;"></button>';
 		}
 		html += '    </label>';
 		if(this.config.help){
 			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
-			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
+			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
 		html += '  </div>';
@@ -407,7 +405,7 @@ class RadioField extends LabeledFormField{
 			html += ' value="'+choice.value+'"';
 			html += ' disabled>';
 			html += '<label class="form-check-label" for="'+this.baseId+'_'+this.config.name+'_'+i+'">';
-			html += choice.label;
+			html += this.getLocalizedString(choice.label);
 			html += '</label>';
 			html += '</div>';
 		}
@@ -456,7 +454,7 @@ class ColorPickerField extends LabeledFormField{
 		html += '    <input type="color" name="'+this.baseId+'_'+this.config.name+'" id="'+this.baseId+'_'+this.config.name+'" class="form-control form-control-color" value="'+this.config.default+'" title="Click to choose a color" disabled>';
 		if(this.config.help){
 			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
-			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
+			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
 		html += '  </div>';
@@ -509,7 +507,7 @@ class RangeSelectorField extends LabeledFormField{
 		html += '    <input type="range" id="'+this.baseId+'_'+this.config.name+'" name="'+this.baseId+'_'+this.config.name+'" class="form-range form-slider" value="'+this.config.default+'" min="'+this.config.min+'" max="'+this.config.max+'" step="'+this.config.step+'" disabled>';
 		if(this.config.help){
 			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
-			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
+			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
 		html += '  </div>';
@@ -569,15 +567,23 @@ class SelectField extends LabeledFormField{
 		html += '  <div class="col-'+size+'">';
 		html += '    <select id="'+this.baseId+'_'+this.config.name+'" class="form-select" disabled>';
 		if(!this.config.required){
-			html += '<option value="">-- select --</option>';
+			html += '<option value="">'+this.getLocalizedString('@form.selectField.select.value')+'</option>';
 		}
 		for(var i=0;i<this.config.values.length;i++){
 			var value = this.config.values[i];
-			html += '<option value="';
-			html += value;
-			html += '">';
-			html += value;
-			html += '</option>';
+			if(typeof value.label!='undefined'){
+				html += '<option value="';
+				html += value.value;
+				html += '">';
+				html += this.getLocalizedString(value.label);
+				html += '</option>';
+			}else{
+				html += '<option value="';
+				html += value;
+				html += '">';
+				html += value;
+				html += '</option>';
+			}
 		}
 		html += '    </select>';
 		if(this.config.help){
@@ -647,7 +653,7 @@ class SourceEditorField extends LabeledFormField{
 			html += '<div id="'+this.baseId+'_'+this.config.name+'_buttonBar" class="d-grid gap-2 d-md-flex">';//justify-content-md-end
 			for(var i=0;i<this.config.buttons.length;i++){
 				var button = this.config.buttons[i];
-				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="img-icon" src="'+button.icon+'" title="'+button.label+'"></button>';
+				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="img-icon" src="'+button.icon+'" title="'+this.getLocalizedString(button.label)+'"></button>';
 			}
 			html += '</div>';
 		}
@@ -718,7 +724,7 @@ class SourceEditorField extends LabeledFormField{
 				var jsonObj = JSON.parse(jsonTxt);
 				return false;
 			}catch(parseException){
-				showError('Invalid JSON content for field '+this.config.name);
+				showError(this.getLocalizedString('@form.editor.json.error',[this.config.name]));
 				return true;
 			}
 		}else{
@@ -776,7 +782,7 @@ class TextAreaField extends LabeledFormField{
 		if(this.config.required && (typeof fieldValue=='undefined' || fieldValue.length==0)){
 			$('#'+inputFieldId).addClass('is-invalid');
 			$('#'+inputFieldId).focus();
-			showError('The '+this.config.name+' field cannot be empty!');
+			showError(this.getLocalizedString('@form.textField.error',[this.config.name]));
 			return true;
 		}else{
 			$('#'+inputFieldId).removeClass('is-invalid');
@@ -809,7 +815,7 @@ class ArrayEditorField extends LabeledFormField{
 			html += '        <input id="'+this.baseId+'_'+this.config.name+'_edit" type="text" class="form-control" readonly>';
 			html += '      </div>';
 			html += '      <div class="col-1">';
-			html += '        <button id="'+this.baseId+'_'+this.config.name+'_gobtn" type="button" class="btn btn-primary" id="" disabled>Go</button>';
+			html += '        <button id="'+this.baseId+'_'+this.config.name+'_gobtn" type="button" class="btn btn-primary" disabled>'+this.getLocalizedString('@form.arrayEditor.button.go')+'</button>';
 			html += '      </div>';
 			html += '    </div>';
 		}
@@ -820,11 +826,11 @@ class ArrayEditorField extends LabeledFormField{
 		html += '      </div>';
 		if(typeof this.config.editable=='undefined' || this.config.editable){
 			html += '      <div class="col-1">';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_addbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/add.png" class="scafFormIcon" title="Add a '+datatype+' value"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_editbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/pencil.png" class="scafFormIcon" title="Edit the selected '+datatype+' value"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_delbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/cross.png" class="scafFormIcon" title="Delect the selected '+datatype+' value"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_upbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/arrow_up.png" class="scafFormIcon" title="Move the selected '+datatype+' up"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_downbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/arrow_down.png" class="scafFormIcon" title="Move the selected '+datatype+' down"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_addbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/add.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.add',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_editbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/pencil.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.edit',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_delbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/cross.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.delete',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_upbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/arrow_up.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.up',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_downbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/arrow_down.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.down',[datatype])+'"></button>';
 			html += '      </div>';
 		}else{
 			html += '      <div class="col-1">&nbsp;</div>';
@@ -1034,7 +1040,7 @@ class UploadField extends LabeledFormField{
 		html += '     <input class="form-control" type="file" id="'+this.baseId+'_'+this.config.name+'" disabled/>';
 		html += '  </div>';
 		html += '  <div class="col-3">';
-		html += '    <button id="'+this.baseId+'_'+this.config.name+'_submit" type="button" class="btn btn-primary" disabled>'+buttonLabel+'</button>';
+		html += '    <button id="'+this.baseId+'_'+this.config.name+'_submit" type="button" class="btn btn-primary" disabled>'+this.getLocalizedString(buttonLabel)+'</button>';
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
@@ -1072,7 +1078,7 @@ class ButtonField extends FormField{
 		html += '<div class="row form-row">';
 		html += '  <div class="col-2">&nbsp;</div>';
 		html += '  <div class="col-10">';
-		html += '     <button type="button" id="'+this.baseId+'_'+this.config.name+'" class="btn btn-'+this.config.buttonType+'" disabled>'+this.config.label+'</button>';
+		html += '     <button type="button" id="'+this.baseId+'_'+this.config.name+'" class="btn btn-'+this.config.buttonType+'" disabled>'+this.getLocalizedString(this.config.label)+'</button>';
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
@@ -1144,7 +1150,7 @@ class RichTextEditorField extends LabeledFormField{
 			html += '<div id="'+inputFieldId+'_buttonBar" class="d-grid gap-2 d-md-flex">';//justify-content-md-end
 			for(var i=0;i<this.config.buttons.length;i++){
 				var button = this.config.buttons[i];
-				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="img-icon" src="'+button.icon+'" title="'+button.label+'"></button>';
+				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="img-icon" src="'+button.icon+'" title="'+this.getLocalizedString(button.label)+'"></button>';
 			}
 			html += '</div>';
 		}
@@ -1291,7 +1297,7 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 		html += '<div id="'+this.getId()+'" class="'+formClass+'">'
 		if(typeof config.title!='undefined'){
-			html += '<div class="form-title">'+config.title+'</div>';
+			html += '<div class="form-title">'+this.getLocalizedString(config.title)+'</div>';
 		}
 		html += '</div>';
 		$('#'+this.getId()+'_form').append(html);

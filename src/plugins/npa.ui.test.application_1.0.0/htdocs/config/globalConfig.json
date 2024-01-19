@@ -235,7 +235,7 @@
 		    			"label": "Type",
 		    			"type": "select",
 		    			"size": 4,
-		    			"values": ["Bronze","Silver","Gold"]
+		    			"values": ["Bronze","Silver",{"label": "Or", "value": "Gold"}]
 		    		},
 		    		{
 		    			"name": "custom",
@@ -346,7 +346,7 @@
 		    			"label": "Type",
 		    			"type": "select",
 		    			"size": 4,
-		    			"values": ["Bronze","Silver","Gold"]
+		    			"values": [{"label": "@form1.field.type.value1", "value": "Gold"},{"label": "@form1.field.type.value2", "value": "Silver"},{"label": "@form1.field.type.value3", "value": "Bronze"}]
 		    		}
 		    	]
 		    }
@@ -358,7 +358,7 @@
 		    "configuration": {
 		    	"actions": [
 		    		{
-		                "label": "Print",
+		                "label": "@toolbar1.icon1.label",
 		                "actionId": "print",
 		                "icon": "/uiTools/img/silk/printer.png"
 		            },
@@ -366,17 +366,17 @@
 		                "type": "separator"
 		            },
 		    		{
-		                "label": "Insert a new record",
+		                "label": "@toolbar1.icon2.label",
 		                "actionId": "insert",
 		                "icon": "/uiTools/img/silk/table_row_insert.png"
 		            },
 		    		{
-		                "label": "Edit the current record",
+		                "label": "@toolbar1.icon3.label",
 		                "actionId": "edit",
 		                "icon": "/uiTools/img/silk/table_edit.png"
 		            },
 		    		{
-		                "label": "Save the current record",
+		                "label": "@toolbar1.icon4.label",
 		                "actionId": "save",
 		                "icon": "/uiTools/img/silk/disk.png"
 		            },
@@ -384,7 +384,7 @@
 		                "type": "separator"
 		            },
 		    		{
-		                "label": "Delete the current record",
+		                "label": "@toolbar1.icon5.label",
 		                "actionId": "delete",
 		                "icon": "/uiTools/img/silk/table_row_delete.png"
 		            }
