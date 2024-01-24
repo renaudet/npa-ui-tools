@@ -30,6 +30,12 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 				let actionId = $(this).data('action');
 				npaUi.fireEvent(actionId,{"source": toolbar.getId(),"actionId": actionId});
 			});
+			for(var i=0;i<config.actions.length;i++){
+				let action = config.actions[i];
+				if(typeof action.enabled!='undefined' && !action.enabled){
+					this.setEnabled(action.actionId,false);
+				}
+			}
 		}
 	}
 	setEnabled(actionId,enableState){
@@ -39,5 +45,19 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 				$(this).prop('disabled',!enableState);
 			}
 		});
+	}
+	onItemSelected(item){
+		console.log('toolbar#onItemSelected()');
+		let config = this.getConfiguration();
+		for(var i=0;i<config.actions.length;i++){
+			let action = config.actions[i];
+			if(typeof action.enableOnSelection!='undefined'){
+				if(action.enableOnSelection){
+					this.setEnabled(action.actionId,true);
+				}else{
+					this.setEnabled(action.actionId,false);
+				}
+			}
+		}
 	}
 }

@@ -132,8 +132,10 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 	}
 	select(itemIndex){
 		this.selectedIndex = itemIndex;
+		$('#'+this.getId()+' li').removeClass('active');
 		if(this.selectedIndex>=0 && this.selectedIndex<this.items.length){
 			let selectedItem = this.items[this.selectedIndex];
+			$('#'+this.getId()+'_line_'+this.selectedIndex).addClass('active');
 			npaUi.fireEvent('select',{"source": this.getId(),"item": selectedItem});
 		}
 	}

@@ -68,11 +68,7 @@ function makeRESTCall(action,uri,params,onSuccess,onError){
 		if(onError){
 			onError({"message": errorMsg,"httpStatus": jqXHR.status});
 		}else{
-			if(showError){
-				showError('Error invoking "'+uri+'": '+errorMsg);
-			}else{
-				console.log('Error invoking "'+uri+'": '+errorMsg);
-			}
+			console.log('Error invoking "'+uri+'": '+errorMsg);
 		}
 	});
 }
@@ -190,6 +186,9 @@ npaUi = {
 								if(npaUi.loadingComponent==0){
 									npaUi.onComponentLoaded();
 								}
+								if(json.configuration.selectionListener && json.configuration.selectionProvider){
+									npaUi.registerSelectionListener(json.configuration.selectionProvider,npaUi.componentInstances[json.id]);
+								}
 							});
 							
 						});
@@ -211,6 +210,9 @@ npaUi = {
 									$('#'+divId).data('loaded','true');
 									if(npaUi.loadingComponent==0){
 										npaUi.onComponentLoaded();
+									}
+									if(globalComponentDef.configuration.selectionListener && globalComponentDef.configuration.selectionProvider){
+										npaUi.registerSelectionListener(globalComponentDef.configuration.selectionProvider,npaUi.componentInstances[globalComponentDef.id]);
 									}
 								});
 								
@@ -329,20 +331,25 @@ npaUi = {
 			}
 		}
 	},
-	getLocalizedString: function(reference,data){
-		let localizedString = reference;
-		let unProcessedLocalizedString = this.localizationMap[reference];
-		if(typeof unProcessedLocalizedString!='undefined'){
-			if(typeof data!='undefined' && data && data.length>0){
-				for(var i=0;i<data.length;i++){
-					let value = data[i];
-					let expr = '\\{'+i+'\\}';
-					let regex = new RegExp(expr,'g');
-					unProcessedLocalizedString = unProcessedLocalizedString.replace(regex,value);
+	getLocalizedString: function(stringExpr,data){
+		if(stringExpr.startsWith('@')){
+			let reference = stringExpr.replace(/@/,'');
+			let localizedString = reference;
+			let unProcessedLocalizedString = this.localizationMap[reference];
+			if(typeof unProcessedLocalizedString!='undefined'){
+				if(typeof data!='undefined' && data && data.length>0){
+					for(var i=0;i<data.length;i++){
+						let value = data[i];
+						let expr = '\\{'+i+'\\}';
+						let regex = new RegExp(expr,'g');
+						unProcessedLocalizedString = unProcessedLocalizedString.replace(regex,value);
+					}
 				}
+				localizedString = unProcessedLocalizedString;
 			}
-			localizedString = unProcessedLocalizedString;
+			return localizedString;
+		}else{
+			return stringExpr;
 		}
-		return localizedString;
 	}
 }

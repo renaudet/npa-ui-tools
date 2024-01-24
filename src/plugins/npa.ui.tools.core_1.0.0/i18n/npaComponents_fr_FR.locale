@@ -1,4 +1,5 @@
 form.textField.error=Le champs {0} est requis !
+form.passwordField.error.length=Le Mot de Passe doit avoir une longueur minimum de {1} caract&egrave;res
 form.passwordField.error.match=Les valeurs ne concordent pas !
 form.numericField.error=Le champs {0} doit être num&eacute;rique !
 form.dateField.error=Le champs {0} ne peut être vide et doit respecter le bon format !'

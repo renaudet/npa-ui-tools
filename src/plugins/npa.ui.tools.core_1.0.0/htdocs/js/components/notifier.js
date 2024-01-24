@@ -6,30 +6,30 @@
 var notifCount = 0;
 function createNotification(type,message,data=[]){
 	var notifId = 'uiToolsNotification_'+(notifCount++);
-	var title = npaUi.getLocalizedString('notifier.title');
-	var msgType = npaUi.getLocalizedString('notifier.info');
+	var title = npaUi.getLocalizedString('@notifier.title');
+	var msgType = npaUi.getLocalizedString('@notifier.info');
 	var icon = '/uiTools/img/info.png';
 	var theme = ' text-bg-info';
 	var autoHide = 'false';
 	var autoHideDelay = 4000;
 	if('error'==type){
-		msgType = npaUi.getLocalizedString('notifier.error');
+		msgType = npaUi.getLocalizedString('@notifier.error');
 		icon = '/uiTools/img/error.png';
 		theme = ' text-bg-danger';
 	}
 	if('warning'==type){
-		msgType = npaUi.getLocalizedString('notifier.warning');
+		msgType = npaUi.getLocalizedString('@notifier.warning');
 		icon = '/uiTools/img/warning.png';
 		theme = ' text-bg-warning';
 	}
 	if('confirm'==type){
-		msgType = npaUi.getLocalizedString('notifier.confirm');
+		msgType = npaUi.getLocalizedString('@notifier.confirm');
 		icon = '/uiTools/img/silk/accept.png';
 		theme = ' text-bg-success';
 		autoHide = 'true';
 	}
 	if('flash'==type){
-		msgType = npaUi.getLocalizedString('notifier.flash');
+		msgType = npaUi.getLocalizedString('@notifier.flash');
 		icon = '/uiTools/img/silk/flag_green.png';
 		theme = ' text-bg-success';
 		autoHide = 'true';

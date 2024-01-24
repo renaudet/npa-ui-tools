@@ -177,8 +177,15 @@ class PasswordField extends TextField{
 				showError(this.getLocalizedString('@form.textField.error',[this.config.name]));
 				return true;
 			}else{
-				$('#'+inputFieldId).removeClass('is-invalid');
-				return false;
+				if(this.config.minimumLength && fieldValue.length<this.config.minimumLength){
+					$('#'+inputFieldId).addClass('is-invalid');
+					$('#'+inputFieldId).focus();
+					showError(this.getLocalizedString('@form.passwordField.error.length',[this.config.name,this.config.minimumLength]));
+					return true;
+				}else{
+					$('#'+inputFieldId).removeClass('is-invalid');
+					return false;
+				}
 			}
 		}
 		if('passwordCheck'==this.config.type){
@@ -1352,5 +1359,13 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 			console.log('veto: '+errorFound);
 		}
 		return !errorFound;
+	}
+	onItemSelected(item){
+		this.setEditMode(false);
+		if(typeof item!='undefined' && item!=null){
+			this.setData(item);
+		}else{
+			this.setData({});
+		}
 	}
 }

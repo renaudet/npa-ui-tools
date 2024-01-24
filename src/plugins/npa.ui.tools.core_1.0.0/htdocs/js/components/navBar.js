@@ -28,7 +28,11 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		this.generateNavBarMenu(function(){
 			$('.npa-navbar-menu').on('click',function(){
 				let actionId = $(this).data('actionid');
-				npaUi.fireEvent(actionId,navBar.actionIdToItem[actionId]);
+				let item = navBar.actionIdToItem[actionId];
+				if('redirect'==item.actionId){
+					npaUi.fireEvent('redirect',item);
+				}else
+					npaUi.fireEvent(actionId,item);
 			});
 		});
 	}
@@ -59,9 +63,13 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 					html += '<hr class="dropdown-divider">';
 					html += '</li>';
 				}else{
-					this.actionIdToItem[item.actionId] = item;
+					let actionId = item.actionId;
+					if('redirect'==actionId){
+						actionId = item.id;
+					}
+					this.actionIdToItem[actionId] = item;
 					html += '<li id="'+item.id+'">';
-					html += '<a class="dropdown-item npa-navbar-menu" href="#" data-actionid="'+item.actionId+'">';
+					html += '<a class="dropdown-item npa-navbar-menu" href="#" data-actionid="'+actionId+'">';
 					if(typeof item.icon!='undefined'){
 						var title = '';
 						if(typeof item.tooltip!='undefined'){

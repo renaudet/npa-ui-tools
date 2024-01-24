@@ -28,12 +28,7 @@ class NpaUiComponent {
 		console.log('NpaUiComponent#render() was called');
 	}
 	getLocalizedString(stringExpr,data=[]){
-		if(stringExpr.startsWith('@')){
-			let reference = stringExpr.replace(/@/,'');
-			return npaUi.getLocalizedString(reference,data);
-		}else{
-			return stringExpr;
-		}
+		return npaUi.getLocalizedString(stringExpr,data);
 	}
 	localize(reference,data,then){
 		let values = '';

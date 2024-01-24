@@ -4,7 +4,7 @@
  */
  
 const UIPlugin = require('../../npaUtil.js');
-const fs = require("fs");
+const fs = require('fs');
 const DEFAULT_LOCALE = 'en-US';
 
 var plugin = new UIPlugin();
@@ -16,14 +16,10 @@ plugin.beforeExtensionPlugged = function(){
 
 plugin.lazzyPlug = function(extenderId,extensionPointConfig){
 	if('npa.ui.locale.provider'==extensionPointConfig.point){
-		this.info('adding Locale provider '+extenderId+':'+extensionPointConfig.id+' for language(s) '+extensionPointConfig.locale);
+		this.debug('adding Locale provider '+extenderId+':'+extensionPointConfig.id+' for language(s) '+extensionPointConfig.locale);
 		try{
-			this.info('before this.runtime.getPluginWrapper()');
 			let contributorPlugin = this.runtime.getPluginWrapper(extenderId);
-			console.log('contributorPlugin: ');
-			console.log(contributorPlugin);
 			let localeFilePath = contributorPlugin.getLocalDirectory()+'/'+extensionPointConfig.path;
-			this.info('local file path: '+localeFilePath);
 			this.loadLocalizationFile(localeFilePath,extensionPointConfig.locale);
 		}catch(e){
 			this.info('error!');
@@ -33,7 +29,7 @@ plugin.lazzyPlug = function(extenderId,extensionPointConfig){
 }
 
 plugin.loadLocalizationFile = function(filePath,locale){
-	this.info('->loadLocalizationFile()');
+	this.trace('->loadLocalizationFile()');
 	let normalizedLocale = locale.toLowerCase();
 	var fileContent = fs.readFileSync(filePath, 'utf8');
 	let provider = this.providers[normalizedLocale];
@@ -49,7 +45,7 @@ plugin.loadLocalizationFile = function(filePath,locale){
 			provider[token[0]] = token[1];
 		}
 	}
-	this.info('<-loadLocalizationFile()');
+	this.trace('<-loadLocalizationFile()');
 }
 
 plugin.setDefaultLocale = function(locale){

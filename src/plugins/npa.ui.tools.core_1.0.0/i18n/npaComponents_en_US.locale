@@ -1,4 +1,5 @@
 form.textField.error=The {0} field cannot be empty!
+form.passwordField.error.length=Minimum Password length is {1}
 form.passwordField.error.match=Values do not match!
 form.numericField.error=The {0} field value must be numeric!
 form.dateField.error=The {0} field cannot be empty or does not match the expected format!'
