@@ -46,3 +46,31 @@
 .form-slider {
 	margin-top: 7px;
 }
+
+.form-icon {
+	margin-top: 2px;
+	vertical-align: top;
+}
+
+.form-icon:hover {
+	rotate: 10deg;
+}
+
+.form-btn-icon {
+	border: 1px solid #c3c3c3;
+	border-radius: 0.2rem;
+	box-shadow: 1px 1px 3px #a0a0a0;
+	background-color: #ffffff;
+	margin-left: 2px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+.form-btn-icon:hover {
+	border: 1px solid #909090;
+	background-color: #eaeaea;
+	box-shadow: 1px 1px 1px #909090;
+}
+.form-btn-icon:active {
+	border: 1px solid #747474;
+	background-color: #c3c3c3;
+}

@@ -28,3 +28,4 @@ toolbar1.icon2.label=Cr&eacute;er un nouvel enregistrement
 toolbar1.icon3.label=Modifier l'enregistrement courant
 toolbar1.icon4.label=Sauvegarder l'enregistrement courant
 toolbar1.icon5.label=Supprimer l'enregistrement courant
+action.delete.record.confirmation=Voulez-vous réellement supprimer l'enregistrement "{0}" ?

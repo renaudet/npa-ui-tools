@@ -28,3 +28,4 @@ toolbar1.icon2.label=Insert a new record
 toolbar1.icon3.label=Edit the current record
 toolbar1.icon4.label=Save the current record
 toolbar1.icon5.label=Delete the current record
+action.delete.record.confirmation=Do you really want to delete the record "{0}"?

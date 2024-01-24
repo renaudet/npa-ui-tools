@@ -42,10 +42,10 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 			}
 			if('local'==type){
 				console.log('SelectionList#fetchDataFromDatasource() - using local data from '+datasource.uri);
-				var datatable = this;
+				var selectionList = this;
 				makeRESTCall(method,datasource.uri,payload,function(response){
 					if(response.status==200){
-						then(datatable.adaptFormat(response));
+						then(selectionList.adaptFormat(response));
 					}else{
 						console.log(response);
 					}
@@ -61,6 +61,30 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 				}
 			}
 		}
+	}
+	adaptFormat(inputData){
+		let datasource = this.getConfiguration().datasource;
+		let dsType = 'local';
+		if(typeof datasource.type!='undefined'){
+			dsType = datasource.type;
+		}
+		if('local'==dsType){
+			if(datasource.adapter){
+				var data = [];
+				var toEval = 'data = '+datasource.adapter.replace(/@/g,'inputData')+';'
+				try{
+					eval(toEval);
+					return data;
+				}catch(t){
+					console.log('selectionList.js#adaptFormat(inputData) - exception evaluating adapter for datasource');
+					return [];
+				}
+			}else{
+				return inputData;
+			}
+		}
+		console.log('selectionList.js#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
+		return [];
 	}
 	render(){
 		if(this.parentDiv().data('loaded')!='true'){

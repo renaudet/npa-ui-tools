@@ -660,7 +660,7 @@ class SourceEditorField extends LabeledFormField{
 			html += '<div id="'+this.baseId+'_'+this.config.name+'_buttonBar" class="d-grid gap-2 d-md-flex">';//justify-content-md-end
 			for(var i=0;i<this.config.buttons.length;i++){
 				var button = this.config.buttons[i];
-				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="img-icon" src="'+button.icon+'" title="'+this.getLocalizedString(button.label)+'"></button>';
+				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="form-icon" src="'+button.icon+'" title="'+this.getLocalizedString(button.label)+'"></button>';
 			}
 			html += '</div>';
 		}
@@ -833,11 +833,11 @@ class ArrayEditorField extends LabeledFormField{
 		html += '      </div>';
 		if(typeof this.config.editable=='undefined' || this.config.editable){
 			html += '      <div class="col-1">';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_addbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/add.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.add',[datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_editbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/pencil.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.edit',[datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_delbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/cross.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.delete',[datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_upbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/arrow_up.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.up',[datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_downbtn" class="btn btn-sm scafFormBtn" disabled><img src="/uiTools/img/silk/arrow_down.png" class="scafFormIcon" title="'+this.getLocalizedString('@form.arrayEditor.button.down',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_addbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/add.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.add',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_editbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/pencil.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.edit',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_delbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/cross.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.delete',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_upbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_up.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.up',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_downbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_down.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.down',[datatype])+'"></button>';
 			html += '      </div>';
 		}else{
 			html += '      <div class="col-1">&nbsp;</div>';
@@ -1136,6 +1136,286 @@ class PlaceholderField extends LabeledFormField{
 	}
 }
 
+
+class MultipleReferenceEditorField extends LabeledFormField{
+	constructor(config,form){
+		super(config,form);
+	}
+	fetchDataFromDatasource(then){
+		let datasource = this.config.datasource;
+		if(typeof datasource!='undefined'){
+			let type = 'local';
+			let method = 'GET';
+			let payload = {};
+			if(typeof datasource.type!='undefined'){
+				type = datasource.type;
+			}
+			if(typeof datasource.method!='undefined'){
+				method = datasource.method;
+			}
+			if(typeof datasource.payload!='undefined'){
+				payload = datasource.payload;
+			}
+			if('local'==type){
+				console.log('MultipleReferenceEditorField#fetchDataFromDatasource() - using local data from '+datasource.uri);
+				var field = this;
+				makeRESTCall(method,datasource.uri,payload,function(response){
+					if(response.status==200){
+						then(field.adaptFormat(response));
+					}else{
+						console.log(response);
+					}
+				},function(errorMsg){
+					console.log(errorMsg);
+				});
+			}
+			if('managed'==type){
+				console.log('MultipleReferenceEditorField#fetchDataFromDatasource() - using DataManager #'+datasource.manager);
+				let dataManager = npaUi.getComponent(datasource.manager);
+				if(typeof dataManager!='undefined'){
+					dataManager.query(payload).then(then);
+				}
+			}
+		}
+	}
+	fetchSingleDataFromDatasource(id,then){
+		console.log('MultipleReferenceEditorField#fetchSingleDataFromDatasource('+id+')');
+		let datasource = this.config.datasource;
+		if(typeof datasource!='undefined'){
+			let type = 'local';
+			let method = 'GET';
+			let payload = {};
+			if(typeof datasource.type!='undefined'){
+				type = datasource.type;
+			}
+			if(typeof datasource.method!='undefined'){
+				method = datasource.method;
+			}
+			if('local'==type){
+				console.log('MultipleReferenceEditorField#fetchSingleDataFromDatasource() - using local data from '+datasource.uri);
+				payload = {"selector": {"$eq": {"id": id}}};
+				var field = this;
+				makeRESTCall(method,datasource.uri,payload,function(response){
+					if(response.status==200){
+						let results = field.adaptFormat(response);
+						if(results.length>0){
+							then(results[0]);
+						}else{
+							then(null);
+						}
+					}else{
+						console.log(response);
+					}
+				},function(errorMsg){
+					console.log(errorMsg);
+				});
+			}
+			if('managed'==type){
+				console.log('MultipleReferenceEditorField#fetchSingleDataFromDatasource() - using DataManager #'+datasource.manager);
+				payload = {"id": id};
+				let dataManager = npaUi.getComponent(datasource.manager);
+				if(typeof dataManager!='undefined'){
+					dataManager.findByPrimaryKey(payload).then(then);
+				}
+			}
+		}
+	}
+	adaptFormat(inputData){
+		let datasource = this.getConfiguration().datasource;
+		let dsType = 'local';
+		if(typeof datasource.type!='undefined'){
+			dsType = datasource.type;
+		}
+		if('local'==dsType){
+			if(datasource.adapter){
+				var data = [];
+				var toEval = 'data = '+datasource.adapter.replace(/@/g,'inputData')+';'
+				try{
+					eval(toEval);
+					return data;
+				}catch(t){
+					console.log('MultipleReferenceEditorField#adaptFormat(inputData) - exception evaluating adapter for datasource');
+					return [];
+				}
+			}else{
+				return inputData;
+			}
+		}
+		console.log('MultipleReferenceEditorField#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
+		return [];
+	}
+	render(parent){
+		let visibleRowCount = 5;
+		if(typeof this.config.rows!='undefined'){
+			visibleRowCount = this.config.rows;
+		}
+		this.baseId = parent.prop('id');
+		var html = '';
+		html += '<div class="row form-row">';
+		html += this.generateLabel();
+		html += '  <div class="col-4">';
+		html += '    '+this.getLocalizedString('@form.multiple.reference.available')+'<br>';
+		html += '    <select id="'+this.baseId+'_source_'+this.config.name+'" class="form-select" size="'+visibleRowCount+'" disabled>';
+		html += '    </select>';
+		html += '  </div>';
+		html += '  <div class="col-1">';
+		html += '    <br>';
+		html += '    <button type="button" id="'+this.baseId+'_'+this.config.name+'_addBtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/add.png" title="'+this.getLocalizedString('@form.multiple.reference.button.add',[this.config.label])+'" class="form-icon"></button><br>';
+		html += '    <button type="button" id="'+this.baseId+'_'+this.config.name+'_removeBtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/delete.png" title="'+this.getLocalizedString('@form.multiple.reference.button.remove',[this.config.label])+'" class="form-icon"></button><br>';
+		html += '  </div>';
+		html += '  <div class="col-4">';
+		html += '    '+this.getLocalizedString('@form.multiple.reference.associated')+'<br>';
+		html += '    <select id="'+this.baseId+'_'+this.config.name+'" class="form-select" size="'+visibleRowCount+'" disabled>';
+		html += '    </select>';
+		html += '  </div>';
+		html += '  <div class="col-1">&nbsp;</div>';
+		html += '</div>';
+		parent.append(html);
+		var field = this;
+		this.fetchDataFromDatasource(function(data){
+			var itemList = data;
+			let titleRenderer = null;
+			let valueRenderer = null;
+			if(field.config.renderer && field.config.renderer.title){
+				titleRenderer = new window[field.config.renderer.title.type](field.config.renderer.title);
+			}else{
+				titleRenderer = new ItemRenderer({});
+			}
+			if(field.config.renderer && field.config.renderer.value){
+				valueRenderer = new window[field.config.renderer.value.type](field.config.renderer.value);
+			}else{
+				valueRenderer = new ItemRenderer({});
+			}
+			for(var i=0;i<itemList.length;i++){
+				let record = itemList[i];
+				let html = '';
+				let title = titleRenderer.render(record);
+				let value = valueRenderer.render(record);
+				html += '<option value="'+record.id+'" title="'+title+'">';
+				html += value;
+				html += '</option>';
+				$('#'+field.baseId+'_source_'+field.config.name).append(html);
+			}
+		});
+		var field = this;
+		$('#'+this.baseId+'_source_'+this.config.name).on('change',function(e){
+			$('#'+field.baseId+'_'+field.config.name+'_addBtn').prop('disabled',false);
+		});
+		$('#'+this.baseId+'_'+this.config.name).on('change',function(e){
+			$('#'+field.baseId+'_'+field.config.name+'_removeBtn').prop('disabled',false);
+		});
+		$('#'+this.baseId+'_'+this.config.name+'_addBtn').on('click',function(){
+			var selectedId = $('#'+field.baseId+'_source_'+field.config.name+' option:selected').val();
+			var selectedOption =  $('#'+field.baseId+'_source_'+field.config.name+' option[value=\''+selectedId+'\']');
+			//is the selected option already right
+			var itemAlreadyAssociated = false;
+			$('#'+field.baseId+'_'+field.config.name+' option').each(function(){
+			    var associatedOptionId = $(this).val();
+			    if(associatedOptionId==selectedId){
+					itemAlreadyAssociated = true;
+				}
+			});
+			if(!itemAlreadyAssociated || typeof field.config.unique=='undefined' || !field.config.unique){
+				var html = '<option value="'+selectedId+'" title="'+selectedOption.prop('title')+'">'+selectedOption.text()+'</option>';
+				$('#'+field.baseId+'_'+field.config.name).append(html);
+			}
+		});
+		$('#'+this.baseId+'_'+this.config.name+'_removeBtn').on('click',function(){
+			var selectedId = $('#'+field.baseId+'_'+field.config.name+' option:selected').val();
+			var selectedOption =  $('#'+field.baseId+'_'+field.config.name+' option[value=\''+selectedId+'\']');
+			selectedOption.remove();
+		});
+	}
+	setEditMode(editing){
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		var inputSourceFieldId = this.baseId+'_source_'+this.config.name;
+		if(editing){
+			$('#'+inputFieldId).prop('disabled',false);
+			$('#'+inputSourceFieldId).prop('disabled',false);
+		}else{
+			$('#'+inputFieldId).prop('disabled',true);
+			$('#'+inputSourceFieldId).prop('disabled',true);
+		}
+	}
+	setFocus(){
+	}
+	setData(parentObj){
+		console.log('MultipleReferenceEditorField#setData()');
+		console.log(parentObj);
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		var field = this;
+		$('#'+inputFieldId).empty();
+		if(typeof parentObj[this.config.name]!='undefined'){
+			var loadReferenceList = function(list,index,dataArray,next){
+				if(index<list.length){
+					var refDataId = list[index];
+					console.log('processing reference: '+refDataId);
+					field.fetchSingleDataFromDatasource(refDataId,function(data){
+						console.log('reference found - data id '+JSON.stringify(data));
+						if(data && typeof data=='object'){
+							dataArray.push(data);
+						}
+						loadReferenceList(list,index+1,dataArray,next);
+					});
+				}else{
+					next();
+				}
+			}
+			var referencedData = [];
+			loadReferenceList(parentObj[field.config.name],0,referencedData,function(){
+				var html = '';
+				let titleRenderer = null;
+				let valueRenderer = null;
+				if(field.config.renderer && field.config.renderer.title){
+					titleRenderer = new window[field.config.renderer.title.type](field.config.renderer.title);
+				}else{
+					titleRenderer = new ItemRenderer({});
+				}
+				if(field.config.renderer && field.config.renderer.value){
+					valueRenderer = new window[field.config.renderer.value.type](field.config.renderer.value);
+				}else{
+					valueRenderer = new ItemRenderer({});
+				}
+				for(var i=0;i<referencedData.length;i++){
+					let record = referencedData[i];
+					let title = titleRenderer.render(record);
+					let value = valueRenderer.render(record);
+					html += '<option value="'+record.id+'" title="'+title+'">';
+					html += value;
+					html += '</option>';
+				}
+				$('#'+inputFieldId).append(html);
+			});
+		}
+	}
+	assignData(parentObj){
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		parentObj[this.config.name] = $('#'+inputFieldId).val();
+		var refDataIds = [];
+		$('#'+inputFieldId+' option').each(function(){
+		    var associatedOptionId = $(this).val();
+		    refDataIds.push(associatedOptionId);
+		});
+		parentObj[this.config.name] = refDataIds;
+	}
+	vetoRaised(){
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		if(this.config.required){
+			var refDataIds = [];
+			$('#'+inputFieldId+' option').each(function(){
+			    var associatedOptionId = $(this).val();
+			    refDataIds.push(associatedOptionId);
+			});
+			if(refDataIds.length==0){
+				showError(this.getLocalizedString('@form.multiple.reference.error',[this.config.name]));
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+
 const RICH_TEXT_EDITOR_DEPTS = [
 	 {"type": "css","uri": "/css/rte/rte.css"},
      {"type": "js","uri": "/js/richText/rte.js"},
@@ -1281,6 +1561,9 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		if('richText'==config.type){
 			return new RichTextEditorField(config,this);
 		}
+		if('reference'==config.type && config.multiple){
+			return new MultipleReferenceEditorField(config,this);
+		}
 		return new FormField(config,this);
 	}
 	render(){
@@ -1325,6 +1608,10 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		for(var fieldId in this.fieldCache){
 			let field = this.fieldCache[fieldId];
 			field.setEditMode(mode);
+		}
+		let config = this.getConfiguration();
+		if(config.fields.length>0){
+			this.fieldCache[config.fields[0].name].setFocus();
 		}
 	}
 	

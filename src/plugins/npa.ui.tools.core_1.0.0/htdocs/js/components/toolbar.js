@@ -4,6 +4,7 @@
  */
  
 npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
+	pluggableActionHandlers = {};
 	initialize(then){
 		$.loadCss('/uiTools/css/toolbar.css',then);
 	}
@@ -28,7 +29,7 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 			let toolbar = this;
 			$('.toolbar-btn').on('click.'+this.getId(),function(){
 				let actionId = $(this).data('action');
-				npaUi.fireEvent(actionId,{"source": toolbar.getId(),"actionId": actionId});
+				toolbar.triggersActionEvent(actionId);
 			});
 			for(var i=0;i<config.actions.length;i++){
 				let action = config.actions[i];
@@ -36,9 +37,29 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 					this.setEnabled(action.actionId,false);
 				}
 			}
+			if(config.pluggableActionHandlers && config.pluggableActionHandlers.length>0){
+				for(var i=0;i<config.pluggableActionHandlers.length;i++){
+					let actionHandlerConfig = config.pluggableActionHandlers[i];
+					this.pluggableActionHandlers[actionHandlerConfig.actionId] = actionHandlerConfig;
+				}
+			}
 		}
 	}
+	triggersActionEvent(actionId){
+		let actionHandler = this.pluggableActionHandlers[actionId];
+		if(typeof actionHandler!='undefined'){
+			try{
+				let toEval = actionHandler.handlerExpr.replace(/@/g,'this').replace(/\$/g,'npaUi.getComponent');
+				eval(toEval);
+			}catch(e){
+				console.log('npaUi#toolbar#triggersActionEvent('+actionId+')');
+				console.log(e);
+			}
+		}
+		npaUi.fireEvent(actionId,{"source": this.getId(),"actionId": actionId});
+	}
 	setEnabled(actionId,enableState){
+		console.log('npaUi#toolbar#setEnabled('+actionId+','+enableState+')');
 		$('.toolbar-btn').each(function(){
 			let btnActionId = $(this).data('action');
 			if(btnActionId==actionId){

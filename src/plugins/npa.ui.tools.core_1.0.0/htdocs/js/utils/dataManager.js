@@ -26,6 +26,80 @@ npaUiCore.DataManager = class DataManager extends NpaUiComponent{
 	}
 	render(){
 	}
+	findByPrimaryKey(pk){
+		console.log('DataManager#findByPrimaryKey()');
+		let interactionConfig = this.getConfiguration().findByPrimaryKey;
+		let type = 'local';
+		let method = 'GET';
+		let payload = {};
+		let uri = interactionConfig.uri;
+		if(typeof interactionConfig.uri!='undefined'){
+			var paths = interactionConfig.uri.split('/');
+			var substitutedUri = '';
+			console.log('substituing GET uri '+interactionConfig.uri);
+			console.log(paths);
+			for(var i=0;i<paths.length;i++){
+				let path = paths[i];
+				if(path.length>0){
+					console.log('-evaluating path '+path);
+					substitutedUri += this.substitute(path,pk);
+				}
+				if(i<paths.length-1){
+					substitutedUri += '/';
+				}
+				console.log('substitutedUri = '+substitutedUri);
+			}
+			if(interactionConfig.uri.endsWith('/')){
+				substitutedUri += '/';
+			}
+			uri = substitutedUri;
+		}
+		if(typeof interactionConfig.type!='undefined'){
+			type = interactionConfig.type;
+		}
+		if(typeof interactionConfig.method!='undefined'){
+			method = interactionConfig.method;
+		}
+		if(typeof filterExpr!='undefined'){
+			payload = filterExpr;
+		}else{
+			if(typeof interactionConfig.payload!='undefined'){
+				payload = interactionConfig.payload;
+			}
+		}
+		var dataManagerWrapper = new DataManagerWrapper(this);
+		if('local'==type){
+			makeRESTCall(method,uri,payload,function(response){
+				if(response.status==200){
+					if(typeof interactionConfig.adapter!='undefined'){
+						var data = [];
+						var toEval = 'data = '+interactionConfig.adapter.replace(/@/g,'response')+';'
+						try{
+							eval(toEval);
+							dataManagerWrapper.interactionCallback(data);
+						}catch(t){
+							if(dataManagerWrapper.onErrorCallback!=null){
+								dataManagerWrapper.onErrorCallback('dataManager.js#findByPrimaryKey() - exception evaluating adapter');
+							}
+						}
+					}else{
+						dataManagerWrapper.interactionCallback(response);
+					}
+				}else{
+					if(dataManagerWrapper.onErrorCallback!=null){
+						dataManagerWrapper.onErrorCallback(response.message);
+					}
+				}
+			},function(errorMsg){
+				if(dataManagerWrapper.onErrorCallback!=null){
+					dataManagerWrapper.onErrorCallback(errorMsg);
+				}else{
+					console.log(errorMsg);
+				}
+			});
+		}
+		return dataManagerWrapper;
+	}
 	query(filterExpr){
 		console.log('DataManager#query()');
 		let interactionConfig = this.getConfiguration().query;
@@ -207,13 +281,6 @@ npaUiCore.DataManager = class DataManager extends NpaUiComponent{
 			method = interactionConfig.method;
 		}
 		if(typeof interactionConfig.payload!='undefined'){
-			/*var toEval = 'payload = '+interactionConfig.payload.replace(/@/g,'record')+';';
-			try{
-				eval(toEval);
-			}catch(t){
-				console.log('DataManager#delete(): exception evaluating '+toEval);
-				console.log(t);
-			}*/
 			payload = this.substitute(interactionConfig.payload,record);
 		}
 		var dataManagerWrapper = new DataManagerWrapper(this);

@@ -302,6 +302,14 @@ npaUi = {
 		}
 		listeners.push(listener);
 	},
+	on: function(actionId,callback){
+		let handler = {
+			handleEvent: function(event){
+				callback(event);
+			}
+		}
+		this.registerActionHandler(actionId,handler);
+	},
 	fireEvent: function(actionId,event){
 		console.log('fireEvent('+actionId+')');
 		console.log(event);

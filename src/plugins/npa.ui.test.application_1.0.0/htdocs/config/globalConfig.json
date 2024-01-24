@@ -400,6 +400,16 @@
 		                "enabled": false,
 		                "enableOnSelection": true
 		            }
+		    	],
+		    	"pluggableActionHandlers": [
+		    		{
+		    			"actionId": "insert",
+		    			"handlerExpr": "@.setEnabled('save',true);@.setEnabled('edit',false);@.setEnabled('delete',false);$('form_01').setEditMode(true);$('form_01').setData({\"age\": 0,\"type\": \"Bronze\",\"customization\": \"//created by page2!\"});"
+		    		},
+		    		{
+		    			"actionId": "edit",
+		    			"handlerExpr": "@.setEnabled('save',true);@.setEnabled('edit',false);$('form_01').setEditMode(true);"
+		    		}
 		    	]
 		    }
 		}
