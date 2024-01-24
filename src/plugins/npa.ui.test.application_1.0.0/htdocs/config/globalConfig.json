@@ -280,6 +280,8 @@
 		    "configuration": {
 		    	"title": "NPA Sample Record edition",
 		    	"class": "form-frame-noborder",
+		    	"selectionListener": true,
+		    	"selectionProvider": "selectionList_01",
 		    	"fields": [
 		    		{
 		    			"name": "name",
@@ -356,11 +358,15 @@
 		    "version": "1.0.0",
 		    "type": "Toolbar",
 		    "configuration": {
+		    	"selectionListener": true,
+		    	"selectionProvider": "selectionList_01",
 		    	"actions": [
 		    		{
 		                "label": "@toolbar1.icon1.label",
 		                "actionId": "print",
-		                "icon": "/uiTools/img/silk/printer.png"
+		                "icon": "/uiTools/img/silk/printer.png",
+		                "enabled": false,
+		                "enableOnSelection": true
 		            },
 		    		{
 		                "type": "separator"
@@ -373,12 +379,16 @@
 		    		{
 		                "label": "@toolbar1.icon3.label",
 		                "actionId": "edit",
-		                "icon": "/uiTools/img/silk/table_edit.png"
+		                "icon": "/uiTools/img/silk/table_edit.png",
+		                "enabled": false,
+		                "enableOnSelection": true
 		            },
 		    		{
 		                "label": "@toolbar1.icon4.label",
 		                "actionId": "save",
-		                "icon": "/uiTools/img/silk/disk.png"
+		                "icon": "/uiTools/img/silk/disk.png",
+		                "enabled": false,
+		                "enableOnSelection": false
 		            },
 		    		{
 		                "type": "separator"
@@ -386,7 +396,9 @@
 		    		{
 		                "label": "@toolbar1.icon5.label",
 		                "actionId": "delete",
-		                "icon": "/uiTools/img/silk/table_row_delete.png"
+		                "icon": "/uiTools/img/silk/table_row_delete.png",
+		                "enabled": false,
+		                "enableOnSelection": true
 		            }
 		    	]
 		    }

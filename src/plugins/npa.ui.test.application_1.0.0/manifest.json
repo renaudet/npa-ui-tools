@@ -53,6 +53,7 @@
   	{
   		"point": "npa.http.home",
   		"id": "npa.ui.test.application.home",
+  		"application": "test",
   		"uri": "/static/home.html"
   	},
   	{

@@ -65,16 +65,6 @@ var actionHandler = {
 
 var selectionHandler = {
 	onItemSelected: function(item){
-		//flash('Selected item: '+item.name);
-		let form = npaUi.getComponent('form_01');
-		form.setEditMode(false);
-		form.setData(item);
-		
-		let toolbar = npaUi.getComponent('toolbar_01');
-		toolbar.setEnabled('print',true);
-		toolbar.setEnabled('edit',true);
-		toolbar.setEnabled('save',false);
-		toolbar.setEnabled('delete',true);
 	}
 }
  
@@ -86,8 +76,8 @@ $(document).ready(function(){
 			npaUi.registerActionHandler('save',actionHandler);
 			npaUi.registerActionHandler('delete',actionHandler);
 			npaUi.registerActionHandler('displayMessage',actionHandler);
-			npaUi.registerSelectionListener('selectionList_01',selectionHandler);
-			npaUi.onComponentLoaded = onPageReady;
+			//npaUi.registerSelectionListener('selectionList_01',selectionHandler);
+			//npaUi.onComponentLoaded = onPageReady;
 			npaUi.render();
 		});
 	});
