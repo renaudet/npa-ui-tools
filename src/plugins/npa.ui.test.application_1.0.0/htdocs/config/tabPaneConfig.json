@@ -1,0 +1,22 @@
+{
+    "id":"tabPane_01",
+    "version": "1.0.0",
+    "type": "TabPane",
+    "configuration": {
+        "tabs": [
+            {
+                "id": "tab1",
+                "label": "@tab1.label"
+            },
+            {
+                "id": "tab2",
+                "label": "@tab2.label"
+            },
+            {
+                "id": "tab3",
+                "label": "@tab3.label",
+                "active": false
+            }
+        ]
+    }
+}

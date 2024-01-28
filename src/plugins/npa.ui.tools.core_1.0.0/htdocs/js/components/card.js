@@ -32,7 +32,7 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 			let html = '';
 			html += '<div id="'+this.getId()+'" class="card" style="margin-left: 3px;margin-right: 3px;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;">';
 			html += '  <div class="card-header npa-card-header">';
-			html += '    <img src="'+config.icon+'" width="20" style="padding-bottom: 3px;"><span id="scafPageTitle" style="padding-left: 15px;">'+this.getLocalizedString(config.label)+'</span>&nbsp;&nbsp;&nbsp;<span class="visually-hidden spinner-border spinner-border-sm text-secondary" aria-hidden="true"></span>';
+			html += '    <img src="'+config.icon+'" width="20" style="padding-bottom: 3px;"><span id="scafPageTitle" style="padding-left: 15px;">'+this.getLocalizedString(config.label)+'</span>&nbsp;&nbsp;&nbsp;<span class="visually-hidden spinner-border spinner-border-sm text-light" aria-hidden="true"></span>';
 			html += '  </div>';
 			html += '  <ul class="list-group list-group-flush">';
 			html += '    <li id="workArea" class="list-group-item"></li>';

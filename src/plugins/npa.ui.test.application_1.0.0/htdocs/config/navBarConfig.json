@@ -31,6 +31,12 @@
 		        		"uri": "/static/page2.html"
         			},
         			{
+        				"id": "menu25",
+		        		"label": "@menu25.label",
+		        		"actionId": "redirect",
+		        		"uri": "/static/page3.html"
+        			},
+        			{
         				"type": "separator"
         			},
         			{

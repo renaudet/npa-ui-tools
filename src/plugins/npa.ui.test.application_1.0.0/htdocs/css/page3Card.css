@@ -1,0 +1,10 @@
+/***
+ * page2Card.css - CSS file for the NPA UI Card component on Page 2
+ * Copyright 2024 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+.npa-card-header {
+	background-color: #b08ad4;
+	color: #000000;
+}

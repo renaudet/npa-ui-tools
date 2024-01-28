@@ -9,5 +9,6 @@
 	"DataManager": {"version": "1.0.0","dependency":"/uiTools/js/utils/dataManager.js"},
 	"ModalDialog": {"version": "1.0.0","dependency":"/uiTools/js/components/modal.js"},
 	"Form": {"version": "1.0.0","dependency":"/uiTools/js/components/form.js"},
-	"SelectionList": {"version": "1.0.0","dependency":"/uiTools/js/components/selectionList.js"}
+	"SelectionList": {"version": "1.0.0","dependency":"/uiTools/js/components/selectionList.js"},
+	"TabPane": {"version": "1.0.0","dependency":"/uiTools/js/components/tabpane.js"}
 }

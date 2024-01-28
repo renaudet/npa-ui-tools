@@ -1,0 +1,10 @@
+{
+    "id":"card_03",
+    "version": "1.0.0",
+    "type": "Card",
+    "configuration": {
+        "icon": "/uiTools/img/silk/book.png",
+        "label": "@test.application.page3.title",
+        "stylesheet": "/static/css/page3Card.css"
+    }
+}

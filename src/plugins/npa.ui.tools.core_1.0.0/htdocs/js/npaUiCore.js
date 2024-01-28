@@ -3,6 +3,17 @@
  * Copyright 2023 Nicolas Renaudet - All rights reserved
  */
 
+$(document)
+  .ajaxStart(function () {
+	$('.spinner-border').removeClass('visually-hidden');
+  })
+  .ajaxStop(function () {
+	setTimeout(function(){ $('.spinner-border').addClass('visually-hidden'); },200);
+  })
+  .ajaxError(function () {
+	$('.spinner-border').addClass('visually-hidden');
+});
+
 jQuery.loadScript = function (uri, callback){
 	$.ajax({
         url: uri,
@@ -52,7 +63,7 @@ function makeRESTCall(action,uri,params,onSuccess,onError){
 	      type       : action,
 	      dataType   : 'json',
 	      contentType: 'application/json',
-	      success    : function(){},
+		  success    : function(){},
 	      data       : (action=='POST' || action=='PUT')?JSON.stringify(params):null
 	   }
 	)
