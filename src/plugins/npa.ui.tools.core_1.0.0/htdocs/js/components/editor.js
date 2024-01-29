@@ -18,6 +18,7 @@ const DEFAULT_HEIGHT = 300;
 
 npaUiCore.Editor = class Editor extends NpaUiComponent{
 	editor = null;
+	pluggableActionHandlers = {};
 	initialize(then){
 		loadDeps(DEPTS,then);
 	}
@@ -56,6 +57,20 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 			html += '</div>';
 		}
 		this.parentDiv().html(html);
+		if(typeof config.toolbar!='undefined'){
+			for(var i=0;i<config.toolbar.actions.length;i++){
+				let action = config.toolbar.actions[i];
+				if(typeof action.enabled!='undefined' && !action.enabled){
+					this.setEnabled(action.actionId,false);
+				}
+			}
+			if(config.toolbar.pluggableActionHandlers && config.toolbar.pluggableActionHandlers.length>0){
+				for(var i=0;i<config.toolbar.pluggableActionHandlers.length;i++){
+					let actionHandlerConfig = config.toolbar.pluggableActionHandlers[i];
+					this.pluggableActionHandlers[actionHandlerConfig.actionId] = actionHandlerConfig;
+				}
+			}
+		}
 		var textarea = document.getElementById(this.getId());
 		var readonly = true;
 		if(typeof config.readonly!='undefined'){
@@ -77,9 +92,23 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 			let editor = this;
 			$('.editor-btn').on('click.'+this.getId(),function(){
 				let actionId = $(this).data('action');
-				npaUi.fireEvent(actionId,{"source": editor.getId(),"actionId": actionId});
+				//npaUi.fireEvent(actionId,{"source": editor.getId(),"actionId": actionId});
+				editor.triggersActionEvent(actionId)
 			});
 		}
+	}
+	triggersActionEvent(actionId){
+		let actionHandler = this.pluggableActionHandlers[actionId];
+		if(typeof actionHandler!='undefined'){
+			try{
+				let toEval = actionHandler.handlerExpr.replace(/@/g,'this').replace(/\$/g,'npaUi.getComponent');
+				eval(toEval);
+			}catch(e){
+				console.log('npaUi#editor#triggersActionEvent('+actionId+')');
+				console.log(e);
+			}
+		}
+		npaUi.fireEvent(actionId,{"source": this.getId(),"actionId": actionId});
 	}
 	setReadonly(readonly){
 		this.editor.setOption('readOnly',readonly);
@@ -111,6 +140,18 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 			}
 		}else{
 			this.setText(JSON.stringify(item,null,'\t'));
+		}
+		if(typeof config.toolbar!='undefined'){
+			for(var i=0;i<config.toolbar.actions.length;i++){
+				let action = config.toolbar.actions[i];
+				if(typeof action.enableOnSelection!='undefined'){
+					if(action.enableOnSelection){
+						this.setEnabled(action.actionId,true);
+					}else{
+						this.setEnabled(action.actionId,false);
+					}
+				}
+			}
 		}
 	}
 }

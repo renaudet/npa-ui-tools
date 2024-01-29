@@ -20,7 +20,7 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 				}
 			});
 			let html = '';
-			html += '<ul class="nav nav-tabs npa-tab-header" role="tablist">';
+			html += '<ul id="'+this.getId()+'" class="nav nav-tabs npa-tab-header" role="tablist">';
 			for(var i=0;i<config.tabs.length;i++){
 				let tab = config.tabs[i];
 				let active = true;
