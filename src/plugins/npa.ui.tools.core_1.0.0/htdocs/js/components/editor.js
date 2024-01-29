@@ -98,4 +98,19 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 			}
 		});
 	}
+	onItemSelected(item){
+		let config = this.getConfiguration();
+		if(typeof config.contentAdapter!='undefined'){
+			let txt = '';
+			let toEval = 'txt = '+config.contentAdapter.replace(/@/g,'item')+';';
+			try{
+				eval(toEval);
+				this.setText(txt);
+			}catch(e){
+				console.log(e);
+			}
+		}else{
+			this.setText(JSON.stringify(item,null,'\t'));
+		}
+	}
 }

@@ -4,6 +4,10 @@
  *
  ***/
  
- .npa-tab-header {
-	background-color: #d3d3d3;
+.npa-tab-header {
+	margin-top: 3px;
+} 
+
+.npa-tab-content {
+	margin-top: 3px;
 }

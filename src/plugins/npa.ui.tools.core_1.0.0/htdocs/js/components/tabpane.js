@@ -11,13 +11,16 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let childs = {};
-			if($('#'+this.parentDivId+' div').length>0){
-				$('#'+this.parentDivId+' div').each(function(){
+			$('#'+this.parentDivId+' div').each(function(){
+				if(typeof $(this).data('tab-target')!='undefined' && 
+				   $(this).data('tab-target')!=null && 
+				   $(this).data('tab-target').length>0){
+					console.log('detaching child DIV with target: '+$(this).data('tab-target'));
 					childs[$(this).data('tab-target')] = $(this).detach();
-				});
-		    }
+				}
+			});
 			let html = '';
-			html += '<ul class="nav nav-tabs" role="tablist">';
+			html += '<ul class="nav nav-tabs npa-tab-header" role="tablist">';
 			for(var i=0;i<config.tabs.length;i++){
 				let tab = config.tabs[i];
 				let active = true;
@@ -29,7 +32,7 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 				html += '  </li>';
 			}
 			html += '</ul>';
-			html += '<div class="tab-content" id="'+this.getId()+'_content">';
+			html += '<div class="tab-content npa-tab-content" id="'+this.getId()+'_content">';
 			for(var i=0;i<config.tabs.length;i++){
 				let tab = config.tabs[i];
 				html += '  <div class="tab-pane fade show'+(i==0?' active':'')+'" id="'+tab.id+'-pane" role="tabpanel" aria-labelledby="'+tab.id+'" tabindex="0"></div>';
@@ -39,6 +42,7 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 
 			for(var tabId in childs){
 				let div = childs[tabId];
+				console.log('attaching child DIV with target '+tabId);
 				$('#'+tabId+'-pane').empty();
 				$('#'+tabId+'-pane').append(div);
 			}

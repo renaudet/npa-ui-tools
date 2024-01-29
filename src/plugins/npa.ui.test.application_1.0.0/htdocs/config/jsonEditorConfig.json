@@ -1,0 +1,29 @@
+{
+    "id":"jsonEditor",
+    "version": "1.0.0",
+    "type": "Editor",
+    "configuration": {
+        "height": 450,
+    	"selectionListener": true,
+    	"selectionProvider": "selectionList_01",
+    	"contentAdapter_": "@.customization",
+        "toolbar": {
+        	"position": "top",
+        	"actions": [
+        		{
+                    "label": "Save",
+                    "actionId": "save",
+                    "icon": "/uiTools/img/silk/disk.png"
+                },
+	    		{
+	                "type": "separator"
+	            },
+        		{
+                    "label": "Edit",
+                    "actionId": "edit",
+                    "icon": "/uiTools/img/silk/page_edit.png"
+                }
+        	]
+        }
+    }
+}

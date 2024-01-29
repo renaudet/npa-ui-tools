@@ -1,0 +1,29 @@
+{
+    "id":"selectionList_02",
+    "version": "1.0.0",
+    "type": "SelectionList",
+    "configuration": {
+    	"header": {
+    		"title": "@selectionList1.title",
+    		"showFilter": true
+    	},
+    	"datasource": {
+            "type_": "local",
+            "type": "managed",
+            "manager": "manager_01",
+            "uri": "/test/getRecords",
+            "method": "POST",
+            "payload": {},
+            "adapter": "@.data"
+        },
+        "renderer": {
+        	"type": "FieldItemRenderer",
+        	"processor": "(@.genre=='male'?'<b>'+@.name+'</b>':@.name)+'<span class=\"badge bg-primary rounded-pill\">'+@.rank+'</span>'"
+        },
+        "sorter": {
+        	"type": "FieldItemSorter",
+        	"field": "name",
+        	"ascending": false
+        }
+    }
+}

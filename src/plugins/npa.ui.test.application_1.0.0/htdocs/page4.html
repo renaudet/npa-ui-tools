@@ -18,20 +18,25 @@
 		<div id="dataManagerPlaceholder" class="npaUi" data-ref="dataManager"></div>
 		<div id="navBarPlaceholder" class="npaUi" data-config="/static/config/navBarConfig.json"></div>
 		<div id="cardPlaceholder" class="npaUi" data-config="/static/config/page3CardConfig.json">
-			<div class="row">
-				<div class="col-3">
-					<div id="selectionList1" class="npaUi" data-config="/static/config/selectionListConfig.json"></div>
+			<div id="tabPanePlaceholder" class="npaUi" data-config="/static/config/tabPaneConfig.json">
+				<div class="row" data-tab-target="tab1">
+					<div class="col-3">
+						<div id="selectionList1" class="npaUi" data-config="/static/config/selectionListConfig.json"></div>
+					</div>
+					<div class="col-7">
+						<div id="toolbar0" class="npaUi" data-ref="toolbar"></div>
+						<div id="form0" class="npaUi" data-ref="form"></div>
+					</div>
+					<div class="col-2">&nbsp;</div>
 				</div>
-				<div class="col-9">
-					<div id="tabPanePlaceholder" class="npaUi" data-config="/static/config/tabPaneConfig.json">
-						<div data-tab-target="tab1">
-							<div id="toolbar0" class="npaUi" data-ref="toolbar"></div>
-							<div id="form0" class="npaUi" data-ref="form"></div>
-						</div>
-						<div data-tab-target="tab2">
-							<div id="toolbar0" class="npaUi" data-ref="toolbar"></div>
-							<div id="editor0" class="npaUi" data-config="/static/config/jsonEditorConfig.json"></div>
-						</div>
+				<div id="datatablePlaceholder" class="npaUi" data-ref="dataTable" data-tab-target="tab2"></div>
+				<div class="row" data-tab-target="tab3">
+					<div class="col-3">
+						<div id="selectionList2" class="npaUi" data-config="/static/config/selectionListConfig2.json"></div>
+					</div>
+					<div class="col-9">
+						<div id="toolbar0" class="npaUi" data-ref="toolbar"></div>
+						<div id="editor0" class="npaUi" data-config="/static/config/jsonEditorConfig.json"></div>
 					</div>
 				</div>
 			</div>

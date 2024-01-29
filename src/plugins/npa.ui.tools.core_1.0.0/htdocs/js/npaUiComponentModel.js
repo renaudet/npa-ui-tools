@@ -30,7 +30,7 @@ class NpaUiComponent {
 	getLocalizedString(stringExpr,data=[]){
 		return npaUi.getLocalizedString(stringExpr,data);
 	}
-	localize(reference,data,then){
+	localize(reference,data,then){ //deprecated
 		let values = '';
 		for(var i=0;i<data.length;i++){
 			if(i>0){
@@ -42,10 +42,12 @@ class NpaUiComponent {
 			then(response.text);
 		});
 	}
-	localizeAndReplace(reference,data,id){
+	localizeAndReplace(reference,data,id){ //deprecated
 		this.localize(reference,data,function(localizedString){
 			$('#'+id).html(localizedString);
 		});
+	}
+	onItemSelected(item){
 	}
 }
 
