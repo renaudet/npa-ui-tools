@@ -11,5 +11,6 @@
 	"Form": {"version": "1.0.0","dependency":"/uiTools/js/components/form.js"},
 	"SelectionList": {"version": "1.0.0","dependency":"/uiTools/js/components/selectionList.js"},
 	"TabPane": {"version": "1.0.0","dependency":"/uiTools/js/components/tabpane.js"},
-	"Carousel": {"version": "1.0.0","dependency":"/uiTools/js/components/carousel.js"}
+	"Carousel": {"version": "1.0.0","dependency":"/uiTools/js/components/carousel.js"},
+	"VerticalMenu": {"version": "1.0.0","dependency":"/uiTools/js/components/verticalMenu.js"}
 }

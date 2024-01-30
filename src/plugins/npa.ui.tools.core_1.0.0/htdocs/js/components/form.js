@@ -177,7 +177,8 @@ class PasswordField extends TextField{
 				showError(this.getLocalizedString('@form.textField.error',[this.config.name]));
 				return true;
 			}else{
-				if(this.config.minimumLength && fieldValue.length<this.config.minimumLength){
+				if((this.config.required && this.config.minimumLength && fieldValue.length<this.config.minimumLength) ||
+				   (!this.config.required && this.config.minimumLength && fieldValue.length>0 && fieldValue.length<this.config.minimumLength)){
 					$('#'+inputFieldId).addClass('is-invalid');
 					$('#'+inputFieldId).focus();
 					showError(this.getLocalizedString('@form.passwordField.error.length',[this.config.name,this.config.minimumLength]));
@@ -191,7 +192,8 @@ class PasswordField extends TextField{
 		if('passwordCheck'==this.config.type){
 			var fieldValue = $('#'+inputFieldId).val();
 			var checkedFieldValue = $('#'+this.baseId+'_'+this.config.checkField).val();
-			if(fieldValue!=checkedFieldValue ){
+			if((this.config.required && fieldValue!=checkedFieldValue) ||
+			    (checkedFieldValue.length>0 && fieldValue!=checkedFieldValue)){
 				$('#'+inputFieldId).addClass('is-invalid');
 				$('#'+inputFieldId).focus();
 				$('#'+this.baseId+'_'+this.config.checkField).addClass('is-invalid');

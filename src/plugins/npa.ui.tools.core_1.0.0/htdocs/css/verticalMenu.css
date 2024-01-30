@@ -1,0 +1,16 @@
+/***
+ * verticalMenu.css - default CSS file for the NPA UI VerticalMenu component
+ * Copyright 2024 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+
+.npa-vertical-menu {
+	background-color: #343a40;
+	color: #ffffff;
+	padding-top: 15px;
+}
+
+.npa-vertical-item {
+	margin-top: 3px;
+	color: #ffffff;
+}
