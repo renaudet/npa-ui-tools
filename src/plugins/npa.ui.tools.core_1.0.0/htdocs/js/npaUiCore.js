@@ -370,24 +370,32 @@ npaUi = {
 		}
 	},
 	getLocalizedString: function(stringExpr,data){
-		if(stringExpr.startsWith('@')){
-			let reference = stringExpr.replace(/@/,'');
-			let localizedString = reference;
-			let unProcessedLocalizedString = this.localizationMap[reference];
-			if(typeof unProcessedLocalizedString!='undefined'){
-				if(typeof data!='undefined' && data && data.length>0){
-					for(var i=0;i<data.length;i++){
-						let value = data[i];
-						let expr = '\\{'+i+'\\}';
-						let regex = new RegExp(expr,'g');
-						unProcessedLocalizedString = unProcessedLocalizedString.replace(regex,value);
+		if(typeof stringExpr!='undefined' && stringExpr!=null){
+			if(stringExpr.startsWith('@')){
+				let reference = stringExpr.replace(/@/,'');
+				let localizedString = reference;
+				let unProcessedLocalizedString = this.localizationMap[reference];
+				if(typeof unProcessedLocalizedString!='undefined'){
+					if(typeof data!='undefined' && data && data.length>0){
+						for(var i=0;i<data.length;i++){
+							let value = data[i];
+							let expr = '\\{'+i+'\\}';
+							let regex = new RegExp(expr,'g');
+							unProcessedLocalizedString = unProcessedLocalizedString.replace(regex,value);
+						}
 					}
+					localizedString = unProcessedLocalizedString;
 				}
-				localizedString = unProcessedLocalizedString;
+				return localizedString;
+			}else{
+				if(stringExpr.startsWith('#')){
+					let id = stringExpr.replace(/#/,'');
+					return '<span id="'+id+'">'+id+'</span>';
+				}else
+					return stringExpr;
 			}
-			return localizedString;
 		}else{
-			return stringExpr;
+			return '!';
 		}
 	}
 }

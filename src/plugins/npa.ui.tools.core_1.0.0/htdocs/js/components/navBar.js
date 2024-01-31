@@ -35,7 +35,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 					$('#'+placeholderId).replaceWith(html);
 				}
 			}
-			$('.npa-navbar-menu').on('click',function(){
+			$('.npa-navbar-menu').on('click.navbar',function(){
 				let actionId = $(this).data('actionid');
 				let item = navBar.actionIdToItem[actionId];
 				if('redirect'==item.actionId){
@@ -123,25 +123,61 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		}else
 		if('placeholder'==item.type){
 			html += '<li id="'+item.id+'"></li>';
+		}else
+		if('dynamic'==item.type){
+			html += '<li id="'+item.id+'"></li>';
+			this.dynamicalyLoadMenuItems(item);
 		}else{
-			let actionId = item.actionId;
-			if('redirect'==actionId){
-				actionId = item.id;
-			}
-			this.actionIdToItem[actionId] = item;
-			html += '<li id="'+item.id+'">';
-			html += '<a class="dropdown-item npa-navbar-menu" href="#" data-actionid="'+actionId+'">';
-			if(typeof item.icon!='undefined'){
-				var title = '';
-				if(typeof item.tooltip!='undefined'){
-					title = ' title="'+this.getLocalizedString(item.tooltip)+'"';
-				}
-				html += '<img src="'+item.icon+'" style="margin-right: 5px;" width="16"'+title+'>&nbsp;';
-			}
-			html += this.getLocalizedString(item.label);
-			html += '</a>';
-			html += '</li>';
+			html = this.generateClassicMenuItem(item);
 		}
+		return html;
+	}
+	dynamicalyLoadMenuItems(item){
+		let navBar = this;
+		makeRESTCall('GET',item.uri,{},function(response){
+			if(response.status==200){
+				let menuContributions = response.data;
+				let html = '';
+				for(var i=0;i<menuContributions.length;i++){
+					let menuItem = menuContributions[i];
+					html += navBar.generateMenuItem(menuItem);
+				}
+				$('#'+item.id).replaceWith(html);
+				$('.npa-navbar-menu').off('.navbar');
+				$('.npa-navbar-menu').on('click.navbar',function(){
+					let actionId = $(this).data('actionid');
+					let item = navBar.actionIdToItem[actionId];
+					if('redirect'==item.actionId){
+						npaUi.fireEvent('redirect',item);
+					}else
+						npaUi.fireEvent(actionId,item);
+				});
+			}
+		},function(error){
+			console.log('navBar#dynamicalyLoadMenuItems()');
+			console.log(item);
+			console.log(error);
+		});
+	}
+	generateClassicMenuItem(item){
+		let html = '';
+		let actionId = item.actionId;
+		if('redirect'==actionId){
+			actionId = item.id;
+		}
+		this.actionIdToItem[actionId] = item;
+		html += '<li id="'+item.id+'">';
+		html += '<a class="dropdown-item npa-navbar-menu" href="#" data-actionid="'+actionId+'">';
+		if(typeof item.icon!='undefined'){
+			var title = '';
+			if(typeof item.tooltip!='undefined'){
+				title = ' title="'+this.getLocalizedString(item.tooltip)+'"';
+			}
+			html += '<img src="'+item.icon+'" style="margin-right: 5px;" width="16"'+title+'>&nbsp;';
+		}
+		html += this.getLocalizedString(item.label);
+		html += '</a>';
+		html += '</li>';
 		return html;
 	}
 }

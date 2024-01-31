@@ -92,7 +92,6 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 			let editor = this;
 			$('.editor-btn').on('click.'+this.getId(),function(){
 				let actionId = $(this).data('action');
-				//npaUi.fireEvent(actionId,{"source": editor.getId(),"actionId": actionId});
 				editor.triggersActionEvent(actionId)
 			});
 		}
@@ -128,27 +127,39 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 		});
 	}
 	onItemSelected(item){
-		let config = this.getConfiguration();
-		if(typeof config.contentAdapter!='undefined'){
-			let txt = '';
-			let toEval = 'txt = '+config.contentAdapter.replace(/@/g,'item')+';';
-			try{
-				eval(toEval);
-				this.setText(txt);
-			}catch(e){
-				console.log(e);
+		if(typeof item=='undefined' || item==null){
+			this.setText('');
+			this.setReadonly(true);
+			let config = this.getConfiguration();
+			if(typeof config.toolbar!='undefined'){
+				for(var i=0;i<config.toolbar.actions.length;i++){
+					let action = config.toolbar.actions[i];
+					this.setEnabled(action.actionId,false);
+				}
 			}
 		}else{
-			this.setText(JSON.stringify(item,null,'\t'));
-		}
-		if(typeof config.toolbar!='undefined'){
-			for(var i=0;i<config.toolbar.actions.length;i++){
-				let action = config.toolbar.actions[i];
-				if(typeof action.enableOnSelection!='undefined'){
-					if(action.enableOnSelection){
-						this.setEnabled(action.actionId,true);
-					}else{
-						this.setEnabled(action.actionId,false);
+			let config = this.getConfiguration();
+			if(typeof config.contentAdapter!='undefined'){
+				let txt = '';
+				let toEval = 'txt = '+config.contentAdapter.replace(/@/g,'item')+';';
+				try{
+					eval(toEval);
+					this.setText(txt);
+				}catch(e){
+					console.log(e);
+				}
+			}else{
+				this.setText(JSON.stringify(item,null,'\t'));
+			}
+			if(typeof config.toolbar!='undefined'){
+				for(var i=0;i<config.toolbar.actions.length;i++){
+					let action = config.toolbar.actions[i];
+					if(typeof action.enableOnSelection!='undefined'){
+						if(action.enableOnSelection){
+							this.setEnabled(action.actionId,true);
+						}else{
+							this.setEnabled(action.actionId,false);
+						}
 					}
 				}
 			}
