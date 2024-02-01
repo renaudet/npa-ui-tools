@@ -111,33 +111,39 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 	}
 	refresh(){
 		console.log('Datatable#refresh()');
-		let config = this.getConfiguration();
-		$('#'+this.getId()+'_table tbody').empty();
 		var datatable = this;
 		this.fetchDataFromDatasource(function(data){
-			let sortedData = datatable.itemSorter.sort(data);
-			$('.'+datatable.getId()+'_row').off('.'+datatable.getId());
-			$('.datatableAction').off('.'+datatable.getId());
-			sortedData.map(function(item,index){
-				let row = '';
-				row += '<tr data-index="'+index+'" class="'+datatable.getId()+'_row">';
-				row += '';
-				for(var i=0;i<config.columns.length;i++){
-					let column = config.columns[i];
-					row += datatable.renderColumn(item,index,column);
-				}
-				row += '</tr>';
-				$('#'+datatable.getId()+'_table tbody').append(row);
-			});
-			$('.'+datatable.getId()+'_row').on('click.'+datatable.getId(),function(){
-				let rowIndex = $(this).data('index');
-				npaUi.fireEvent('select',{"source": datatable.getId(),"item": sortedData[rowIndex]});
-			});
-			$('.datatableAction').on('click.'+datatable.getId(),function(){
-				let rowIndex = $(this).data('index');
-				let actionId = $(this).data('action');
-				npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": sortedData[rowIndex]});
-			});
+			console.log('received '+data.length+' rows from datasource');
+			console.log(data);
+			datatable.renderData(data)
+		});
+	}
+	renderData(data){
+		$('#'+this.getId()+'_table tbody').empty();
+		let config = this.getConfiguration();
+		let datatable = this;
+		let sortedData = this.itemSorter.sort(data);
+		$('.'+this.getId()+'_row').off('.'+this.getId());
+		$('.thisAction').off('.'+this.getId());
+		sortedData.map(function(item,index){
+			let row = '';
+			row += '<tr data-index="'+index+'" class="'+datatable.getId()+'_row">';
+			row += '';
+			for(var i=0;i<config.columns.length;i++){
+				let column = config.columns[i];
+				row += datatable.renderColumn(item,index,column);
+			}
+			row += '</tr>';
+			$('#'+datatable.getId()+'_table tbody').append(row);
+		});
+		$('.'+this.getId()+'_row').on('click.'+this.getId(),function(){
+			let rowIndex = $(this).data('index');
+			npaUi.fireEvent('select',{"source": datatable.getId(),"item": sortedData[rowIndex]});
+		});
+		$('.thisAction').on('click.'+this.getId(),function(){
+			let rowIndex = $(this).data('index');
+			let actionId = $(this).data('action');
+			npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": sortedData[rowIndex]});
 		});
 	}
 	renderColumn(item,index,column){
@@ -195,5 +201,20 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		}
 		html += '</td>';
 		return html;
+	}
+	onItemSelected(item){
+		let config = this.getConfiguration();
+		if(typeof config.contentAdapter!="undefined"){
+			let data = [];
+			let toEval = 'data = '+config.contentAdapter.replace(/@/g,'item')+';';
+			try{
+				console.log('datatable#onItemSelected() evaluating content adapter: '+toEval);
+				eval(toEval);
+			}catch(t){
+				console.log('evaluation exception:');
+				console.log(t);
+			}
+			this.renderData(data);
+		}
 	}
 }

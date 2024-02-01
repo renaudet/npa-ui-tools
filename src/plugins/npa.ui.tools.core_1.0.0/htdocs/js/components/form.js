@@ -20,6 +20,11 @@ class FormField {
 	}
 	setData(parentObj){
 	}
+	val(value){
+		let data = {};
+		data[this.config.name] = value;
+		this.setData(data);
+	}
 	assignData(parentObj){
 	}
 	vetoRaised(){
@@ -27,6 +32,25 @@ class FormField {
 	}
 	getLocalizedString(reference,data=[]){
 		return this.form.getLocalizedString(reference,data);
+	}
+	fireFormEvent(event){
+		this.form.fireFormEvent(event);
+	}
+	onFormEvent(event){
+		//console.log('field '+this.config.name+' received event '+event.type+' from '+event.source);
+		if(typeof this.config.constraint!='undefined'){
+			console.log('evaluating constraint');
+			try{
+				let virtualData = this.form.getData();
+				let field = this;
+				let toEval = this.config.constraint.replace(/@/g,'virtualData').replace(/#/g,'field')+';';
+				eval(toEval);
+				console.log('constraint '+toEval+' evaluated with success!');
+			}catch(e){
+				console.log('Form#Field('+this.config.name+')#onFormEvent() caught an evaluate exception');
+				console.log(e);
+			}
+		}
 	}
 }
 
@@ -78,6 +102,10 @@ class TextField extends LabeledFormField{
 		}
 		html += '</div>';
 		parent.append(html);
+		let field = this;
+		$('#'+this.baseId+'_'+this.config.name).on('input',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	setEditMode(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -145,6 +173,10 @@ class PasswordField extends TextField{
 		}
 		html += '</div>';
 		parent.append(html);
+		let field = this;
+		$('#'+this.baseId+'_'+this.config.name).on('input',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	setData(parentObj){
 		if('password'==this.config.type){
@@ -239,6 +271,10 @@ class NumericField extends TextField{
 		}
 		html += '</div>';
 		parent.append(html);
+		let field = this;
+		$('#'+this.baseId+'_'+this.config.name).on('input',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	setData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
@@ -309,6 +345,10 @@ class DateField extends TextField{
 		loadDeps(DATE_PICKER_DEPTS,function(){
 			  $('#'+target.baseId+'_'+target.config.name).val(moment().format('YYYY/MM/DD'));
 		});
+		let field = this;
+		$('#'+this.baseId+'_'+this.config.name).on('change',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	vetoRaised(){
 		var inputFieldId = this.baseId+'_'+this.config.name;
@@ -359,6 +399,10 @@ class CheckField extends FormField{
 		html += '  <div class="col-1">&nbsp;</div>';
 		html += '</div>';
 		parent.append(html);
+		let field = this;
+		$('#'+this.baseId+'_'+this.config.name).on('change',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	setEditMode(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -422,6 +466,10 @@ class RadioField extends LabeledFormField{
 		html += '  <div class="col-1">&nbsp;</div>';
 		html += '</div>';
 		parent.append(html);
+		let field = this;
+		$('[name="'+this.baseId+'_'+this.config.name+'"]').on('change',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	setEditMode(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -469,6 +517,10 @@ class ColorPickerField extends LabeledFormField{
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
+		let field = this;
+		$('#'+this.baseId+'_'+this.config.name).on('change',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	setEditMode(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -528,6 +580,7 @@ class RangeSelectorField extends LabeledFormField{
 		var source = this;
 		$('input[name='+this.baseId+'_'+this.config.name+']').on('input',function(){
 			$('#'+source.baseId+'_'+source.config.name+'_value').html($(this).val());
+			source.fireFormEvent({"type": "change","source": source.config.name});
 		});
 	}
 	setEditMode(editing){
@@ -606,6 +659,10 @@ class SelectField extends LabeledFormField{
 		}
 		html += '</div>';
 		parent.append(html);
+		let field = this;
+		$('#'+this.baseId+'_'+this.config.name).on('change',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	setEditMode(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -763,6 +820,10 @@ class TextAreaField extends LabeledFormField{
 		}
 		html += '</div>';
 		parent.append(html);
+		let field = this;
+		$('#'+this.baseId+'_'+this.config.name).on('input',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 	}
 	setEditMode(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -1615,6 +1676,9 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		if(config.fields.length>0){
 			this.fieldCache[config.fields[0].name].setFocus();
 		}
+		if(mode){
+			this.fireFormEvent({"type":"editionStatusChanged","source":"form"});
+		}
 	}
 	
 	setData(data){
@@ -1655,6 +1719,12 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 			this.setData(item);
 		}else{
 			this.setData({});
+		}
+	}
+	fireFormEvent(event){
+		for(var fieldId in this.fieldCache){
+			let field = this.fieldCache[fieldId];
+			field.onFormEvent(event);
 		}
 	}
 }
