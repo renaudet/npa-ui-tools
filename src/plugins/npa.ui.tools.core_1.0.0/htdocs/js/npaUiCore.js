@@ -341,7 +341,7 @@ npaUi = {
 		this.registerActionHandler(actionId,handler);
 	},
 	fireEvent: function(actionId,event){
-		console.log('fireEvent('+actionId+')');
+		console.log('npaUiCore#fireEvent('+actionId+') - event:');
 		console.log(event);
 		if('select'==actionId){
 			let listeners = this.selectionListeners[event.source];
@@ -366,6 +366,8 @@ npaUi = {
 				}catch(t){
 					console.log(t);
 				}
+			}else{
+				console.log('no action handler registered for this event');
 			}
 		}
 	},

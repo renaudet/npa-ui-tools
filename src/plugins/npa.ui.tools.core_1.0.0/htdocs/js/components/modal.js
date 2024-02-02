@@ -25,11 +25,15 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 				 child = $('#'+this.parentDivId+' div').first().detach();
 			}
 			let html = '';
+			let title = '';
+			if(typeof config.title!='undefined' && config.title.length>0){
+				title = this.getLocalizedString(config.title);
+			}
 			html += '<div class="modal fade" id="'+this.getId()+'" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="'+config.title+'" aria-hidden="true">';
 			html += '  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable'+size+'">';
 			html += '    <div class="modal-content">';
 			html += '      <div id="'+this.getId()+'_header" class="modal-header modal-dialog-header">';
-			html += '        <h1 class="modal-title fs-5" id="staticBackdropLabel">'+this.getLocalizedString(config.title)+'</h1>';
+			html += '        <h1 class="modal-title fs-5" id="'+this.getId()+'_title">'+title+'</h1>';
 			html += '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
 			html += '      </div>';
 			html += '      <div id="'+this.getId()+'_body" class="modal-body">';
@@ -63,7 +67,7 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 		$('#'+this.getId()+'_body').html(html);
 	}
 	setTitle(title){
-		$('#'+this.getId()+'_header h1').html(title);
+		$('#'+this.getId()+'_title').html(this.getLocalizedString(title));
 	}
 	open(){
 		const myModal = new bootstrap.Modal(document.getElementById(this.getId()));

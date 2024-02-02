@@ -5,6 +5,7 @@
  
 npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 	itemSorter = null;
+	dataset = [];
 	initialize(then){
 		$.loadCss('/uiTools/css/datatable.css',then);
 		if(this.getConfiguration().sorter){
@@ -15,38 +16,36 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 	}
 	fetchDataFromDatasource(then){
 		let datasource = this.getConfiguration().datasource;
-		if(typeof datasource!='undefined'){
-			let type = 'local';
-			let method = 'GET';
-			let payload = {};
-			if(typeof datasource.type!='undefined'){
-				type = datasource.type;
-			}
-			if(typeof datasource.method!='undefined'){
-				method = datasource.method;
-			}
-			if(typeof datasource.payload!='undefined'){
-				payload = datasource.payload;
-			}
-			if('local'==type){
-				console.log('Datatable#fetchDataFromDatasource() - using local data from '+datasource.uri);
-				var datatable = this;
-				makeRESTCall(method,datasource.uri,payload,function(response){
-					if(response.status==200){
-						then(datatable.adaptFormat(response));
-					}else{
-						console.log(response);
-					}
-				},function(errorMsg){
-					console.log(errorMsg);
-				});
-			}
-			if('managed'==type){
-				console.log('Datatable#fetchDataFromDatasource() - using DataManager #'+datasource.manager);
-				let dataManager = npaUi.getComponent(datasource.manager);
-				if(typeof dataManager!='undefined'){
-					dataManager.query(payload).then(then);
+		let type = 'local';
+		let method = 'GET';
+		let payload = {};
+		if(typeof datasource.type!='undefined'){
+			type = datasource.type;
+		}
+		if(typeof datasource.method!='undefined'){
+			method = datasource.method;
+		}
+		if(typeof datasource.payload!='undefined'){
+			payload = datasource.payload;
+		}
+		if('local'==type){
+			console.log('Datatable#fetchDataFromDatasource() - using local data from '+datasource.uri);
+			var datatable = this;
+			makeRESTCall(method,datasource.uri,payload,function(response){
+				if(response.status==200){
+					then(datatable.adaptFormat(response));
+				}else{
+					console.log(response);
 				}
+			},function(errorMsg){
+				console.log(errorMsg);
+			});
+		}
+		if('managed'==type){
+			console.log('Datatable#fetchDataFromDatasource() - using DataManager #'+datasource.manager);
+			let dataManager = npaUi.getComponent(datasource.manager);
+			if(typeof dataManager!='undefined'){
+				dataManager.query(payload).then(then);
 			}
 		}
 	}
@@ -112,11 +111,16 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 	refresh(){
 		console.log('Datatable#refresh()');
 		var datatable = this;
-		this.fetchDataFromDatasource(function(data){
-			console.log('received '+data.length+' rows from datasource');
-			console.log(data);
-			datatable.renderData(data)
-		});
+		let config = this.getConfiguration();
+		if(typeof config.datasource!='undefined'){
+			this.fetchDataFromDatasource(function(data){
+				console.log('received '+data.length+' rows from datasource');
+				console.log(data);
+				datatable.renderData(data)
+			});
+		}else{
+			this.renderData(this.dataset);
+		}
 	}
 	renderData(data){
 		$('#'+this.getId()+'_table tbody').empty();
@@ -124,7 +128,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		let datatable = this;
 		let sortedData = this.itemSorter.sort(data);
 		$('.'+this.getId()+'_row').off('.'+this.getId());
-		$('.thisAction').off('.'+this.getId());
+		$('.datatableAction').off('.'+this.getId());
 		sortedData.map(function(item,index){
 			let row = '';
 			row += '<tr data-index="'+index+'" class="'+datatable.getId()+'_row">';
@@ -140,11 +144,14 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			let rowIndex = $(this).data('index');
 			npaUi.fireEvent('select',{"source": datatable.getId(),"item": sortedData[rowIndex]});
 		});
-		$('.thisAction').on('click.'+this.getId(),function(){
+		$('.datatableAction').on('click.'+this.getId(),function(event){
+			event.stopPropagation();
 			let rowIndex = $(this).data('index');
 			let actionId = $(this).data('action');
+			npaUi.fireEvent('select',{"source": datatable.getId(),"item": sortedData[rowIndex]});
 			npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": sortedData[rowIndex]});
 		});
+		this.dataset = data;
 	}
 	renderColumn(item,index,column){
 		let html = '';
