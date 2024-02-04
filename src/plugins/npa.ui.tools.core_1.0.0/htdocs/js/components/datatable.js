@@ -6,6 +6,7 @@
 npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 	itemSorter = null;
 	dataset = [];
+	editable = true;
 	initialize(then){
 		$.loadCss('/uiTools/css/datatable.css',then);
 		if(this.getConfiguration().sorter){
@@ -144,6 +145,20 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			let rowIndex = $(this).data('index');
 			npaUi.fireEvent('select',{"source": datatable.getId(),"item": sortedData[rowIndex]});
 		});
+		if(this.editable){
+			$('.datatableAction').on('click.'+this.getId(),function(event){
+				event.stopPropagation();
+				let rowIndex = $(this).data('index');
+				let actionId = $(this).data('action');
+				npaUi.fireEvent('select',{"source": datatable.getId(),"item": sortedData[rowIndex]});
+				npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": sortedData[rowIndex]});
+			});
+		}
+		this.dataset = data;
+	}
+	enableActions(){
+		let sortedData = this.itemSorter.sort(this.dataset);
+		let datatable = this;
 		$('.datatableAction').on('click.'+this.getId(),function(event){
 			event.stopPropagation();
 			let rowIndex = $(this).data('index');
@@ -151,7 +166,6 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			npaUi.fireEvent('select',{"source": datatable.getId(),"item": sortedData[rowIndex]});
 			npaUi.fireEvent(actionId,{"source": datatable.getId(),"actionId": actionId,"item": sortedData[rowIndex]});
 		});
-		this.dataset = data;
 	}
 	renderColumn(item,index,column){
 		let html = '';
@@ -222,6 +236,14 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 				console.log(t);
 			}
 			this.renderData(data);
+		}
+	}
+	setEditable(editable){
+		this.editable = editable;
+		if(editable){
+			this.enableActions();
+		}else{
+			$('.datatableAction').unbind();
 		}
 	}
 }

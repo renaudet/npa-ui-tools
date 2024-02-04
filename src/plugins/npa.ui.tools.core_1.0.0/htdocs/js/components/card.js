@@ -5,10 +5,12 @@
  
 function stretchWorkArea(height=-1){
 	if(height==-1){
-		$('#workArea').height($(window).height()-140);
 		$(window).on('resize',function(){
-			$('#workArea').height($(window).height()-140);
+			let newHeight = $(window).height()-140;
+			$('#workArea').height(newHeight);
+			$('.card-scrollable').css('max-height',newHeight+'px');
 		});
+		$(window).trigger('resize');
 	}else{
 		$('#workArea').height(height);
 	}

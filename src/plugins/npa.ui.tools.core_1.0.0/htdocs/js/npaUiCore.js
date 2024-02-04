@@ -169,16 +169,12 @@ npaUi = {
 	componentByDivId: {},
 	actionHandlers: {},
 	selectionListeners: {},
-	loadingComponent: 0,
 	localizationMap: null,
     render: function(){
-		this.loadingComponent = $('.npaUi').length;
-		console.log('number of component to render: '+this.loadingComponent);
 		let toLoad = [];
 		$('.npaUi').each(function(index,element){
 			let placeholder = $(this);
 			var divId = placeholder.attr('id');
-            //console.log('rendering component #'+divId);
             let cachedComponent = npaUi.componentByDivId[divId];
             if(typeof cachedComponent=='undefined'){
 				toLoad.push(placeholder);
@@ -204,13 +200,9 @@ npaUi = {
 								npaUi.componentInstances[json.id] = new NpaUiComponentProxy(namespace,type,divId,json);
 								npaUi.componentByDivId[divId] = npaUi.componentInstances[json.id];
 								npaUi.componentInstances[json.id].initialize(function(){
-									//npaUi.loadingComponent--;
 									console.log('first rendering for component '+type+' from namespace '+namespace);
 									npaUi.componentInstances[json.id].render();
 									$('#'+divId).data('loaded','true');
-									/*if(npaUi.loadingComponent==0){
-										npaUi.onComponentLoaded();
-									}*/
 									if(json.configuration.selectionListener && json.configuration.selectionProvider){
 										npaUi.registerSelectionListener(json.configuration.selectionProvider,npaUi.componentInstances[json.id]);
 									}
@@ -232,13 +224,9 @@ npaUi = {
 									npaUi.componentInstances[globalComponentDef.id] = new NpaUiComponentProxy(namespace,type,divId,globalComponentDef);
 									npaUi.componentByDivId[divId] = npaUi.componentInstances[globalComponentDef.id];
 									npaUi.componentInstances[globalComponentDef.id].initialize(function(){
-										//npaUi.loadingComponent--;
 										console.log('first rendering for component '+type+' from namespace '+namespace);
 										npaUi.componentInstances[globalComponentDef.id].render();
 										$('#'+divId).data('loaded','true');
-										/*if(npaUi.loadingComponent==0){
-											npaUi.onComponentLoaded();
-										}*/
 										if(globalComponentDef.configuration.selectionListener && globalComponentDef.configuration.selectionProvider){
 											npaUi.registerSelectionListener(globalComponentDef.configuration.selectionProvider,npaUi.componentInstances[globalComponentDef.id]);
 										}
@@ -257,12 +245,12 @@ npaUi = {
 						}
 					}
 				}else{
-					npaUi.onComponentLoaded();
+					npaUi.onRenderingCompleted();
 				}
 			}
 			loadInstance(toLoad,0);
 		}else{
-			npaUi.onComponentLoaded();
+			npaUi.onRenderingCompleted();
 		}		
     },
     loadConfigFrom: function(configFileUri,then){
@@ -270,6 +258,9 @@ npaUi = {
 			npaUi.globalConfig = json;
 			then();
 		});
+	},
+	registerComponentConfig: function(reference,componentConfig){
+		this.globalConfig.components[reference] = componentConfig;
 	},
 	getComponent: function(componentId){
 		return npaUi.componentInstances[componentId];
@@ -317,6 +308,10 @@ npaUi = {
 				console.error('NPA-UI was unable to load the Component Map from server!');
 			});
 		});
+	},
+	onRenderingCompleted: function(){
+		this.onComponentLoaded();
+		$(window).trigger('resize');
 	},
 	onComponentLoaded: function(){
 		console.log('NPA UI runtime: all components loaded!');

@@ -7,6 +7,7 @@ class FormField {
 	config = null;
 	form = null;
 	baseId = '';
+	editable = true;
 	constructor(config,form){
 		this.config = config;
 		this.form = form;
@@ -16,10 +17,12 @@ class FormField {
 	}
 	setFocus(){
 	}
-	setEditMode(mode){
+	setEditMode(editable){
+		this.editable = editable;
+		this.setEnabled(editable);
 	}
-	setData(parentObj){
-	}
+	setEnabled(enabled){}
+	setData(parentObj){}
 	val(value){
 		let data = {};
 		data[this.config.name] = value;
@@ -37,13 +40,16 @@ class FormField {
 		this.form.fireFormEvent(event);
 	}
 	onFormEvent(event){
+		console.log('FormField#onFormEvent() received by field #'+this.config.name);
+		console.log(event);
 		//console.log('field '+this.config.name+' received event '+event.type+' from '+event.source);
-		if(typeof this.config.constraint!='undefined'){
-			console.log('evaluating constraint');
+		if(typeof this.config.constraint!='undefined' && this.config.constraint.length>0){
+			console.log('evaluating constraint '+this.config.constraint);
 			try{
 				let virtualData = this.form.getData();
-				let field = this;
-				let toEval = this.config.constraint.replace(/@/g,'virtualData').replace(/#/g,'field')+';';
+				//let field = this;
+				let toEval = this.config.constraint.replace(/@/g,'virtualData').replace(/#/g,'this')+';';
+				console.log(toEval);
 				eval(toEval);
 				console.log('constraint '+toEval+' evaluated with success!');
 			}catch(e){
@@ -107,7 +113,7 @@ class TextField extends LabeledFormField{
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('#'+inputFieldId).addClass('form-control');
@@ -282,14 +288,18 @@ class NumericField extends TextField{
 			$('#'+inputFieldId).val(parentObj[this.config.name]);
 			$('#'+inputFieldId).removeClass('is-invalid');
 		}else{
-			$('#'+inputFieldId).val(this.config.default);
-			$('#'+inputFieldId).addClass('is-invalid');
+			if(typeof this.config.default!='undefined'){
+				$('#'+inputFieldId).val(this.config.default);
+				$('#'+inputFieldId).removeClass('is-invalid');
+			}else{
+				$('#'+inputFieldId).addClass('is-invalid');
+			}
 		}
 	}
 	assignData(parentObj){
 		const parsed = parseInt($('#'+this.baseId+'_'+this.config.name).val(), 10);
 		if (isNaN(parsed)){
-			parentObj[this.config.name] = field.default;
+			parentObj[this.config.name] = typeof this.config.default=='undefined'?0:this.config.default;
 		}else{
 			parentObj[this.config.name] = parsed;
 		}
@@ -404,7 +414,7 @@ class CheckField extends FormField{
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('#'+inputFieldId).prop('disabled',false);
@@ -471,7 +481,7 @@ class RadioField extends LabeledFormField{
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('input[name='+inputFieldId+']').prop('disabled',false);
@@ -522,7 +532,7 @@ class ColorPickerField extends LabeledFormField{
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('input[name='+inputFieldId+']').prop('disabled',false);
@@ -583,7 +593,7 @@ class RangeSelectorField extends LabeledFormField{
 			source.fireFormEvent({"type": "change","source": source.config.name});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('input[name='+inputFieldId+']').prop('disabled',false);
@@ -664,7 +674,7 @@ class SelectField extends LabeledFormField{
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('#'+inputFieldId).prop('disabled',false);
@@ -748,7 +758,7 @@ class SourceEditorField extends LabeledFormField{
 			}
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			this.form.editors[this.config.name].setOption('readOnly',false);
@@ -825,7 +835,7 @@ class TextAreaField extends LabeledFormField{
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('#'+inputFieldId).prop('disabled',false);
@@ -995,7 +1005,7 @@ class ArrayEditorField extends LabeledFormField{
 			}
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('#'+inputFieldId+'_list').prop('disabled',false);
@@ -1015,7 +1025,7 @@ class ArrayEditorField extends LabeledFormField{
 	}
 	setData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
-		if(Array. isArray(parentObj[this.config.name])){
+		if(Array.isArray(parentObj[this.config.name])){
 			$('#'+inputFieldId+'_list').empty();
 			for(var j=0;j<parentObj[this.config.name].length;j++){
 				var value = parentObj[this.config.name][j];
@@ -1061,7 +1071,7 @@ class DatatypeField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		var innerForm = npaUi.getComponent(this.config.formRef);
 		if(innerForm){
 			innerForm.setEditMode(editing);
@@ -1119,7 +1129,7 @@ class UploadField extends LabeledFormField{
 			npaUi.fireEvent(action,{"action": action,"field": $('#'+source.baseId+'_'+source.config.name)});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		var inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('#'+inputFieldId).prop('disabled',false);
@@ -1157,7 +1167,7 @@ class ButtonField extends FormField{
 			npaUi.fireEvent(source.config.actionId,{"action": source.config.actionId,"field": $('#'+source.baseId+'_'+source.config.name)});
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		var inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			$('#'+inputFieldId).prop('disabled',false);
@@ -1389,7 +1399,7 @@ class MultipleReferenceEditorField extends LabeledFormField{
 			selectedOption.remove();
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		var inputFieldId = this.baseId+'_'+this.config.name;
 		var inputSourceFieldId = this.baseId+'_source_'+this.config.name;
 		if(editing){
@@ -1530,7 +1540,7 @@ class RichTextEditorField extends LabeledFormField{
 			source.form.editors[source.config.name] = editor;
 		});
 	}
-	setEditMode(editing){
+	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
 			this.form.editors[this.config.name].enable();
@@ -1668,8 +1678,10 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 	}
 	setEditMode(mode){
-		for(var fieldId in this.fieldCache){
+		console.log('form#setEditMode('+mode+')');
+		for(const fieldId in this.fieldCache){
 			let field = this.fieldCache[fieldId];
+			console.log(fieldId);
 			field.setEditMode(mode);
 		}
 		let config = this.getConfiguration();
@@ -1680,8 +1692,8 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 			this.fireFormEvent({"type":"editionStatusChanged","source":"form"});
 		}
 	}
-	
 	setData(data){
+		console.log('form#setData()');
 		this.formData = data;
 		if(this.formData==null){
 			this.formData = {};
@@ -1694,10 +1706,14 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 	}
 	getData(){
+		console.log('form#getData()');
+		console.log(this.fieldCache);
 		var data = Object.assign({},this.formData);
-		for(var fieldId in this.fieldCache){
+		for(const fieldId in this.fieldCache){
 			let field = this.fieldCache[fieldId];
-			field.assignData(data);
+			if(field.editable){
+				field.assignData(data);
+			}
 		}
 		return data;
 	}
@@ -1714,6 +1730,7 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		return !errorFound;
 	}
 	onItemSelected(item){
+		console.log('form#onItemSelected()');
 		this.setEditMode(false);
 		if(typeof item!='undefined' && item!=null){
 			this.setData(item);
