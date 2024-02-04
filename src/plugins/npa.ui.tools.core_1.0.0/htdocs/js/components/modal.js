@@ -29,7 +29,7 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 			if(typeof config.title!='undefined' && config.title.length>0){
 				title = this.getLocalizedString(config.title);
 			}
-			html += '<div class="modal fade" id="'+this.getId()+'" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="'+config.title+'" aria-hidden="true">';
+			html += '<div class="modal" id="'+this.getId()+'" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="'+config.title+'" aria-hidden="true">';
 			html += '  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable'+size+'">';
 			html += '    <div class="modal-content">';
 			html += '      <div id="'+this.getId()+'_header" class="modal-header modal-dialog-header">';
@@ -58,6 +58,15 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 			html += '</div>';
 			
 			this.parentDiv().html(html);
+			let modal = this;
+			$('#'+this.getId()+'_closeBtn').on('click.'+this.getId(),function(){
+				console.log('modal close() called!');
+				$('#'+modal.getId()).modal('hide');
+			});
+			$('#'+this.getId()+'_cancelBtn').on('click.'+this.getId(),function(){
+				console.log('modal cancel() called!');
+				$('#'+modal.getId()).modal('hide');
+			});
 			if(child){
 				$('#'+this.getId()+'_body').append(child);
 			}
@@ -70,15 +79,26 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 		$('#'+this.getId()+'_title').html(this.getLocalizedString(title));
 	}
 	open(){
-		const myModal = new bootstrap.Modal(document.getElementById(this.getId()));
-		myModal.show();
+		/*const myModal = new bootstrap.Modal(document.getElementById(this.getId()));
+		myModal.show();*/
+		$('#'+this.getId()).modal('show');
 	}
 	onClose(callback){
+		let modal = this;
 		$('#'+this.getId()+'_closeBtn').off('.'+this.getId());
-		$('#'+this.getId()+'_closeBtn').on('click.'+this.getId(),callback);
+		$('#'+this.getId()+'_closeBtn').on('click.'+this.getId(),function(){
+			console.log('modal close() called!');
+			$('#'+modal.getId()).modal('hide');
+			callback();
+		});
 	}
 	onCancel(callback){
+		let modal = this;
 		$('#'+this.getId()+'_cancelBtn').off('.'+this.getId());
-		$('#'+this.getId()+'_cancelBtn').on('click.'+this.getId(),callback);
+		$('#'+this.getId()+'_cancelBtn').on('click.'+this.getId(),function(){
+			console.log('modal cancel() called!');
+			$('#'+modal.getId()).modal('hide');
+			callback();
+		});
 	}
 }

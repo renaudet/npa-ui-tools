@@ -742,13 +742,17 @@ class SourceEditorField extends LabeledFormField{
 			var actionId = $(this).data('actionid');
 			source.form.runtime.fireAction(actionId,source.form.editors[source.config.name]);
 		});
+		let editorMode = 'json';
+		if(typeof this.config.type!='undefined' && this.config.type=='javascript'){
+			editorMode = 'javascript';
+		}
 		loadDeps(CODE_MIRROR_DEPTS,function(){
 			var textArea = document.getElementById(source.baseId+'_'+source.config.name);
 			source.form.editors[source.config.name] = CodeMirror.fromTextArea(textArea, {
 			    lineNumbers: true,
     			autoRefresh:true,
 			    theme: 'abcdef',
-			    mode:  "javascript",
+			    mode:  editorMode,
 			    readOnly: true
 			});
 			if(typeof source.config.height!='undefined'){
@@ -759,16 +763,21 @@ class SourceEditorField extends LabeledFormField{
 		});
 	}
 	setEnabled(editing){
-		let inputFieldId = this.baseId+'_'+this.config.name;
-		if(editing){
-			this.form.editors[this.config.name].setOption('readOnly',false);
-			if(typeof this.config.buttons!='undefined'){
-				$('#'+inputFieldId+'_buttonBar button').prop('disabled',false);
-			}
+		if(typeof this.form.editors[this.config.name]=='undefined'){
+			let editor = this;
+			setTimeout(function(){ editor.setEnabled(editing);},500);
 		}else{
-			this.form.editors[this.config.name].setOption('readOnly',true);
-			if(typeof this.config.buttons!='undefined'){
-				$('#'+inputFieldId+'_buttonBar button').prop('disabled',true);
+			let inputFieldId = this.baseId+'_'+this.config.name;
+			if(editing){
+				this.form.editors[this.config.name].setOption('readOnly',false);
+				if(typeof this.config.buttons!='undefined'){
+					$('#'+inputFieldId+'_buttonBar button').prop('disabled',false);
+				}
+			}else{
+				this.form.editors[this.config.name].setOption('readOnly',true);
+				if(typeof this.config.buttons!='undefined'){
+					$('#'+inputFieldId+'_buttonBar button').prop('disabled',true);
+				}
 			}
 		}
 	}
@@ -777,15 +786,19 @@ class SourceEditorField extends LabeledFormField{
 		$('#'+inputFieldId).focus();
 	}
 	setData(parentObj){
-		var inputFieldId = this.baseId+'_'+this.config.name;
-		if(typeof parentObj[this.config.name]!='undefined'){
-			this.form.editors[this.config.name].setValue(parentObj[this.config.name]);
+		if(typeof this.form.editors[this.config.name]=='undefined'){
+			let editor = this;
+			setTimeout(function(){ editor.setData(parentObj);},500);
 		}else{
-			if(this.config.type=='json'){
-				this.form.editors[this.config.name].setValue('{\n}');
-			}
-			if(this.config.type=='javascript'){
-				this.form.editors[this.config.name].setValue('//some javascript code snippet here\n');
+			if(typeof parentObj[this.config.name]!='undefined'){
+				this.form.editors[this.config.name].setValue(parentObj[this.config.name]);
+			}else{
+				if(this.config.type=='json'){
+					this.form.editors[this.config.name].setValue('{\n}');
+				}
+				if(this.config.type=='javascript'){
+					this.form.editors[this.config.name].setValue('//some javascript code snippet here\n');
+				}
 			}
 		}
 	}
@@ -872,6 +885,7 @@ class TextAreaField extends LabeledFormField{
 }
 
 class ArrayEditorField extends LabeledFormField{
+	datatype = 'text';
 	constructor(config,form){
 		super(config,form);
 	}
@@ -882,9 +896,8 @@ class ArrayEditorField extends LabeledFormField{
 		if(typeof this.config.rows!='undefined'){
 			rows = this.config.rows;
 		}
-		let datatype = 'Text';
 		if(typeof this.config.datatype!='undefined'){
-			datatype = this.config.datatype;
+			this.datatype = this.config.datatype;
 		}
 		html += '<div class="row form-row">';
 		html += this.generateLabel();
@@ -906,11 +919,11 @@ class ArrayEditorField extends LabeledFormField{
 		html += '      </div>';
 		if(typeof this.config.editable=='undefined' || this.config.editable){
 			html += '      <div class="col-1">';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_addbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/add.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.add',[datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_editbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/pencil.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.edit',[datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_delbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/cross.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.delete',[datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_upbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_up.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.up',[datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_downbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_down.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.down',[datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_addbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/add.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.add',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_editbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/pencil.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.edit',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_delbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/cross.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.delete',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_upbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_up.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.up',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_downbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_down.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.down',[this.datatype])+'"></button>';
 			html += '      </div>';
 		}else{
 			html += '      <div class="col-1">&nbsp;</div>';
@@ -921,6 +934,7 @@ class ArrayEditorField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		var baseId = this.baseId+'_'+this.config.name;
+		let radio = this;
 		$('#'+baseId+'_addbtn').on('click',function(){
 			$('#'+baseId+'_edit').removeAttr('readonly');
 			$('#'+baseId+'_gobtn').prop('disabled',false);
@@ -932,11 +946,21 @@ class ArrayEditorField extends LabeledFormField{
 			var selectedValue = $('#'+baseId+'_list option:selected').val();
 			if(selectedValue){
 				//update
-				$('#'+baseId+'_list option:selected').val(value);
+				if(radio.datatype=='object'){
+					$('#'+baseId+'_list option:selected').val(value.replace(/'/g,'"'));
+				}else{
+					$('#'+baseId+'_list option:selected').val(value);
+				}
 				$('#'+baseId+'_list option:selected').text(value);
 			}else{
 				//create
-				var option = '<option value="'+value+'">'+value+'</option>';
+				let option = null;
+				if(radio.datatype=='object'){
+					option = '<option value="'+value.replace(/"/g,'\'')+'">'+value+'</option>';
+				}else{
+					option = '<option value="'+value+'">'+value+'</option>';
+				}
+				//var option = '<option value="'+value+'">'+value+'</option>';
 				$('#'+baseId+'_list').append(option);
 			}
 			$('#'+baseId+'_editbtn').prop('disabled',false);
@@ -962,7 +986,11 @@ class ArrayEditorField extends LabeledFormField{
 		});
 		$('#'+baseId+'_editbtn').on('click',function(){
 			var selectedValue = $('#'+baseId+'_list option:selected').val();
-			$('#'+baseId+'_edit').val(selectedValue);
+			if(radio.datatype=='object'){
+				$('#'+baseId+'_edit').val(selectedValue.replace(/'/g,'"'));
+			}else{
+				$('#'+baseId+'_edit').val(selectedValue);
+			}
 			$('#'+baseId+'_edit').removeAttr('readonly');
 			$('#'+baseId+'_gobtn').prop('disabled',false);
 			$('#'+baseId+'_editbtn').prop('disabled',true);
@@ -983,10 +1011,11 @@ class ArrayEditorField extends LabeledFormField{
 				var current = $('#'+baseId+'_list :nth-child('+(selectedIndex+1)+')');
 				var prev = $('#'+baseId+'_list :nth-child('+(selectedIndex)+')');
 				var tmp = current.val();
+				var txt = current.text();
 				current.val(prev.val());
 				current.text(prev.text());
 				prev.val(tmp);
-				prev.text(tmp);
+				prev.text(txt);
 				prev.prop('selected', true);
 			}
 		});
@@ -997,10 +1026,11 @@ class ArrayEditorField extends LabeledFormField{
 				var current = $('#'+baseId+'_list :nth-child('+(selectedIndex+1)+')');
 				var next = $('#'+baseId+'_list :nth-child('+(selectedIndex+2)+')');
 				var tmp = current.val();
+				var txt = current.text();
 				current.val(next.val());
 				current.text(next.text());
 				next.val(tmp);
-				next.text(tmp);
+				next.text(txt);
 				next.prop('selected', true);
 			}
 		});
@@ -1025,24 +1055,37 @@ class ArrayEditorField extends LabeledFormField{
 	}
 	setData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
+		$('#'+inputFieldId+'_list').empty();
 		if(Array.isArray(parentObj[this.config.name])){
-			$('#'+inputFieldId+'_list').empty();
 			for(var j=0;j<parentObj[this.config.name].length;j++){
 				var value = parentObj[this.config.name][j];
-				var option = '<option value="'+value+'">'+value+'</option>'
+				var option = '';
+				if(this.datatype=='text' || this.datatype=='integer'){
+					option = '<option value="'+value+'">'+value+'</option>';
+				}
+				if(this.datatype=='object'){
+					let serialized = JSON.stringify(value);
+					option = '<option value="'+serialized.replace(/"/g,'\'')+'">'+serialized+'</option>';
+				}
 				$('#'+inputFieldId+'_list').append(option);
 			}
-		}else{
-			$('#'+inputFieldId+'_list').empty();
 		}
 	}
 	assignData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
 		var values = [];
+		let radio = this;
 		$('#'+inputFieldId+'_list option').each(function(){
 		    var value = $(this).val();
-		    values.push(value);
+			if(radio.datatype=='text' || radio.datatype=='integer'){
+				values.push(value);
+			}
+			if(radio.datatype=='object'){
+				let obj = JSON.parse(value.replace(/'/g,'"'));
+				values.push(obj);
+			}
 		});
+		console.log();
 		parentObj[this.config.name] = values;
 	}
 	vetoRaised(){
@@ -1542,26 +1585,36 @@ class RichTextEditorField extends LabeledFormField{
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
-		if(editing){
-			this.form.editors[this.config.name].enable();
-			if(typeof this.config.buttons!='undefined'){
-				$('#'+inputFieldId+'_buttonBar button').prop('disabled',false);
+		if(typeof this.form.editors[this.config.name]!='undefined'){
+			if(editing){
+				this.form.editors[this.config.name].enable();
+				if(typeof this.config.buttons!='undefined'){
+					$('#'+inputFieldId+'_buttonBar button').prop('disabled',false);
+				}
+			}else{
+				this.form.editors[this.config.name].disable();
+				if(typeof this.config.buttons!='undefined'){
+					$('#'+inputFieldId+'_buttonBar button').prop('disabled',true);
+				}
 			}
 		}else{
-			this.form.editors[this.config.name].disable();
-			if(typeof this.config.buttons!='undefined'){
-				$('#'+inputFieldId+'_buttonBar button').prop('disabled',true);
-			}
+			let editor = this;
+			setTimeout(function(){ editor.setData(parentObj); },500);
 		}
 	}
 	setFocus(){
 		this.form.editors[this.config.name].focus();
 	}
 	setData(parentObj){
-		if(typeof parentObj[this.config.name]!='undefined'){
-			this.form.editors[this.config.name].setText(parentObj[this.config.name]);
+		if(typeof this.form.editors[this.config.name]!='undefined'){
+			if(typeof parentObj[this.config.name]!='undefined'){
+				this.form.editors[this.config.name].setText(parentObj[this.config.name]);
+			}else{
+				this.form.editors[this.config.name].setText('');
+			}
 		}else{
-			this.form.editors[this.config.name].setText('');
+			let editor = this;
+			setTimeout(function(){ editor.setData(parentObj); },500);
 		}
 	}
 	assignData(parentObj){

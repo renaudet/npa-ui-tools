@@ -288,6 +288,14 @@ npaUi = {
 			console.log('NPA UI - undefined Component type '+componentType);
 		}
 	},
+	unLoad: function(componentId){
+		let proxy = this.componentInstances[componentId];
+		if(typeof proxy!='undefined'){
+			let divId = proxy.parentDivId;
+			delete this.componentInstances[componentId];
+			delete this.componentByDivId[divId];
+		}
+	},
     initialize: function(then){
 		var deps = [
 			{"type": "css","uri": "/uiTools/css/npaUiTheme.css"},
