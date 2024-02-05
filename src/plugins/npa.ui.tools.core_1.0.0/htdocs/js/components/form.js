@@ -40,21 +40,22 @@ class FormField {
 		this.form.fireFormEvent(event);
 	}
 	onFormEvent(event){
-		console.log('FormField#onFormEvent() received by field #'+this.config.name);
-		console.log(event);
-		//console.log('field '+this.config.name+' received event '+event.type+' from '+event.source);
+		console.log('field '+this.config.name+' received event '+event.type+' from '+event.source);
 		if(typeof this.config.constraint!='undefined' && this.config.constraint.length>0){
-			console.log('evaluating constraint '+this.config.constraint);
-			try{
-				let virtualData = this.form.getData();
-				//let field = this;
-				let toEval = this.config.constraint.replace(/@/g,'virtualData').replace(/#/g,'this')+';';
-				console.log(toEval);
-				eval(toEval);
-				console.log('constraint '+toEval+' evaluated with success!');
-			}catch(e){
-				console.log('Form#Field('+this.config.name+')#onFormEvent() caught an evaluate exception');
-				console.log(e);
+			if(typeof this.config.constrainedBy=='undefined' || 
+			   (this.config.constrainedBy.length>0 && this.config.constrainedBy==event.source) || 
+			   'editionStatusChanged'==event.type){
+				console.log('evaluating constraint '+this.config.constraint);
+				try{
+					let virtualData = this.form.getData();
+					let toEval = this.config.constraint.replace(/@/g,'virtualData').replace(/#/g,'this')+';';
+					console.log(toEval);
+					eval(toEval);
+					console.log('evaluation successfull');
+				}catch(e){
+					console.log('Form#Field('+this.config.name+')#onFormEvent() caught an evaluation exception');
+					console.log(e);
+				}
 			}
 		}
 	}
@@ -934,7 +935,7 @@ class ArrayEditorField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		var baseId = this.baseId+'_'+this.config.name;
-		let radio = this;
+		let arrayField = this;
 		$('#'+baseId+'_addbtn').on('click',function(){
 			$('#'+baseId+'_edit').removeAttr('readonly');
 			$('#'+baseId+'_gobtn').prop('disabled',false);
@@ -946,7 +947,7 @@ class ArrayEditorField extends LabeledFormField{
 			var selectedValue = $('#'+baseId+'_list option:selected').val();
 			if(selectedValue){
 				//update
-				if(radio.datatype=='object'){
+				if(arrayField.datatype=='object'){
 					$('#'+baseId+'_list option:selected').val(value.replace(/'/g,'"'));
 				}else{
 					$('#'+baseId+'_list option:selected').val(value);
@@ -955,7 +956,7 @@ class ArrayEditorField extends LabeledFormField{
 			}else{
 				//create
 				let option = null;
-				if(radio.datatype=='object'){
+				if(arrayField.datatype=='object'){
 					option = '<option value="'+value.replace(/"/g,'\'')+'">'+value+'</option>';
 				}else{
 					option = '<option value="'+value+'">'+value+'</option>';
@@ -986,7 +987,7 @@ class ArrayEditorField extends LabeledFormField{
 		});
 		$('#'+baseId+'_editbtn').on('click',function(){
 			var selectedValue = $('#'+baseId+'_list option:selected').val();
-			if(radio.datatype=='object'){
+			if(arrayField.datatype=='object'){
 				$('#'+baseId+'_edit').val(selectedValue.replace(/'/g,'"'));
 			}else{
 				$('#'+baseId+'_edit').val(selectedValue);
@@ -1074,13 +1075,13 @@ class ArrayEditorField extends LabeledFormField{
 	assignData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
 		var values = [];
-		let radio = this;
+		let arrayField = this;
 		$('#'+inputFieldId+'_list option').each(function(){
 		    var value = $(this).val();
-			if(radio.datatype=='text' || radio.datatype=='integer'){
+			if(arrayField.datatype=='text' || arrayField.datatype=='integer'){
 				values.push(value);
 			}
-			if(radio.datatype=='object'){
+			if(arrayField.datatype=='object'){
 				let obj = JSON.parse(value.replace(/'/g,'"'));
 				values.push(obj);
 			}
@@ -1718,9 +1719,10 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		html += '</div>';
 		$('#'+this.getId()+'_form').append(html);
 		var parent = $('#'+this.getId());
-		for(var i=0;i<config.fields.length;i++){
-			var fieldId = config.fields[i].name;
-			console.log('looking for helper class for field #'+fieldId+' ('+config.fields[i].type+')');
+		let orderedFieldList = sortOn(config.fields,'displayIndex');
+		for(var i=0;i<orderedFieldList.length;i++){
+			var fieldId = orderedFieldList[i].name;
+			console.log('looking for helper class for field #'+fieldId+' ('+orderedFieldList[i].type+')');
 			var field = this.fieldCache[fieldId];
 			if(typeof field!='undefined'){
 				console.log('calling '+field.config.type+' rendering');
