@@ -29,11 +29,12 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		this.generateNavBarMenu(function(){
 			for(var placeholderId in navBar.pluggableItems){
 				let items = navBar.pluggableItems[placeholderId];
+				let html = '';
 				for(var itemId in items){
 					let item = items[itemId];
-					let html = navBar.generateMenuItem(item);
-					$('#'+placeholderId).replaceWith(html);
+					html += navBar.generateMenuItem(item);
 				}
+				$('#'+placeholderId).replaceWith(html);
 			}
 			$('.npa-navbar-menu').on('click.navbar',function(){
 				let actionId = $(this).data('actionid');

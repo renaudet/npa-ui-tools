@@ -16,6 +16,7 @@ form.multiple.reference.available=Available:
 form.multiple.reference.associated=Associated:
 form.multiple.reference.button.add=Add to this {0}
 form.multiple.reference.button.remove=Remove from this {0}
+form.SingleReferenceEditorField.select.value=-- select --
 modal.button.close=Close
 selection.list.button.toggle=Toggle filter...
 selection.list.button.ok=Ok

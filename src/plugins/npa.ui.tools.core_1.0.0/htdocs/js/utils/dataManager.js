@@ -26,6 +26,9 @@ npaUiCore.DataManager = class DataManager extends NpaUiComponent{
 	}
 	render(){
 	}
+	setConfiguration(config){
+		this.config.configuration = config;
+	}
 	findByPrimaryKey(pk){
 		console.log('DataManager#findByPrimaryKey()');
 		let interactionConfig = this.getConfiguration().findByPrimaryKey;

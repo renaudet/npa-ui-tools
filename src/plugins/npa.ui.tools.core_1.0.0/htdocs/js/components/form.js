@@ -1532,6 +1532,198 @@ class MultipleReferenceEditorField extends LabeledFormField{
 	}
 }
 
+class SingleReferenceEditorField extends LabeledFormField{
+	constructor(config,form){
+		super(config,form);
+	}
+	fetchDataFromDatasource(then){
+		let datasource = this.config.datasource;
+		if(typeof datasource!='undefined'){
+			let type = 'local';
+			let method = 'GET';
+			let payload = {};
+			if(typeof datasource.type!='undefined'){
+				type = datasource.type;
+			}
+			if(typeof datasource.method!='undefined'){
+				method = datasource.method;
+			}
+			if(typeof datasource.payload!='undefined'){
+				payload = datasource.payload;
+			}
+			if('local'==type){
+				console.log('SingleReferenceEditorField#fetchDataFromDatasource() - using local data from '+datasource.uri);
+				var field = this;
+				makeRESTCall(method,datasource.uri,payload,function(response){
+					if(response.status==200){
+						then(field.adaptFormat(response));
+					}else{
+						console.log(response);
+					}
+				},function(errorMsg){
+					console.log(errorMsg);
+				});
+			}
+			if('managed'==type){
+				console.log('SingleReferenceEditorField#fetchDataFromDatasource() - using DataManager #'+datasource.manager);
+				let dataManager = npaUi.getComponent(datasource.manager);
+				if(typeof dataManager!='undefined'){
+					dataManager.query(payload).then(then);
+				}
+			}
+		}
+	}
+	fetchSingleDataFromDatasource(id,then){
+		console.log('SingleReferenceEditorField#fetchSingleDataFromDatasource('+id+')');
+		let datasource = this.config.datasource;
+		if(typeof datasource!='undefined'){
+			let type = 'local';
+			let method = 'GET';
+			let payload = {};
+			if(typeof datasource.type!='undefined'){
+				type = datasource.type;
+			}
+			if(typeof datasource.method!='undefined'){
+				method = datasource.method;
+			}
+			if('local'==type){
+				console.log('SingleReferenceEditorField#fetchSingleDataFromDatasource() - using local data from '+datasource.uri);
+				payload = {"selector": {"$eq": {"id": id}}};
+				var field = this;
+				makeRESTCall(method,datasource.uri,payload,function(response){
+					if(response.status==200){
+						let results = field.adaptFormat(response);
+						if(results.length>0){
+							then(results[0]);
+						}else{
+							then(null);
+						}
+					}else{
+						console.log(response);
+					}
+				},function(errorMsg){
+					console.log(errorMsg);
+				});
+			}
+			if('managed'==type){
+				console.log('SingleReferenceEditorField#fetchSingleDataFromDatasource() - using DataManager #'+datasource.manager);
+				payload = {"id": id};
+				let dataManager = npaUi.getComponent(datasource.manager);
+				if(typeof dataManager!='undefined'){
+					dataManager.findByPrimaryKey(payload).then(then);
+				}
+			}
+		}
+	}
+	adaptFormat(inputData){
+		let datasource = this.getConfiguration().datasource;
+		let dsType = 'local';
+		if(typeof datasource.type!='undefined'){
+			dsType = datasource.type;
+		}
+		if('local'==dsType){
+			if(datasource.adapter){
+				var data = [];
+				var toEval = 'data = '+datasource.adapter.replace(/@/g,'inputData')+';'
+				try{
+					eval(toEval);
+					return data;
+				}catch(t){
+					console.log('SingleReferenceEditorField#adaptFormat(inputData) - exception evaluating adapter for datasource');
+					return [];
+				}
+			}else{
+				return inputData;
+			}
+		}
+		console.log('SingleReferenceEditorField#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
+		return [];
+	}
+	render(parent){
+		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		let size = 8;
+		if(typeof this.config.size!='undefined' && this.config.size<=10){
+			size = this.config.size;
+		}
+		var html = '';
+		html += '<div class="row form-row">';
+		html += this.generateLabel();
+		html += '  <div class="col-'+size+'">';
+		html += '    <select id="'+inputFieldId+'" class="form-select" disabled>';
+		if(!this.config.required){
+			html += '  <option value="">'+this.getLocalizedString('@form.SingleReferenceEditorField.select.value')+'</option>';
+		}
+		html += '    </select>';
+		if(this.config.help){
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
+			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
+			html += '</div>';
+		}
+		html += '  </div>';
+		if(size<10){
+			html += '  <div class="col-'+(10-size)+'">&nbsp;</div>';
+		}
+		html += '</div>';
+		parent.append(html);
+		let field = this;
+		this.fetchDataFromDatasource(function(data){
+			var itemList = data;
+			let titleRenderer = null;
+			let valueRenderer = null;
+			if(field.config.renderer && field.config.renderer.title){
+				titleRenderer = new window[field.config.renderer.title.type](field.config.renderer.title);
+			}else{
+				titleRenderer = new ItemRenderer({});
+			}
+			if(field.config.renderer && field.config.renderer.value){
+				valueRenderer = new window[field.config.renderer.value.type](field.config.renderer.value);
+			}else{
+				valueRenderer = new ItemRenderer({});
+			}
+			for(var i=0;i<itemList.length;i++){
+				let record = itemList[i];
+				let html = '';
+				let title = titleRenderer.render(record);
+				let value = valueRenderer.render(record);
+				html += '<option value="'+record.id+'" title="'+title+'">';
+				html += value;
+				html += '</option>';
+				$('#'+inputFieldId).append(html);
+			}
+		});
+		$('#'+inputFieldId).on('change',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
+	}
+	setEnabled(editing){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		if(editing){
+			$('#'+inputFieldId).prop('disabled',false);
+		}else{
+			$('#'+inputFieldId).prop('disabled',true);
+		}
+	}
+	setFocus(){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		$('#'+inputFieldId).focus();
+	}
+	setData(parentObj){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		if(typeof parentObj[this.config.name]!='undefined'){
+			$('#'+inputFieldId).val(parentObj[this.config.name]);
+		}else{
+			$('#'+inputFieldId+'  :nth-child(0)').prop('selected', true);
+		}
+	}
+	assignData(parentObj){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		parentObj[this.config.name] = $('#'+inputFieldId).val();
+	}
+	vetoRaised(){
+		return false;
+	}
+}
 
 const RICH_TEXT_EDITOR_DEPTS = [
 	 {"type": "css","uri": "/css/rte/rte.css"},
@@ -1690,6 +1882,9 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 		if('reference'==config.type && config.multiple){
 			return new MultipleReferenceEditorField(config,this);
+		}
+		if('reference'==config.type && !config.multiple){
+			return new SingleReferenceEditorField(config,this);
 		}
 		return new FormField(config,this);
 	}

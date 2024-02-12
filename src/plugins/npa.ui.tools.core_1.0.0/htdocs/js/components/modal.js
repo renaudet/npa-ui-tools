@@ -79,17 +79,19 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 		$('#'+this.getId()+'_title').html(this.getLocalizedString(title));
 	}
 	open(){
-		/*const myModal = new bootstrap.Modal(document.getElementById(this.getId()));
-		myModal.show();*/
 		$('#'+this.getId()).modal('show');
 	}
 	onClose(callback){
 		let modal = this;
 		$('#'+this.getId()+'_closeBtn').off('.'+this.getId());
-		$('#'+this.getId()+'_closeBtn').on('click.'+this.getId(),function(){
-			console.log('modal close() called!');
-			$('#'+modal.getId()).modal('hide');
-			callback();
+		$('#'+this.getId()+'_closeBtn').on('click.'+this.getId(),function(event){
+			console.log('modal custom close() called!');
+			let noVetoRaised = callback();
+			if(typeof noVetoRaised=='undefined' || noVetoRaised){
+				$('#'+modal.getId()).modal('hide');
+			}else{
+				$('#'+modal.getId()).modal('show');
+			}
 		});
 	}
 	onCancel(callback){

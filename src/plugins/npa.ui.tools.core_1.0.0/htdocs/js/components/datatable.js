@@ -180,7 +180,11 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 					html += '<img src="'+actionDef.icon+'" class="datatableAction" title="'+this.getLocalizedString(actionDef.label)+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
 				}
 			}else{
-				if('boolean'==column.type){
+				if('text'==column.type || 'select'==column.type || 'date'==column.type){
+					let value = item[column.field];
+					html += value;
+				}else
+				if('boolean'==column.type || 'check'==column.type){
 					let booleanValue = item[column.field];
 					if(booleanValue){
 						html += '<img src="/uiTools/img/silk/accept.png">';

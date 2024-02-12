@@ -183,7 +183,7 @@ npaUi = {
 			}
 		});
 		if(toLoad.length>0){
-			let loadInstance = function(placeHolderList,index){
+			let loadInstances = function(placeHolderList,index){
 				if(index<placeHolderList.length){
 					let placeholder = placeHolderList[index];
 					let divId = placeholder.attr('id');
@@ -206,7 +206,7 @@ npaUi = {
 									if(json.configuration.selectionListener && json.configuration.selectionProvider){
 										npaUi.registerSelectionListener(json.configuration.selectionProvider,npaUi.componentInstances[json.id]);
 									}
-									loadInstance(placeHolderList,index+1);
+									loadInstances(placeHolderList,index+1);
 								});
 								
 							});
@@ -230,29 +230,122 @@ npaUi = {
 										if(globalComponentDef.configuration.selectionListener && globalComponentDef.configuration.selectionProvider){
 											npaUi.registerSelectionListener(globalComponentDef.configuration.selectionProvider,npaUi.componentInstances[globalComponentDef.id]);
 										}
-										loadInstance(placeHolderList,index+1);
+										loadInstances(placeHolderList,index+1);
 									});
 									
 								});
 								
 							}else{
 								console.log('can\'t resolve global reference - skipping...');
-								loadInstance(placeHolderList,index+1);
+								loadInstances(placeHolderList,index+1);
 							}
 						}else{
 							console.log('no global reference nor configuration file URI found in Tag - skipping...');
-							loadInstance(placeHolderList,index+1);
+							loadInstances(placeHolderList,index+1);
 						}
 					}
 				}else{
 					npaUi.onRenderingCompleted();
 				}
 			}
-			loadInstance(toLoad,0);
+			loadInstances(toLoad,0);
 		}else{
 			npaUi.onRenderingCompleted();
 		}		
     },
+    loadSingleInstance: function(parentDiv,config,then){
+		let divId = parentDiv.attr('id');
+		console.log('processing Tag '+divId);
+		if(config!=null){
+			console.log('a specific configuration was provided:');
+			console.log(config);
+			this.loadComponent(config.type,config.version,function(namespace,type){
+				console.log('(dynamic JSON) creating new instance of the '+type+' component from namespace '+namespace);
+				npaUi.componentInstances[config.id] = new NpaUiComponentProxy(namespace,type,divId,config);
+				npaUi.componentByDivId[divId] = npaUi.componentInstances[config.id];
+				npaUi.componentInstances[config.id].initialize(function(){
+					console.log('first rendering for component '+type+' from namespace '+namespace);
+					npaUi.componentInstances[config.id].render();
+					$('#'+divId).data('loaded','true');
+					if(config.configuration.selectionListener && config.configuration.selectionProvider){
+						npaUi.registerSelectionListener(config.configuration.selectionProvider,npaUi.componentInstances[config.id]);
+					}
+					then();
+				});
+				
+			});
+		}else{
+			let configFileUri = parentDiv.data('config');
+			if(configFileUri){
+				console.log('tag defines a JSON file uri: '+configFileUri);
+				
+				$.loadJson(configFileUri,function(json){
+					console.log('tag configuration file loaded:');
+					console.log(json);
+					npaUi.loadComponent(json.type,json.version,function(namespace,type){
+						console.log('(specific JSON) creating new instance of the '+type+' component from namespace '+namespace);
+						npaUi.componentInstances[json.id] = new NpaUiComponentProxy(namespace,type,divId,json);
+						npaUi.componentByDivId[divId] = npaUi.componentInstances[json.id];
+						npaUi.componentInstances[json.id].initialize(function(){
+							console.log('first rendering for component '+type+' from namespace '+namespace);
+							npaUi.componentInstances[json.id].render();
+							$('#'+divId).data('loaded','true');
+							if(json.configuration.selectionListener && json.configuration.selectionProvider){
+								npaUi.registerSelectionListener(json.configuration.selectionProvider,npaUi.componentInstances[json.id]);
+							}
+							then();
+						});
+						
+					});
+				});
+				
+			}else{
+				let ref = parentDiv.data('ref');
+				if(ref){
+					console.log('tag defines a global reference: '+ref);
+					let globalComponentDef = npaUi.globalConfig.components[ref];
+					if(globalComponentDef){
+						
+						npaUi.loadComponent(globalComponentDef.type,globalComponentDef.version,function(namespace,type){
+							console.log('(global configuration) creating new instance of the '+type+' component from namespace '+namespace);
+							npaUi.componentInstances[globalComponentDef.id] = new NpaUiComponentProxy(namespace,type,divId,globalComponentDef);
+							npaUi.componentByDivId[divId] = npaUi.componentInstances[globalComponentDef.id];
+							npaUi.componentInstances[globalComponentDef.id].initialize(function(){
+								console.log('first rendering for component '+type+' from namespace '+namespace);
+								npaUi.componentInstances[globalComponentDef.id].render();
+								$('#'+divId).data('loaded','true');
+								if(globalComponentDef.configuration.selectionListener && globalComponentDef.configuration.selectionProvider){
+									npaUi.registerSelectionListener(globalComponentDef.configuration.selectionProvider,npaUi.componentInstances[globalComponentDef.id]);
+								}
+								then();
+							});
+							
+						});
+						
+					}else{
+						console.log('can\'t resolve global reference - skipping...');
+						then();
+					}
+				}else{
+					console.log('no global reference nor configuration file URI found in Tag - skipping...');
+					then();
+				}
+			}
+		}
+	},
+    renderSingleComponent: function(tagId,componentConfig,then){
+		let placeholder = $('#'+tagId);
+		let cachedComponent = npaUi.componentByDivId[tagId];
+        if(typeof cachedComponent=='undefined'){
+			this.loadSingleInstance(placeholder,componentConfig,function(){
+				console.log('npaUiCore#renderSingleComponent() returned');
+				then();
+			});
+		}else{
+			cachedComponent.render();
+			then();
+		}
+	},
     loadConfigFrom: function(configFileUri,then){
 		$.loadJson(configFileUri,function(json){
 			npaUi.globalConfig = json;
