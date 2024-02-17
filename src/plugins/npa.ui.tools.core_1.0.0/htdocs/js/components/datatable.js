@@ -168,8 +168,20 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		});
 	}
 	renderColumn(item,index,column){
+		console.log('rendering index: '+index);
+		console.log(column);
 		let html = '';
 		html += '<td>';
+		if(typeof column.renderer!='undefined'){
+			let toEval = 'html += '+column.renderer.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
+			try{
+				eval(toEval);
+			}catch(evalException){
+				console.log(toEval);
+				console.log(evalException);
+				html += '???';
+			}
+		}else
 		if(typeof column.type!='undefined'){
 			if('rowActions'==column.type){
 				for(var j=0;j<column.actions.length;j++){
@@ -211,16 +223,6 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		if(typeof column.field!='undefined'){
 			let value = item[column.field];
 			html += value;
-		}else
-		if(typeof column.renderer!='undefined'){
-			let toEval = 'html += '+column.renderer.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
-			try{
-				eval(toEval);
-			}catch(evalException){
-				console.log(toEval);
-				console.log(evalException);
-				html += '???';
-			}
 		}else{
 			html += '?';
 		}

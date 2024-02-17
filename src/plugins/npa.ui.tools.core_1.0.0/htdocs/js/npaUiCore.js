@@ -128,7 +128,7 @@ function sortOn(list,attributeName,descending=true){
 			for(var j=i+1;j<list.length;j++){
 				var listi = list[i];
 				var listj = list[j];
-				if(listj[attributeName] || listj[attributeName]==0){
+				if(typeof listj[attributeName]!='undefined' && typeof listi[attributeName]!='undefined'){
 					if(Number.isInteger(listj[attributeName])){
 						if(listj[attributeName]<listi[attributeName]){
 							var tmp = listi;
@@ -150,9 +150,6 @@ function sortOn(list,attributeName,descending=true){
 							}
 						}
 					}
-				}else{
-					console.log('sortOn(): invalid listj');
-					console.log(listj);
 				}
 			}
 		}
@@ -164,15 +161,16 @@ function sortOn(list,attributeName,descending=true){
 npaUiCore = {}
 
 npaUi = {
-	globalConfig: null,
+	globalConfig: {},
 	componentInstances: {},
 	componentByDivId: {},
 	actionHandlers: {},
 	selectionListeners: {},
 	localizationMap: null,
-    render: function(){
+    render: function(targetClass='npaUi'){
 		let toLoad = [];
-		$('.npaUi').each(function(index,element){
+		console.log('npaUi#render('+targetClass+')');
+		$('.'+targetClass).each(function(index,element){
 			let placeholder = $(this);
 			var divId = placeholder.attr('id');
             let cachedComponent = npaUi.componentByDivId[divId];
@@ -186,64 +184,9 @@ npaUi = {
 			let loadInstances = function(placeHolderList,index){
 				if(index<placeHolderList.length){
 					let placeholder = placeHolderList[index];
-					let divId = placeholder.attr('id');
-					console.log('processing Tag '+divId);
-					let configFileUri = placeholder.data('config');
-					if(configFileUri){
-						console.log('tag defines a JSON file uri: '+configFileUri);
-						
-						$.loadJson(configFileUri,function(json){
-							console.log('tag configuration file loaded:');
-							console.log(json);
-							npaUi.loadComponent(json.type,json.version,function(namespace,type){
-								console.log('(specific JSON) creating new instance of the '+type+' component from namespace '+namespace);
-								npaUi.componentInstances[json.id] = new NpaUiComponentProxy(namespace,type,divId,json);
-								npaUi.componentByDivId[divId] = npaUi.componentInstances[json.id];
-								npaUi.componentInstances[json.id].initialize(function(){
-									console.log('first rendering for component '+type+' from namespace '+namespace);
-									npaUi.componentInstances[json.id].render();
-									$('#'+divId).data('loaded','true');
-									if(json.configuration.selectionListener && json.configuration.selectionProvider){
-										npaUi.registerSelectionListener(json.configuration.selectionProvider,npaUi.componentInstances[json.id]);
-									}
-									loadInstances(placeHolderList,index+1);
-								});
-								
-							});
-						});
-						
-					}else{
-						let ref = placeholder.data('ref');
-						if(ref){
-							console.log('tag defines a global reference: '+ref);
-							let globalComponentDef = npaUi.globalConfig.components[ref];
-							if(globalComponentDef){
-								
-								npaUi.loadComponent(globalComponentDef.type,globalComponentDef.version,function(namespace,type){
-									console.log('(global configuration) creating new instance of the '+type+' component from namespace '+namespace);
-									npaUi.componentInstances[globalComponentDef.id] = new NpaUiComponentProxy(namespace,type,divId,globalComponentDef);
-									npaUi.componentByDivId[divId] = npaUi.componentInstances[globalComponentDef.id];
-									npaUi.componentInstances[globalComponentDef.id].initialize(function(){
-										console.log('first rendering for component '+type+' from namespace '+namespace);
-										npaUi.componentInstances[globalComponentDef.id].render();
-										$('#'+divId).data('loaded','true');
-										if(globalComponentDef.configuration.selectionListener && globalComponentDef.configuration.selectionProvider){
-											npaUi.registerSelectionListener(globalComponentDef.configuration.selectionProvider,npaUi.componentInstances[globalComponentDef.id]);
-										}
-										loadInstances(placeHolderList,index+1);
-									});
-									
-								});
-								
-							}else{
-								console.log('can\'t resolve global reference - skipping...');
-								loadInstances(placeHolderList,index+1);
-							}
-						}else{
-							console.log('no global reference nor configuration file URI found in Tag - skipping...');
-							loadInstances(placeHolderList,index+1);
-						}
-					}
+					npaUi.loadSingleInstance(placeholder,null,function(){
+						loadInstances(placeHolderList,index+1);
+					});
 				}else{
 					npaUi.onRenderingCompleted();
 				}
@@ -348,7 +291,8 @@ npaUi = {
 	},
     loadConfigFrom: function(configFileUri,then){
 		$.loadJson(configFileUri,function(json){
-			npaUi.globalConfig = json;
+			//npaUi.globalConfig = json;
+			Object.assign(npaUi.globalConfig,json);
 			then();
 		});
 	},
@@ -452,7 +396,12 @@ npaUi = {
 		}else
 		if('redirect'==actionId){
 			if(typeof event.uri!='undefined'){
-				window.location.assign(event.uri);
+				if(typeof event.newWindow!='undefined' && event.newWindow){
+					let windowId = 'apaf_'+Math.floor(Math.random()*1000000);
+					window.open(event.uri,'apaf_'+windowId);
+				}else{
+					window.location.assign(event.uri);
+				}
 			}
 		}else{
 			let handler = this.actionHandlers[actionId];

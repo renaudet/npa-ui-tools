@@ -71,10 +71,10 @@ npaUiCore.VerticalMenu = class VerticalMenu extends NpaUiComponent{
 	stretch(){
 		let config = this.getConfiguration();
 		if(typeof config.expandsTo!='undefined'){
-			$('#'+this.getId()).height($('#'+config.expandsTo).height()-5);
+			$('#'+this.getId()).height($('#'+config.expandsTo).height()-10);
 			let menu = this;
 			$(window).on('resize',function(){
-				$('#'+menu.getId()).height($('#'+config.expandsTo).height()-5);
+				$('#'+menu.getId()).height($('#'+config.expandsTo).height()-10);
 			});
 		}
 	}

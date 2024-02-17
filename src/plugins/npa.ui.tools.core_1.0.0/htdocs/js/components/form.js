@@ -8,6 +8,7 @@ class FormField {
 	form = null;
 	baseId = '';
 	editable = true;
+	hidden = false;
 	constructor(config,form){
 		this.config = config;
 		this.form = form;
@@ -22,6 +23,10 @@ class FormField {
 		this.setEnabled(editable);
 	}
 	setEnabled(enabled){}
+	show(){}
+	hide(){
+		this.setEditMode(false);
+	}
 	setData(parentObj){}
 	val(value){
 		let data = {};
@@ -89,17 +94,18 @@ class TextField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let placeholder = '';
 		if(typeof this.config.placeholder!='undefined'){
 			placeholder = this.config.placeholder;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+this.config.size+'">';
-		html += '    <input type="text" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" placeholder="'+this.getLocalizedString(placeholder)+'" readonly>';
+		html += '    <input type="text" id="'+inputFieldId+'" class="form-control-plaintext" placeholder="'+this.getLocalizedString(placeholder)+'" readonly>';
 		if(this.config.help){
-			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
@@ -110,9 +116,18 @@ class TextField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
-		$('#'+this.baseId+'_'+this.config.name).on('input',function(){
+		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -160,17 +175,18 @@ class PasswordField extends TextField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let placeholder = '';
 		if(typeof this.config.placeholder!='undefined'){
 			placeholder = this.config.placeholder;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+this.config.size+'">';
-		html += '    <input type="password" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" placeholder="'+placeholder+'" readonly>';
+		html += '    <input type="password" id="'+inputFieldId+'" class="form-control-plaintext" placeholder="'+placeholder+'" readonly>';
 		if(this.config.help){
-			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
@@ -181,9 +197,18 @@ class PasswordField extends TextField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
-		$('#'+this.baseId+'_'+this.config.name).on('input',function(){
+		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setData(parentObj){
 		if('password'==this.config.type){
@@ -254,6 +279,7 @@ class NumericField extends TextField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let placeholder = '';
 		if(typeof this.config.placeholder!='undefined'){
@@ -263,12 +289,12 @@ class NumericField extends TextField{
 		if(typeof this.config.size!='undefined'){
 			size = this.config.size;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'">';
-		html += '    <input type="number" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" placeholder="'+placeholder+'" value="'+this.config.default+'" readonly>';
+		html += '    <input type="number" id="'+inputFieldId+'" class="form-control-plaintext" placeholder="'+placeholder+'" value="'+this.config.default+'" readonly>';
 		if(this.config.help){
-			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
@@ -279,9 +305,18 @@ class NumericField extends TextField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
-		$('#'+this.baseId+'_'+this.config.name).on('input',function(){
+		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
@@ -335,14 +370,15 @@ class DateField extends TextField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var size = typeof this.config.size!='undefined'?this.config.size:3;
 		var html = '';
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'">';
-		html += '    <input type="text" id="'+this.baseId+'_'+this.config.name+'" class="form-control-plaintext" style="'+this.config.style+'" placeholder="YYYY/MM/DD" data-provide="datepicker" data-date-format="yyyy/mm/dd" readonly>';
+		html += '    <input type="text" id="'+inputFieldId+'" class="form-control-plaintext" style="'+this.config.style+'" placeholder="YYYY/MM/DD" data-provide="datepicker" data-date-format="yyyy/mm/dd" readonly>';
 		if(this.config.help){
-			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
@@ -354,12 +390,21 @@ class DateField extends TextField{
 		parent.append(html);
 		var target = this;
 		loadDeps(DATE_PICKER_DEPTS,function(){
-			  $('#'+target.baseId+'_'+target.config.name).val(moment().format('YYYY/MM/DD'));
+			  $('#'+inputFieldId).val(moment().format('YYYY/MM/DD'));
 		});
 		let field = this;
-		$('#'+this.baseId+'_'+this.config.name).on('change',function(){
+		$('#'+inputFieldId).on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	vetoRaised(){
 		var inputFieldId = this.baseId+'_'+this.config.name;
@@ -382,6 +427,7 @@ class CheckField extends FormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
 		var divClass = ' form-check';
 		var role = '';
@@ -391,18 +437,18 @@ class CheckField extends FormField{
 			role = ' role="switch"';
 			checkClass = '';
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += '  <div class="col-2">&nbsp;</div>';
 		html += '  <div class="col-9'+divClass+'">';
-		html += '    <input type="checkbox" id="'+this.baseId+'_'+this.config.name+'"'+role+' disabled class="form-check-input'+checkClass+'" style="margin-left: -10px;margin-right: 8px;" value="true"'+(this.config.default?' checked>':'>');
-		html += '    <label class="form-check-label" for="'+this.baseId+'_'+this.config.name+'">';
+		html += '    <input type="checkbox" id="'+inputFieldId+'"'+role+' disabled class="form-check-input'+checkClass+'" style="margin-left: -10px;margin-right: 8px;" value="true"'+(this.config.default?' checked>':'>');
+		html += '    <label class="form-check-label" for="'+inputFieldId+'">';
 		html += this.getLocalizedString(this.config.label);
 		if(this.config.help){
-			html += '<button class="btn btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#'+this.baseId+'_'+this.config.name+'_help"><img src="/uiTools/img/silk/information.png" title="help" style="padding-bottom: 5px;"></button>';
+			html += '<button class="btn btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#'+inputFieldId+'_help"><img src="/uiTools/img/silk/information.png" title="help" style="padding-bottom: 5px;"></button>';
 		}
 		html += '    </label>';
 		if(this.config.help){
-			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
@@ -411,9 +457,18 @@ class CheckField extends FormField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
-		$('#'+this.baseId+'_'+this.config.name).on('change',function(){
+		$('#'+inputFieldId).on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -455,20 +510,21 @@ class RadioField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-9 form-check">';
 		for(var i=0;i<this.config.choices.length;i++){
 			var choice = this.config.choices[i];
 			html += '<div>';
-			html += '<input class="form-check-input" type="radio" style="margin-left: -10px;margin-right: 7px;" name="'+this.baseId+'_'+this.config.name+'" id="'+this.baseId+'_'+this.config.name+'_'+i+'"';
+			html += '<input class="form-check-input" type="radio" style="margin-left: -10px;margin-right: 7px;" name="'+inputFieldId+'" id="'+inputFieldId+'_'+i+'"';
 			if(choice.value==this.config.default){
 				html += ' checked';
 			}
 			html += ' value="'+choice.value+'"';
 			html += ' disabled>';
-			html += '<label class="form-check-label" for="'+this.baseId+'_'+this.config.name+'_'+i+'">';
+			html += '<label class="form-check-label" for="'+inputFieldId+'_'+i+'">';
 			html += this.getLocalizedString(choice.label);
 			html += '</label>';
 			html += '</div>';
@@ -478,9 +534,18 @@ class RadioField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
-		$('[name="'+this.baseId+'_'+this.config.name+'"]').on('change',function(){
+		$('[name="'+inputFieldId+'"]').on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -515,13 +580,14 @@ class ColorPickerField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-10">';
-		html += '    <input type="color" name="'+this.baseId+'_'+this.config.name+'" id="'+this.baseId+'_'+this.config.name+'" class="form-control form-control-color" value="'+this.config.default+'" title="Click to choose a color" disabled>';
+		html += '    <input type="color" name="'+inputFieldId+'" id="'+inputFieldId+'" class="form-control form-control-color" value="'+this.config.default+'" title="Click to choose a color" disabled>';
 		if(this.config.help){
-			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
@@ -529,9 +595,18 @@ class ColorPickerField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
-		$('#'+this.baseId+'_'+this.config.name).on('change',function(){
+		$('#'+inputFieldId).on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -568,31 +643,41 @@ class RangeSelectorField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let size = 10;
 		if(typeof this.config.size!='undefined'){
 			size = this.config.size;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'">';
-		html += '    <input type="range" id="'+this.baseId+'_'+this.config.name+'" name="'+this.baseId+'_'+this.config.name+'" class="form-range form-slider" value="'+this.config.default+'" min="'+this.config.min+'" max="'+this.config.max+'" step="'+this.config.step+'" disabled>';
+		html += '    <input type="range" id="'+inputFieldId+'" name="'+inputFieldId+'" class="form-range form-slider" value="'+this.config.default+'" min="'+this.config.min+'" max="'+this.config.max+'" step="'+this.config.step+'" disabled>';
 		if(this.config.help){
-			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
 			html += '</div>';
 		}
 		html += '  </div>';
 		if(size<10){
-			html += '  <div class="col-'+(10-size)+'"><span id="'+this.baseId+'_'+this.config.name+'_value" class="form-text">'+this.config.default+'</span></div>';
+			html += '  <div class="col-'+(10-size)+'"><span id="'+inputFieldId+'_value" class="form-text">'+this.config.default+'</span></div>';
 		}
 		html += '</div>';
 		parent.append(html);
 		var source = this;
-		$('input[name='+this.baseId+'_'+this.config.name+']').on('input',function(){
+		$('input[name='+inputFieldId+']').on('input',function(){
 			$('#'+source.baseId+'_'+source.config.name+'_value').html($(this).val());
 			source.fireFormEvent({"type": "change","source": source.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -628,39 +713,103 @@ class SelectField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
+	fetchDataFromDatasource(then){
+		let datasource = this.config.datasource;
+		if(typeof datasource!='undefined'){
+			let type = 'local';
+			let method = 'GET';
+			let payload = {};
+			if(typeof datasource.type!='undefined'){
+				type = datasource.type;
+			}
+			if(typeof datasource.method!='undefined'){
+				method = datasource.method;
+			}
+			if(typeof datasource.payload!='undefined'){
+				payload = datasource.payload;
+			}
+			if('local'==type){
+				console.log('SelectField#fetchDataFromDatasource() - using local data from '+datasource.uri);
+				var field = this;
+				makeRESTCall(method,datasource.uri,payload,function(response){
+					if(response.status==200){
+						then(field.adaptFormat(response));
+					}else{
+						console.log(response);
+					}
+				},function(errorMsg){
+					console.log(errorMsg);
+				});
+			}
+			if('managed'==type){
+				console.log('SelectField#fetchDataFromDatasource() - using DataManager #'+datasource.manager);
+				let dataManager = npaUi.getComponent(datasource.manager);
+				if(typeof dataManager!='undefined'){
+					dataManager.query(payload).then(then);
+				}
+			}
+		}
+	}
+	adaptFormat(inputData){
+		let datasource = this.config.datasource;
+		let dsType = 'local';
+		if(typeof datasource.type!='undefined'){
+			dsType = datasource.type;
+		}
+		if('local'==dsType){
+			if(datasource.adapter){
+				var data = [];
+				var toEval = 'data = '+datasource.adapter.replace(/@/g,'inputData')+';'
+				try{
+					eval(toEval);
+					return data;
+				}catch(t){
+					console.log('SelectField#adaptFormat(inputData) - exception evaluating adapter for datasource');
+					return [];
+				}
+			}else{
+				return inputData;
+			}
+		}
+		console.log('SelectField#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
+		return [];
+	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let size = 8;
 		if(typeof this.config.size!='undefined'){
 			size = this.config.size;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'">';
-		html += '    <select id="'+this.baseId+'_'+this.config.name+'" class="form-select" disabled>';
+		html += '    <select id="'+inputFieldId+'" class="form-select" disabled>';
 		if(!this.config.required){
 			html += '<option value="">'+this.getLocalizedString('@form.selectField.select.value')+'</option>';
 		}
-		for(var i=0;i<this.config.values.length;i++){
-			var value = this.config.values[i];
-			if(typeof value.label!='undefined'){
-				html += '<option value="';
-				html += value.value;
-				html += '">';
-				html += this.getLocalizedString(value.label);
-				html += '</option>';
-			}else{
-				html += '<option value="';
-				html += value;
-				html += '">';
-				html += value;
-				html += '</option>';
+		if(typeof this.config.values!='undefined'){
+			for(var i=0;i<this.config.values.length;i++){
+				var value = this.config.values[i];
+				if(typeof value.label!='undefined'){
+					html += '<option value="';
+					html += value.value;
+					html += '">';
+					html += this.getLocalizedString(value.label);
+					html += '</option>';
+				}else{
+					html += '<option value="';
+					html += value;
+					html += '">';
+					html += value;
+					html += '</option>';
+				}
 			}
 		}
 		html += '    </select>';
 		if(this.config.help){
-			html += '<div class="collapse" id="'+this.baseId+'_'+this.config.name+'_help">';
+			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.config.help+'</div>';
 			html += '</div>';
 		}
@@ -671,9 +820,45 @@ class SelectField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
-		$('#'+this.baseId+'_'+this.config.name).on('change',function(){
+		$('#'+inputFieldId).on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		if(typeof this.config.datasource!='undefined'){
+			this.fetchDataFromDatasource(function(data){
+				var itemList = data;
+				let labelRenderer = null;
+				let valueRenderer = null;
+				if(field.config.renderer && field.config.renderer.title){
+					labelRenderer = new window[field.config.renderer.label.type](field.config.renderer.label);
+				}else{
+					labelRenderer = new ItemRenderer({});
+				}
+				if(field.config.renderer && field.config.renderer.value){
+					valueRenderer = new window[field.config.renderer.value.type](field.config.renderer.value);
+				}else{
+					valueRenderer = new ItemRenderer({});
+				}
+				for(var i=0;i<itemList.length;i++){
+					let record = itemList[i];
+					let html = '';
+					let label = labelRenderer.render(record);
+					let value = valueRenderer.render(record);
+					html += '<option title="'+label+'">';
+					html += value;
+					html += '</option>';
+					$('#'+inputFieldId).append(html);
+				}
+			});
+		}
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -707,7 +892,7 @@ class SelectField extends LabeledFormField{
 const CODE_MIRROR_DEPTS = [
 	{"type": "css","uri": "/css/codemirror.css"},
 	{"type": "css","uri": "/css/codeMirror/abcdef.css"},
-	{"type": "css","uri": "/css/codeMirror/ambiance.css"},
+	{"type": "css","uri": "/uiTools/css/editor.css"},
 	{"type": "js","uri": "/js/codemirror.js"},
 	{"type": "js","uri": "/js/codeMirror/autorefresh.js"},
 	{"type": "js","uri": "/js/codeMirror/javascript.js"},
@@ -722,46 +907,59 @@ class SourceEditorField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-10">';
 		if(typeof this.config.buttons!='undefined'){
-			html += '<div id="'+this.baseId+'_'+this.config.name+'_buttonBar" class="d-grid gap-2 d-md-flex">';//justify-content-md-end
+			html += '<div id="'+inputFieldId+'_buttonBar" class="d-grid gap-2 d-md-flex">';//justify-content-md-end
 			for(var i=0;i<this.config.buttons.length;i++){
 				var button = this.config.buttons[i];
 				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="form-icon" src="'+button.icon+'" title="'+this.getLocalizedString(button.label)+'"></button>';
 			}
 			html += '</div>';
 		}
-		html += '    <textarea id="'+this.baseId+'_'+this.config.name+'" class="form-control" style="border: 1px solid lightgrey; background-color: #fff;"></textarea>';
+		html += '    <textarea id="'+inputFieldId+'" class="form-control" style="border: 1px solid lightgrey; background-color: #fff;"></textarea>';
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
 		var source = this;
-		$('#'+this.baseId+'_'+this.config.name+'_buttonBar button').on('click',function(){
+		$('#'+inputFieldId+'_buttonBar button').on('click',function(){
 			var actionId = $(this).data('actionid');
-			source.form.runtime.fireAction(actionId,source.form.editors[source.config.name]);
+			npaUi.fireEvent(actionId,{"action": actionId,"field": $('#'+inputFieldId)});
 		});
 		let editorMode = 'json';
 		if(typeof this.config.type!='undefined' && this.config.type=='javascript'){
 			editorMode = 'javascript';
 		}
+		console.log('CodeMirror editor mode is: '+editorMode);
 		loadDeps(CODE_MIRROR_DEPTS,function(){
-			var textArea = document.getElementById(source.baseId+'_'+source.config.name);
+			var textArea = document.getElementById(inputFieldId);
 			source.form.editors[source.config.name] = CodeMirror.fromTextArea(textArea, {
 			    lineNumbers: true,
     			autoRefresh:true,
-			    theme: 'abcdef',
+			    theme: "abcdef",
 			    mode:  editorMode,
 			    readOnly: true
 			});
+			setTimeout(function(){ source.form.editors[source.config.name].setOption("mode",editorMode); },100);
+			
 			if(typeof source.config.height!='undefined'){
 				source.form.editors[source.config.name].setSize(null,source.config.height);
 			}else{
 				source.form.editors[source.config.name].setSize(null,DEFAULT_EDITOR_HEIGHT);
 			}
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		if(typeof this.form.editors[this.config.name]=='undefined'){
@@ -829,15 +1027,16 @@ class TextAreaField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let size = 8;
 		if(typeof this.config.size!='undefined'){
 			size = this.config.size;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'">';
-		html += '    <textarea id="'+this.baseId+'_'+this.config.name+'" class="form-control" style="'+this.config.style+'" row="'+this.config.rows+'" disabled="true"></textarea>';
+		html += '    <textarea id="'+inputFieldId+'" class="form-control" style="'+this.config.style+'" row="'+this.config.rows+'" disabled="true"></textarea>';
 		html += '  </div>';
 		if(size<10){
 			html += '  <div class="col-'+(10-size)+'">&nbsp;</div>';
@@ -845,9 +1044,18 @@ class TextAreaField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
-		$('#'+this.baseId+'_'+this.config.name).on('input',function(){
+		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -892,6 +1100,7 @@ class ArrayEditorField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let rows = 7;
 		if(typeof this.config.rows!='undefined'){
@@ -900,31 +1109,31 @@ class ArrayEditorField extends LabeledFormField{
 		if(typeof this.config.datatype!='undefined'){
 			this.datatype = this.config.datatype;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-9">';
 		html += '    <div class="row form-row">';
 		if(typeof this.config.editable=='undefined' || this.config.editable){
 			html += '      <div class="col-9">';
-			html += '        <input id="'+this.baseId+'_'+this.config.name+'_edit" type="text" class="form-control" readonly>';
+			html += '        <input id="'+inputFieldId+'_edit" type="text" class="form-control" readonly>';
 			html += '      </div>';
 			html += '      <div class="col-1">';
-			html += '        <button id="'+this.baseId+'_'+this.config.name+'_gobtn" type="button" class="btn btn-primary" disabled>'+this.getLocalizedString('@form.arrayEditor.button.go')+'</button>';
+			html += '        <button id="'+inputFieldId+'_gobtn" type="button" class="btn btn-primary" disabled>'+this.getLocalizedString('@form.arrayEditor.button.go')+'</button>';
 			html += '      </div>';
 			html += '    </div>';
 		}
 		html += '    <div class="row">';
 		html += '      <div class="col-9">';
-		html += '        <select id="'+this.baseId+'_'+this.config.name+'_list" class="form-select" size="'+rows+'" disabled>';
+		html += '        <select id="'+inputFieldId+'_list" class="form-select" size="'+rows+'" disabled>';
 		html += '        </select>';
 		html += '      </div>';
 		if(typeof this.config.editable=='undefined' || this.config.editable){
 			html += '      <div class="col-1">';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_addbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/add.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.add',[this.datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_editbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/pencil.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.edit',[this.datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_delbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/cross.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.delete',[this.datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_upbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_up.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.up',[this.datatype])+'"></button>';
-			html += '        <button type="button" id="'+this.baseId+'_'+this.config.name+'_downbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_down.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.down',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+inputFieldId+'_addbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/add.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.add',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+inputFieldId+'_editbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/pencil.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.edit',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+inputFieldId+'_delbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/cross.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.delete',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+inputFieldId+'_upbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_up.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.up',[this.datatype])+'"></button>';
+			html += '        <button type="button" id="'+inputFieldId+'_downbtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/arrow_down.png" class="form-icon" title="'+this.getLocalizedString('@form.arrayEditor.button.down',[this.datatype])+'"></button>';
 			html += '      </div>';
 		}else{
 			html += '      <div class="col-1">&nbsp;</div>';
@@ -934,25 +1143,24 @@ class ArrayEditorField extends LabeledFormField{
 		html += '  <div class="col-1">&nbsp;</div>';
 		html += '</div>';
 		parent.append(html);
-		var baseId = this.baseId+'_'+this.config.name;
 		let arrayField = this;
-		$('#'+baseId+'_addbtn').on('click',function(){
-			$('#'+baseId+'_edit').removeAttr('readonly');
-			$('#'+baseId+'_gobtn').prop('disabled',false);
-			$('#'+baseId+'_edit').focus();
-			$('#'+baseId+'_list option:selected').prop('selected', false);
+		$('#'+inputFieldId+'_addbtn').on('click',function(){
+			$('#'+inputFieldId+'_edit').removeAttr('readonly');
+			$('#'+inputFieldId+'_gobtn').prop('disabled',false);
+			$('#'+inputFieldId+'_edit').focus();
+			$('#'+inputFieldId+'_list option:selected').prop('selected', false);
 		});
-		$('#'+baseId+'_gobtn').on('click',function(){
-			var value = $('#'+baseId+'_edit').val();
-			var selectedValue = $('#'+baseId+'_list option:selected').val();
+		$('#'+inputFieldId+'_gobtn').on('click',function(){
+			var value = $('#'+inputFieldId+'_edit').val();
+			var selectedValue = $('#'+inputFieldId+'_list option:selected').val();
 			if(selectedValue){
 				//update
 				if(arrayField.datatype=='object'){
-					$('#'+baseId+'_list option:selected').val(value.replace(/'/g,'"'));
+					$('#'+inputFieldId+'_list option:selected').val(value.replace(/'/g,'"'));
 				}else{
-					$('#'+baseId+'_list option:selected').val(value);
+					$('#'+inputFieldId+'_list option:selected').val(value);
 				}
-				$('#'+baseId+'_list option:selected').text(value);
+				$('#'+inputFieldId+'_list option:selected').text(value);
 			}else{
 				//create
 				let option = null;
@@ -962,55 +1170,55 @@ class ArrayEditorField extends LabeledFormField{
 					option = '<option value="'+value+'">'+value+'</option>';
 				}
 				//var option = '<option value="'+value+'">'+value+'</option>';
-				$('#'+baseId+'_list').append(option);
+				$('#'+inputFieldId+'_list').append(option);
 			}
-			$('#'+baseId+'_editbtn').prop('disabled',false);
-			$('#'+baseId+'_delbtn').prop('disabled',false);
-			$('#'+baseId+'_upbtn').prop('disabled',false);
-			$('#'+baseId+'_downbtn').prop('disabled',false);
-			$('#'+baseId+'_list option[value=\''+value+'\']').prop('selected', true);
-			$('#'+baseId+'_edit').val('');
-			$('#'+baseId+'_edit').attr('readonly');
-			$('#'+baseId+'_gobtn').prop('disabled',true);
+			$('#'+inputFieldId+'_editbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_delbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_upbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_downbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_list option[value=\''+value+'\']').prop('selected', true);
+			$('#'+inputFieldId+'_edit').val('');
+			$('#'+inputFieldId+'_edit').attr('readonly');
+			$('#'+inputFieldId+'_gobtn').prop('disabled',true);
 		});
-		$('#'+baseId+'_delbtn').on('click',function(){
-			var selectedValue = $('#'+baseId+'_list option:selected').val();
-			var selectedOption =   $('#'+baseId+'_list option[value=\''+selectedValue+'\']');
+		$('#'+inputFieldId+'_delbtn').on('click',function(){
+			var selectedValue = $('#'+inputFieldId+'_list option:selected').val();
+			var selectedOption =   $('#'+inputFieldId+'_list option[value=\''+selectedValue+'\']');
 			selectedOption.remove();
-			$('#'+baseId+'_edit').val('');
-			$('#'+baseId+'_edit').attr('readonly');
-			$('#'+baseId+'_gobtn').prop('disabled',true);
-			$('#'+baseId+'_editbtn').prop('disabled',true);
-			$('#'+baseId+'_delbtn').prop('disabled',true);
-			$('#'+baseId+'_upbtn').prop('disabled',true);
-			$('#'+baseId+'_downbtn').prop('disabled',true);
+			$('#'+inputFieldId+'_edit').val('');
+			$('#'+inputFieldId+'_edit').attr('readonly');
+			$('#'+inputFieldId+'_gobtn').prop('disabled',true);
+			$('#'+inputFieldId+'_editbtn').prop('disabled',true);
+			$('#'+inputFieldId+'_delbtn').prop('disabled',true);
+			$('#'+inputFieldId+'_upbtn').prop('disabled',true);
+			$('#'+inputFieldId+'_downbtn').prop('disabled',true);
 		});
-		$('#'+baseId+'_editbtn').on('click',function(){
-			var selectedValue = $('#'+baseId+'_list option:selected').val();
+		$('#'+inputFieldId+'_editbtn').on('click',function(){
+			var selectedValue = $('#'+inputFieldId+'_list option:selected').val();
 			if(arrayField.datatype=='object'){
-				$('#'+baseId+'_edit').val(selectedValue.replace(/'/g,'"'));
+				$('#'+inputFieldId+'_edit').val(selectedValue.replace(/'/g,'"'));
 			}else{
-				$('#'+baseId+'_edit').val(selectedValue);
+				$('#'+inputFieldId+'_edit').val(selectedValue);
 			}
-			$('#'+baseId+'_edit').removeAttr('readonly');
-			$('#'+baseId+'_gobtn').prop('disabled',false);
-			$('#'+baseId+'_editbtn').prop('disabled',true);
-			$('#'+baseId+'_delbtn').prop('disabled',false);
-			$('#'+baseId+'_upbtn').prop('disabled',false);
-			$('#'+baseId+'_downbtn').prop('disabled',false);
-			$('#'+baseId+'_edit').focus();
+			$('#'+inputFieldId+'_edit').removeAttr('readonly');
+			$('#'+inputFieldId+'_gobtn').prop('disabled',false);
+			$('#'+inputFieldId+'_editbtn').prop('disabled',true);
+			$('#'+inputFieldId+'_delbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_upbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_downbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_edit').focus();
 		});
-		$('#'+baseId+'_list').on('change',function(){
-			$('#'+baseId+'_editbtn').prop('disabled',false);
-			$('#'+baseId+'_delbtn').prop('disabled',false);
-			$('#'+baseId+'_upbtn').prop('disabled',false);
-			$('#'+baseId+'_downbtn').prop('disabled',false);
+		$('#'+inputFieldId+'_list').on('change',function(){
+			$('#'+inputFieldId+'_editbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_delbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_upbtn').prop('disabled',false);
+			$('#'+inputFieldId+'_downbtn').prop('disabled',false);
 		});
-		$('#'+baseId+'_upbtn').on('click',function(){
-			var selectedIndex = $('#'+baseId+'_list').prop('selectedIndex');
+		$('#'+inputFieldId+'_upbtn').on('click',function(){
+			var selectedIndex = $('#'+inputFieldId+'_list').prop('selectedIndex');
 			if(selectedIndex>0){//:nth-child(0)
-				var current = $('#'+baseId+'_list :nth-child('+(selectedIndex+1)+')');
-				var prev = $('#'+baseId+'_list :nth-child('+(selectedIndex)+')');
+				var current = $('#'+inputFieldId+'_list :nth-child('+(selectedIndex+1)+')');
+				var prev = $('#'+inputFieldId+'_list :nth-child('+(selectedIndex)+')');
 				var tmp = current.val();
 				var txt = current.text();
 				current.val(prev.val());
@@ -1020,12 +1228,12 @@ class ArrayEditorField extends LabeledFormField{
 				prev.prop('selected', true);
 			}
 		});
-		$('#'+baseId+'_downbtn').on('click',function(){
-			var selectedIndex = $('#'+baseId+'_list').prop('selectedIndex');
-			var maxIndex = $('#'+baseId+'_list option').length-1;
+		$('#'+inputFieldId+'_downbtn').on('click',function(){
+			var selectedIndex = $('#'+inputFieldId+'_list').prop('selectedIndex');
+			var maxIndex = $('#'+inputFieldId+'_list option').length-1;
 			if(selectedIndex<maxIndex){
-				var current = $('#'+baseId+'_list :nth-child('+(selectedIndex+1)+')');
-				var next = $('#'+baseId+'_list :nth-child('+(selectedIndex+2)+')');
+				var current = $('#'+inputFieldId+'_list :nth-child('+(selectedIndex+1)+')');
+				var next = $('#'+inputFieldId+'_list :nth-child('+(selectedIndex+2)+')');
 				var tmp = current.val();
 				var txt = current.text();
 				current.val(next.val());
@@ -1035,6 +1243,15 @@ class ArrayEditorField extends LabeledFormField{
 				next.prop('selected', true);
 			}
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -1100,12 +1317,13 @@ class DatatypeField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
 		let size = 10;
 		if(typeof this.config.size!='undefined'){
 			size = this.config.size;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'" id="'+this.config.siteId+'">';
 		html += '  </div>';
@@ -1114,6 +1332,15 @@ class DatatypeField extends LabeledFormField{
 		}
 		html += '</div>';
 		parent.append(html);
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		var innerForm = npaUi.getComponent(this.config.formRef);
@@ -1149,6 +1376,7 @@ class UploadField extends LabeledFormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let buttonLabel = 'Upload';
 		if(typeof this.config.uploadButtonLabel!='undefined'){
@@ -1158,20 +1386,29 @@ class UploadField extends LabeledFormField{
 		if(typeof this.config.actionId!='undefined'){
 			action = this.config.actionId;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-7">';
-		html += '     <input class="form-control" type="file" id="'+this.baseId+'_'+this.config.name+'" disabled/>';
+		html += '     <input class="form-control" type="file" id="'+inputFieldId+'" disabled/>';
 		html += '  </div>';
 		html += '  <div class="col-3">';
-		html += '    <button id="'+this.baseId+'_'+this.config.name+'_submit" type="button" class="btn btn-primary" disabled>'+this.getLocalizedString(buttonLabel)+'</button>';
+		html += '    <button id="'+inputFieldId+'_submit" type="button" class="btn btn-primary" disabled>'+this.getLocalizedString(buttonLabel)+'</button>';
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
 		var source = this;
-		$('#'+this.baseId+'_'+this.config.name+'_submit').on('click',function(){
-			npaUi.fireEvent(action,{"action": action,"field": $('#'+source.baseId+'_'+source.config.name)});
+		$('#'+inputFieldId+'_submit').on('click',function(){
+			npaUi.fireEvent(action,{"action": action,"field": $('#'+inputFieldId)});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		var inputFieldId = this.baseId+'_'+this.config.name;
@@ -1198,18 +1435,28 @@ class ButtonField extends FormField{
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += '  <div class="col-2">&nbsp;</div>';
 		html += '  <div class="col-10">';
-		html += '     <button type="button" id="'+this.baseId+'_'+this.config.name+'" class="btn btn-'+this.config.buttonType+'" disabled>'+this.getLocalizedString(this.config.label)+'</button>';
+		html += '     <button type="button" id="'+inputFieldId+'" class="btn btn-'+this.config.buttonType+'" disabled>'+this.getLocalizedString(this.config.label)+'</button>';
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
 		var source = this;
-		$('#'+this.baseId+'_'+this.config.name).on('click',function(){
-			npaUi.fireEvent(source.config.actionId,{"action": source.config.actionId,"field": $('#'+source.baseId+'_'+source.config.name)});
+		$('#'+inputFieldId).on('click',function(){
+			npaUi.fireEvent(source.config.actionId,{"action": source.config.actionId,"field": $('#'+inputFieldId)});
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		var inputFieldId = this.baseId+'_'+this.config.name;
@@ -1233,12 +1480,14 @@ class PlaceholderField extends LabeledFormField{
 		super(config,form);
 	}
 	render(parent){
+		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
 		let size = 10;
 		if(typeof this.config.size!='undefined'){
 			size = this.config.size;
 		}
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'" id="'+this.config.siteId+'">';
 		html += '  </div>';
@@ -1247,6 +1496,15 @@ class PlaceholderField extends LabeledFormField{
 		}
 		html += '</div>';
 		parent.append(html);
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	vetoRaised(){
 		return false;
@@ -1338,7 +1596,7 @@ class MultipleReferenceEditorField extends LabeledFormField{
 		}
 	}
 	adaptFormat(inputData){
-		let datasource = this.getConfiguration().datasource;
+		let datasource = this.config.datasource;
 		let dsType = 'local';
 		if(typeof datasource.type!='undefined'){
 			dsType = datasource.type;
@@ -1367,8 +1625,9 @@ class MultipleReferenceEditorField extends LabeledFormField{
 			visibleRowCount = this.config.rows;
 		}
 		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-4">';
 		html += '    '+this.getLocalizedString('@form.multiple.reference.available')+'<br>';
@@ -1377,12 +1636,12 @@ class MultipleReferenceEditorField extends LabeledFormField{
 		html += '  </div>';
 		html += '  <div class="col-1">';
 		html += '    <br>';
-		html += '    <button type="button" id="'+this.baseId+'_'+this.config.name+'_addBtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/add.png" title="'+this.getLocalizedString('@form.multiple.reference.button.add',[this.config.label])+'" class="form-icon"></button><br>';
-		html += '    <button type="button" id="'+this.baseId+'_'+this.config.name+'_removeBtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/delete.png" title="'+this.getLocalizedString('@form.multiple.reference.button.remove',[this.config.label])+'" class="form-icon"></button><br>';
+		html += '    <button type="button" id="'+inputFieldId+'_addBtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/add.png" title="'+this.getLocalizedString('@form.multiple.reference.button.add',[this.config.label])+'" class="form-icon"></button><br>';
+		html += '    <button type="button" id="'+inputFieldId+'_removeBtn" class="btn btn-sm form-btn-icon" disabled><img src="/uiTools/img/silk/delete.png" title="'+this.getLocalizedString('@form.multiple.reference.button.remove',[this.config.label])+'" class="form-icon"></button><br>';
 		html += '  </div>';
 		html += '  <div class="col-4">';
 		html += '    '+this.getLocalizedString('@form.multiple.reference.associated')+'<br>';
-		html += '    <select id="'+this.baseId+'_'+this.config.name+'" class="form-select" size="'+visibleRowCount+'" disabled>';
+		html += '    <select id="'+inputFieldId+'" class="form-select" size="'+visibleRowCount+'" disabled>';
 		html += '    </select>';
 		html += '  </div>';
 		html += '  <div class="col-1">&nbsp;</div>';
@@ -1416,12 +1675,12 @@ class MultipleReferenceEditorField extends LabeledFormField{
 		});
 		var field = this;
 		$('#'+this.baseId+'_source_'+this.config.name).on('change',function(e){
-			$('#'+field.baseId+'_'+field.config.name+'_addBtn').prop('disabled',false);
+			$('#'+inputFieldId+'_addBtn').prop('disabled',false);
 		});
-		$('#'+this.baseId+'_'+this.config.name).on('change',function(e){
-			$('#'+field.baseId+'_'+field.config.name+'_removeBtn').prop('disabled',false);
+		$('#'+inputFieldId).on('change',function(e){
+			$('#'+inputFieldId+'_removeBtn').prop('disabled',false);
 		});
-		$('#'+this.baseId+'_'+this.config.name+'_addBtn').on('click',function(){
+		$('#'+inputFieldId+'_addBtn').on('click',function(){
 			var selectedId = $('#'+field.baseId+'_source_'+field.config.name+' option:selected').val();
 			var selectedOption =  $('#'+field.baseId+'_source_'+field.config.name+' option[value=\''+selectedId+'\']');
 			//is the selected option already right
@@ -1434,14 +1693,23 @@ class MultipleReferenceEditorField extends LabeledFormField{
 			});
 			if(!itemAlreadyAssociated || typeof field.config.unique=='undefined' || !field.config.unique){
 				var html = '<option value="'+selectedId+'" title="'+selectedOption.prop('title')+'">'+selectedOption.text()+'</option>';
-				$('#'+field.baseId+'_'+field.config.name).append(html);
+				$('#'+inputFieldId).append(html);
 			}
 		});
-		$('#'+this.baseId+'_'+this.config.name+'_removeBtn').on('click',function(){
-			var selectedId = $('#'+field.baseId+'_'+field.config.name+' option:selected').val();
-			var selectedOption =  $('#'+field.baseId+'_'+field.config.name+' option[value=\''+selectedId+'\']');
+		$('#'+inputFieldId+'_removeBtn').on('click',function(){
+			var selectedId = $('#'+inputFieldId+' option:selected').val();
+			var selectedOption =  $('#'+inputFieldId+' option[value=\''+selectedId+'\']');
 			selectedOption.remove();
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		var inputFieldId = this.baseId+'_'+this.config.name;
@@ -1616,7 +1884,7 @@ class SingleReferenceEditorField extends LabeledFormField{
 		}
 	}
 	adaptFormat(inputData){
-		let datasource = this.getConfiguration().datasource;
+		let datasource = this.config.datasource;
 		let dsType = 'local';
 		if(typeof datasource.type!='undefined'){
 			dsType = datasource.type;
@@ -1647,7 +1915,7 @@ class SingleReferenceEditorField extends LabeledFormField{
 			size = this.config.size;
 		}
 		var html = '';
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'">';
 		html += '    <select id="'+inputFieldId+'" class="form-select" disabled>';
@@ -1696,6 +1964,15 @@ class SingleReferenceEditorField extends LabeledFormField{
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
 	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
+	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(editing){
@@ -1739,7 +2016,7 @@ class RichTextEditorField extends LabeledFormField{
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
-		html += '<div class="row form-row">';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-10">';
 		if(typeof this.config.buttons!='undefined'){
@@ -1775,6 +2052,15 @@ class RichTextEditorField extends LabeledFormField{
 			setTimeout(function(){ editor.disable(); },500);
 			source.form.editors[source.config.name] = editor;
 		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -1972,7 +2258,7 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		for(var fieldId in this.fieldCache){
 			let field = this.fieldCache[fieldId];
 			console.log('checking veto for field '+fieldId);
-			if(field.vetoRaised()){
+			if(field.editable && field.vetoRaised()){
 				errorFound = true;
 			}
 			console.log('veto: '+errorFound);
@@ -1993,5 +2279,8 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 			let field = this.fieldCache[fieldId];
 			field.onFormEvent(event);
 		}
+	}
+	getEditor(fieldName){
+		return this.editors[fieldName];
 	}
 }

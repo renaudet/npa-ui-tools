@@ -83,11 +83,11 @@ function flash(msg,data=[]){
  
 npaUiCore.Notifier = class Notifier extends NpaUiComponent{
 	initialize(then){
-		$.loadCss('/uiTools/css/npaUiTheme.css',then);
+		$.loadCss('/uiTools/css/notifier.css',then);
 	}
 	render(){
 		let html = '';
-		html += '<div id="uiToolsNotifications" class="toast-container top-0 end-0 p-3">';
+		html += '<div id="uiToolsNotifications" class="toast-container top-0 end-0 p-4">';
 		html += '</div>';
 		this.parentDiv().html(html);
 	}

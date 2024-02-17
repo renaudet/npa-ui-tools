@@ -34,6 +34,8 @@ Start the NPA server on the test application with a command-line like:
 
 Then open your browser on url http://localhost:9080/
 
+**Notice** that NPA requires some environment variable to be set before starting the application. Please, refer to the NPA's documentation for more details.
+
 ## Develop with NPA UI
 
 NPA UI uses externaly defined Components that can be configured through JSON files.
@@ -69,7 +71,7 @@ Then, NPA components are added to the page using `<div>` declarations by adding 
 	<div id="cardPlaceholder" class="npaUi" data-config="/static/config/cardConfig.json">
 		<div>
 			<div id="datatablePlaceholder" class="npaUi" data-config="/static/config/datatableConfig.json"></div>
-			<div id="editoPlaceholder" class="npaUi" data-config="/static/config/editorConfig.json"></div>
+			<div id="editorPlaceholder" class="npaUi" data-config="/static/config/editorConfig.json"></div>
 		</div>
 	</div>
 	<div id="notifierPlaceholder" class="npaUi" data-config="/static/config/notifierConfig.json"></div>
@@ -120,6 +122,55 @@ $(document).ready(function(){
         npaUi.render();
     });
 });
+```
+
+Notice the callback  _onPageReady_  used to execute code once all the page components have been loaded and rendered properly.
+
+As dynamically loading specific configuration files for each component on the page may have a severe impact in terms of performance, it is possible to put the component configurations in a single JSON file using a named reference like this:
+
+```json
+{
+    "myCardReference": {
+	    "id":"card_01",
+	    "version": "1.0.0",
+	    "type": "npaTest.Card",
+	    "configuration": {
+	        ...
+	    }
+    }
+}
+```
+
+The JSON file may be loaded by the npaUi runtime the following way:
+
+```javascript
+$(document).ready(function(){
+	npaUi.loadConfigFrom('<path to json file>.json',function(){
+	    npaUi.initialize(function(){
+	        npaUi.onComponentLoaded = onPageReady;
+	        npaUi.render();
+	    });
+    });
+});
+```
+
+In the html page, NPA.ui components should now use a data-ref instead of a data-config:
+  
+```html
+<body>
+	<div id="navBarPlaceholder" class="npaUi" data-ref="myNavbarReference"></div>
+	<div id="cardPlaceholder" class="npaUi" data-ref="myCardReference">
+		<div>
+			<div id="datatablePlaceholder" class="npaUi" data-ref="myDatatableReference"></div>
+			<div id="editorPlaceholder" class="npaUi" data-ref="myEditorReference"></div>
+		</div>
+	</div>
+	<div id="notifierPlaceholder" class="npaUi" data-ref="myNotifierReference"></div>
+	<script src="/js/jquery-3.6.3.min.js"></script>
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/uiTools/js/npaUiCore.js"></script>
+	<script src="/static/js/homePage.js"></script>
+</body>
 ```
 
 ## Built-in components

@@ -1,0 +1,9 @@
+/***
+ * notifier.css - default CSS file for the NPA UI Notifier Component
+ * Copyright 2024 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+.uiToolsNotification {
+	--bs-toast-max-width: 600px;
+}

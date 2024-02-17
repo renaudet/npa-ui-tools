@@ -6,7 +6,6 @@
 const DEPTS = [
 	{"type": "css","uri": "/css/codemirror.css"},
 	{"type": "css","uri": "/css/codeMirror/abcdef.css"},
-	{"type": "css","uri": "/css/codeMirror/ambiance.css"},
 	{"type": "css","uri": "/uiTools/css/editor.css"},
 	{"type": "js","uri": "/js/codemirror.js"},
 	{"type": "js","uri": "/js/codeMirror/autorefresh.js"},
@@ -79,10 +78,12 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 		this.editor = CodeMirror.fromTextArea(textarea, {
 			lineNumbers: true,
 			autoRefresh:true,
-			theme: 'abcdef',
+			theme: "abcdef",
 			mode:  "javascript",
 			readOnly: readonly
 		});
+		let source = this;
+		setTimeout(function(){ source.editor.setOption("mode","javascript"); },100);
 		if(typeof config.height!='undefined'){
 			this.editor.setSize(null,config.height);
 		}else{
