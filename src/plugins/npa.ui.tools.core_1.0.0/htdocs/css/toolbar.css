@@ -38,3 +38,10 @@
 	border-left: 1px solid #a0a0a0;
 	padding-bottom: 5px;
 }
+
+.toolbar-symbol {
+	font-size: 1.2rem;
+	color: #000000;
+	padding-bottom: 5px;
+	display: inline-block;
+}

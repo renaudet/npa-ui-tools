@@ -20,7 +20,12 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 					html += '<span class="toolbar-separator"></span>';
 				}else{
 					html += '<button id="'+this.getId()+'_'+action.actionId+'" type="button" class="btn btn-sm toolbar-btn" data-action="'+action.actionId+'">';
-					html += '<img src="'+action.icon+'" title="'+this.getLocalizedString(action.label)+'" class="toolbar-icon">';
+					if(typeof action.icon!='undefined'){
+						html += '<img src="'+action.icon+'" title="'+this.getLocalizedString(action.label)+'" class="toolbar-icon">';
+					}
+					if(typeof action.symbol!='undefined'){
+						html += '<span class="toolbar-symbol">'+action.symbol+'</span>';
+					}
 					html += '</button>';
 				}
 			}
