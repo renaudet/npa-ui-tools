@@ -1,0 +1,13 @@
+/***
+ * navBar.css - default CSS file for the NPA UI Panel Component
+ * Copyright 2024 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+.panel {
+	border: 1px solid #c3c3c3;
+	border-radius: 0.2rem;
+	box-shadow: 1px 1px 3px #a0a0a0;
+	background-color: #ffffff;
+	margin-bottom: 5px;
+}
