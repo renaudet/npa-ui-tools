@@ -323,6 +323,7 @@ npaUi = {
 			}
 		}else{
 			console.log('NPA UI - undefined Component type '+componentType);
+			console.log(this.componentMap);
 		}
 	},
 	unLoad: function(componentId){
