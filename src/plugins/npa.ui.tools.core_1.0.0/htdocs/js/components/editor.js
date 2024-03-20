@@ -112,6 +112,8 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 	}
 	setReadonly(readonly){
 		this.editor.setOption('readOnly',readonly);
+		let comp = this;
+		setTimeout(function(){ comp.editor.refresh();comp.editor.focus();},200);
 	}
 	setText(txt){
 		this.editor.setValue(txt);

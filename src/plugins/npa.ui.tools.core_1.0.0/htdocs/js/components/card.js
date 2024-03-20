@@ -44,7 +44,7 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 			html += '  <ul class="list-group list-group-flush">';
 			html += '    <li id="'+contentDivId+'" class="list-group-item"></li>';
 			html += '  </ul>';
-			html += '  <div id="statusBar" class="card-footer" style="padding-top: 0px;padding-bottom: 0px;padding-left: 5px;">&nbsp;</div>';
+			html += '  <div id="'+this.getId()+'_status" class="card-footer npa-card-footer" style="padding-top: 0px;padding-bottom: 0px;padding-left: 5px;">&nbsp;</div>';
 			html += '</div>';
 			this.parentDiv().html(html);
 			if(typeof config.height!='undefined'){
@@ -67,5 +67,11 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 	}
 	setIcon(iconPath){
 		$('#'+this.getId()+'_icon').prop('src',iconPath);
+	}
+	setStatus(txt){
+		$('#'+this.getId()+'_status').html(txt);
+	}
+	clearStatus(txt){
+		$('#'+this.getId()+'_status').empty();
 	}
 }

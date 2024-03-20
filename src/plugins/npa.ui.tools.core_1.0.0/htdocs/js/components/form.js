@@ -933,7 +933,7 @@ class SourceEditorField extends LabeledFormField{
 		if(typeof this.config.type!='undefined' && this.config.type=='javascript'){
 			editorMode = 'javascript';
 		}
-		console.log('CodeMirror editor mode is: '+editorMode);
+		//console.log('CodeMirror editor mode is: '+editorMode);
 		loadDeps(CODE_MIRROR_DEPTS,function(){
 			var textArea = document.getElementById(inputFieldId);
 			source.form.editors[source.config.name] = CodeMirror.fromTextArea(textArea, {
