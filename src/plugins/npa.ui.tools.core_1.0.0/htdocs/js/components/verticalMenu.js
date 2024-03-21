@@ -54,7 +54,7 @@ npaUiCore.VerticalMenu = class VerticalMenu extends NpaUiComponent{
 				let contentDiv = childs[firstMenuItem.id];
 				contentDiv.css('display','inline');
 			}
-			
+			let verticalMenu = this;
 			$('.npa-vertical-item').on('click',function(){
 				let id = $(this).attr('id');
 				for(var menuRef in childs){
@@ -64,6 +64,7 @@ npaUiCore.VerticalMenu = class VerticalMenu extends NpaUiComponent{
 					}else{
 						div.css('display','inline');
 					}
+					npaUi.fireEvent('menu.item.selected',{"source": verticalMenu.getId(),"menu": menuRef});
 				}
 			});
 		}
