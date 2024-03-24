@@ -484,8 +484,12 @@ class CheckField extends FormField{
 	}
 	setData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
-		if(typeof parentObj[this.config.name]!='undefined' && parentObj[this.config.name]){
-			$('#'+inputFieldId).prop('checked',true);
+		if(typeof parentObj[this.config.name]!='undefined'){
+			if(parentObj[this.config.name]){
+				$('#'+inputFieldId).prop('checked',true);
+			}else{
+				$('#'+inputFieldId).prop('checked',false);
+			}
 		}else{
 			if(typeof this.config.default!='undefined'){
 				$('#'+inputFieldId).prop('checked',this.config.default);
