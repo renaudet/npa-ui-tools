@@ -43,7 +43,7 @@ function createNotification(type,message,data=[]){
 	html += '    <small>'+msgType+'</small>';
 	html += '    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>';
 	html += '  </div>';
-	html += '  <div class="toast-body" style="background-color: #fff;">';
+	html += '  <div class="toast-body" style="background-color: #fff;max-height: 800px;overflow: auto;">';
 	html += npaUi.getLocalizedString(message,data);
 	html += '  </div>';
 	html += '</div>';
