@@ -252,4 +252,16 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			$('.datatableAction').unbind();
 		}
 	}
+	applyFilter(filterExpr){
+		//this.getId()+'_table
+		var normalizedFilterStr = filterExpr?filterExpr.toUpperCase():'';
+		$('#'+this.getId()+'_table tbody tr').each(function (index, value) {
+			var content = $(this).html();
+			if(content.toUpperCase().indexOf(normalizedFilterStr)>=0){
+				$(this).show();
+			}else{
+				$(this).hide();
+			}
+		});
+	}
 }

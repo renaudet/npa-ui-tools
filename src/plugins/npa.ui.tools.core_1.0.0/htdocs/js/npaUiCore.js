@@ -207,7 +207,7 @@ npaUi = {
 				npaUi.componentInstances[config.id] = new NpaUiComponentProxy(namespace,type,divId,config);
 				npaUi.componentByDivId[divId] = npaUi.componentInstances[config.id];
 				npaUi.componentInstances[config.id].initialize(function(){
-					console.log('first rendering for component '+type+' from namespace '+namespace);
+					console.log('first rendering for component #'+config.id+' of type '+type+' from namespace '+namespace);
 					npaUi.componentInstances[config.id].render();
 					$('#'+divId).data('loaded','true');
 					if(config.configuration.selectionListener && config.configuration.selectionProvider){
