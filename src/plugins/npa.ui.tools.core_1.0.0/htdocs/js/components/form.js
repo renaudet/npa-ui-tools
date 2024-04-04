@@ -2053,7 +2053,7 @@ class RichTextEditorField extends LabeledFormField{
 			var editor = new RichTextEditor(parentId+'_rte',width,height);
 			editor.controlObject = 'NpaEditorControls';
 			editor.init($('#'+parentId).get(0));
-			setTimeout(function(){ editor.disable(); },500);
+			editor.disable();
 			source.form.editors[source.config.name] = editor;
 		});
 	}
@@ -2067,6 +2067,7 @@ class RichTextEditorField extends LabeledFormField{
 		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
+		console.log('RichTextEditorField#setEnabled('+editing+')');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(typeof this.form.editors[this.config.name]!='undefined'){
 			if(editing){
@@ -2082,7 +2083,7 @@ class RichTextEditorField extends LabeledFormField{
 			}
 		}else{
 			let editor = this;
-			setTimeout(function(){ editor.setData(parentObj); },500);
+			setTimeout(function(){ editor.setEnabled(editing); },500);
 		}
 	}
 	setFocus(){

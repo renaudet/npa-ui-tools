@@ -355,7 +355,16 @@ npaUi = {
 			});
 		});
 	},
+	localizeTags: function(){
+		let framwk = this;
+		$('var').each(function(index,element){
+			let varTag = $(this);
+			let localizedString = framwk.getLocalizedString('@'+varTag.text());
+			varTag.html(localizedString);
+		});
+	},
 	onRenderingCompleted: function(){
+		this.localizeTags();
 		this.onComponentLoaded();
 		$(window).trigger('resize');
 	},

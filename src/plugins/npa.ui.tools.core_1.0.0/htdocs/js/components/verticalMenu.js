@@ -63,8 +63,9 @@ npaUiCore.VerticalMenu = class VerticalMenu extends NpaUiComponent{
 						div.css('display','none');
 					}else{
 						div.css('display','inline');
+						npaUi.fireEvent('menu.item.selected',{"source": verticalMenu.getId(),"menu": menuRef});
 					}
-					npaUi.fireEvent('menu.item.selected',{"source": verticalMenu.getId(),"menu": menuRef});
+					//npaUi.fireEvent('menu.item.selected',{"source": verticalMenu.getId(),"menu": menuRef});
 				}
 			});
 		}
