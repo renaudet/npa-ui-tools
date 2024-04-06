@@ -42,7 +42,7 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 			html += '    <img id="'+this.getId()+'_icon" src="'+config.icon+'" width="20" style="padding-bottom: 3px;"><span id="scafPageTitle" style="padding-left: 15px;">'+this.getLocalizedString(config.label)+'</span>&nbsp;&nbsp;&nbsp;<span class="visually-hidden spinner-border spinner-border-sm text-light" aria-hidden="true"></span>';
 			html += '  </div>';
 			html += '  <ul class="list-group list-group-flush">';
-			html += '    <li id="'+contentDivId+'" class="list-group-item"></li>';
+			html += '    <li id="'+contentDivId+'" class="list-group-item card-working-area"></li>';
 			html += '  </ul>';
 			html += '  <div id="'+this.getId()+'_status" class="card-footer npa-card-footer" style="padding-top: 0px;padding-bottom: 0px;padding-left: 5px;">&nbsp;</div>';
 			html += '</div>';

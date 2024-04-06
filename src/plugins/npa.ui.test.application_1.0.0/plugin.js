@@ -5,7 +5,6 @@
  
 const Plugin = require('../../npaUtil.js');
 const ENV_NAME = 'APPLICATION_NAME';
-const ENV_APPLICATION_PORT = 'APPLICATION_PORT';
 const DS_REFERENCE = 'test-ds';
 
 var plugin = new Plugin();
@@ -22,11 +21,7 @@ plugin.start = function(){
 		}else{
 			if(exists){
 				var httpServer = plugin.getService('http');
-				if(typeof process.env[ENV_APPLICATION_PORT]!='undefined'){
-					httpServer.startListener(process.env[ENV_APPLICATION_PORT]);
-				}else{
-					httpServer.startListener();
-				}
+				httpServer.startListener();
 			}else{
 				couchService.createDatabase(DS_REFERENCE,function(err,created){
 					if(err){
@@ -34,11 +29,7 @@ plugin.start = function(){
 						plugin.error(JSON.stringify(err));
 					}else{
 						var httpServer = plugin.getService('http');
-						if(typeof process.env[ENV_APPLICATION_PORT]!='undefined'){
-							httpServer.startListener(process.env[ENV_APPLICATION_PORT]);
-						}else{
-							httpServer.startListener();
-						}
+						httpServer.startListener();
 					}
 				});
 			}
