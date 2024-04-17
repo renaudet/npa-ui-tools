@@ -26,6 +26,16 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 						html += this.getLocalizedString(action.label);
 						html += '</button>';
 					}
+					if('conditional'==action.type){
+						html += '<button id="'+this.getId()+'_'+action.actionId+'" type="button" class="btn btn-sm toolbar-btn" data-action="'+action.actionId+'" style="display: none;">';
+						if(typeof action.icon!='undefined'){
+							html += '<img src="'+action.icon+'" title="'+this.getLocalizedString(action.label)+'" class="toolbar-icon">';
+						}
+						if(typeof action.symbol!='undefined'){
+							html += '<span class="toolbar-symbol">'+action.symbol+'</span>';
+						}
+						html += '</button>';
+					}
 				}else{
 					html += '<button id="'+this.getId()+'_'+action.actionId+'" type="button" class="btn btn-sm toolbar-btn" data-action="'+action.actionId+'">';
 					if(typeof action.icon!='undefined'){
@@ -91,8 +101,22 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 			let btnActionId = $(this).data('action');
 			if(btnActionId==actionId){
 				$(this).prop('disabled',!enableState);
+				$(this).css('display','inline');
 			}
 		});
+	}
+	setSpecificConfig(actionId,config){
+		console.log('npaUi#toolbar#setSpecificConfig('+actionId+')');
+		console.log(config);
+		let buttonId = this.getId()+'_'+actionId;
+		if($('#'+buttonId).length==1){
+			if(config.icon){
+				$('#'+buttonId+' img').prop('src',config.icon);
+			}
+			if(config.label){
+				$('#'+buttonId+' img').prop('title',config.label);
+			}
+		}
 	}
 	onItemSelected(item){
 		console.log('toolbar#onItemSelected()');
