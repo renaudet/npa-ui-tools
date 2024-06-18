@@ -30,7 +30,7 @@ npaUiCore.DataManager = class DataManager extends NpaUiComponent{
 		this.config.configuration = config;
 	}
 	findByPrimaryKey(pk){
-		console.log('DataManager#findByPrimaryKey()');
+		console.log('DataManager#findByPrimaryKey('+pk+')');
 		let interactionConfig = this.getConfiguration().findByPrimaryKey;
 		let type = 'local';
 		let method = 'GET';
@@ -321,10 +321,10 @@ npaUiCore.DataManager = class DataManager extends NpaUiComponent{
 	}
 	substitute(pattern,data){
 		console.log('DataManager#substitute('+pattern+',data)');
-		//console.log('data: '+JSON.stringify(data));
+		console.log('data: '+JSON.stringify(data));
 		let obj = '';
 		if(pattern.indexOf('@')>=0){
-		let toEval = 'obj = '+pattern.replace(/@/g,'data')+';';
+			let toEval = 'obj = '+pattern.replace(/@/g,'data')+';';
 			try{
 				eval(toEval);
 			}catch(t){

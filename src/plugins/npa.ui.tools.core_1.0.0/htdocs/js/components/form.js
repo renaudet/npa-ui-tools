@@ -1991,10 +1991,9 @@ class SingleReferenceEditorField extends LabeledFormField{
 	}
 	setData(parentObj){
 		let inputFieldId = this.baseId+'_'+this.config.name;
+		$('#'+inputFieldId+'  option:first').prop('selected', true);
 		if(typeof parentObj[this.config.name]!='undefined'){
 			$('#'+inputFieldId).val(parentObj[this.config.name]);
-		}else{
-			$('#'+inputFieldId+'  :nth-child(0)').prop('selected', true);
 		}
 	}
 	assignData(parentObj){

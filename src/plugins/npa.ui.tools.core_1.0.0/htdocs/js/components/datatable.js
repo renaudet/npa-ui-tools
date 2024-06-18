@@ -215,6 +215,31 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 				if('color'==column.type){
 					let colorValue = item[column.field];
 					html += '<span class="column-type-color" style="background-color: '+colorValue+';"><span class="column-type-color-tooltip">&nbsp;'+colorValue+'&nbsp;</span>&nbsp;</span>';
+				}else
+				if('reference'==column.type){
+					let datatypeId = item[column.field];
+					html += '<span id="'+datatypeId+'">pending...</span>';
+					if(column.datasource && 'managed'==column.datasource.type){
+						let dataManager = npaUi.getComponent(column.datasource.manager);
+						dataManager.findByPrimaryKey({"id": datatypeId}).then(function(data){
+							if(column.processor){
+								let spanInnerHtml = '';
+								let toEval = 'spanInnerHtml += '+column.processor.replace(/@/g,'data').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
+								try{
+									eval(toEval);
+								}catch(evalException){
+									console.log(toEval);
+									console.log(evalException);
+									spanInnerHtml += '???';
+								}
+								$('#'+datatypeId).html(spanInnerHtml);
+							}else{
+								$('#'+datatypeId).html(datatypeId);
+							}
+						}).onError(function(){
+							$('#'+datatypeId).html(datatypeId);
+						});
+					}
 				}else{
 					html += '?';
 				}
