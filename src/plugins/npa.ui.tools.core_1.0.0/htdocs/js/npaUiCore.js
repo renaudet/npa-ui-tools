@@ -21,7 +21,9 @@ jQuery.loadScript = function (uri, callback){
         success: function(){},
         async: true
     }).done(function(data){
-		callback(data);
+		if(callback){
+			callback(data);
+		}
 	});
 }
 
