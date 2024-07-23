@@ -5,15 +5,17 @@
  
 npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 	pluggableActionHandlers = {};
+	toolbarBtnClass = 'btn-';
 	initialize(then){
 		$.loadCss('/uiTools/css/toolbar.css',then);
+		this.toolbarBtnClass += this.getId();
 	}
 	render(){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let html = '';
 			html += '<div id="'+this.getId()+'" class="toolbar">';
-			$('.toolbar-btn').off('.'+this.getId());
+			$('.'+this.toolbarBtnClass).off('.'+this.getId());
 			for(var i=0;i<config.actions.length;i++){
 				let action = config.actions[i];
 				if(typeof action.type!='undefined'){
@@ -22,12 +24,12 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 					}
 					if('control'==action.type && 'filter'==action.kind){
 						html += '&nbsp;<input id="'+this.getId()+'_filter_'+action.actionId+'" type="text" style="width: '+action.width+'px;line-height: 0.7rem;vertical-align: middle;">';
-						html += '<button class="toolbar-btn" style="line-height: 1.2rem;vertical-align: middle;" type="button" data-action="'+action.actionId+'">';
+						html += '<button class="toolbar-btn '+this.toolbarBtnClass+'" style="line-height: 1.2rem;vertical-align: middle;" type="button" data-action="'+action.actionId+'">';
 						html += this.getLocalizedString(action.label);
 						html += '</button>';
 					}
 					if('conditional'==action.type){
-						html += '<button id="'+this.getId()+'_'+action.actionId+'" type="button" class="btn btn-sm toolbar-btn" data-action="'+action.actionId+'" style="display: none;">';
+						html += '<button id="'+this.getId()+'_'+action.actionId+'" type="button" class="btn btn-sm toolbar-btn '+this.toolbarBtnClass+'" data-action="'+action.actionId+'" style="display: none;">';
 						if(typeof action.icon!='undefined'){
 							html += '<img src="'+action.icon+'" title="'+this.getLocalizedString(action.label)+'" class="toolbar-icon">';
 						}
@@ -37,7 +39,7 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 						html += '</button>';
 					}
 				}else{
-					html += '<button id="'+this.getId()+'_'+action.actionId+'" type="button" class="btn btn-sm toolbar-btn" data-action="'+action.actionId+'">';
+					html += '<button id="'+this.getId()+'_'+action.actionId+'" type="button" class="btn btn-sm toolbar-btn '+this.toolbarBtnClass+'" data-action="'+action.actionId+'">';
 					if(typeof action.icon!='undefined'){
 						html += '<img src="'+action.icon+'" title="'+this.getLocalizedString(action.label)+'" class="toolbar-icon">';
 					}
@@ -50,7 +52,7 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 			html += '</div>';
 			this.parentDiv().html(html);
 			let toolbar = this;
-			$('.toolbar-btn').on('click.'+this.getId(),function(){
+			$('.'+this.toolbarBtnClass).on('click.'+this.getId(),function(){
 				let actionId = $(this).data('action');
 				toolbar.triggersActionEvent(actionId);
 			});
@@ -97,7 +99,7 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 	}
 	setEnabled(actionId,enableState){
 		console.log('npaUi#toolbar#setEnabled('+actionId+','+enableState+')');
-		$('.toolbar-btn').each(function(){
+		$('.'+this.toolbarBtnClass).each(function(){
 			let btnActionId = $(this).data('action');
 			if(btnActionId==actionId){
 				$(this).prop('disabled',!enableState);
