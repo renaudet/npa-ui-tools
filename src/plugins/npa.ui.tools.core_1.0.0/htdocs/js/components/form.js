@@ -147,7 +147,13 @@ class TextField extends LabeledFormField{
 	}
 	setData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
-		$('#'+inputFieldId).val(parentObj[this.config.name]);
+		if(parentObj[this.config.name]){
+			$('#'+inputFieldId).val(parentObj[this.config.name]);
+		}else{
+			if(this.config.default && this.config.default.length>0){
+				$('#'+inputFieldId).val(this.config.default);
+			}
+		}
 		$('#'+inputFieldId).removeClass('is-invalid');
 	}
 	assignData(parentObj){
