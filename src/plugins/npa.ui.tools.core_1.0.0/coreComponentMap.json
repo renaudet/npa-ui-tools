@@ -13,5 +13,6 @@
 	"TabPane": {"version": "1.0.0","dependency":"/uiTools/js/components/tabpane.js"},
 	"Carousel": {"version": "1.0.0","dependency":"/uiTools/js/components/carousel.js"},
 	"VerticalMenu": {"version": "1.0.0","dependency":"/uiTools/js/components/verticalMenu.js"},
-	"HtmlImport": {"version": "1.0.0","dependency":"/uiTools/js/components/htmlImport.js"}
+	"HtmlImport": {"version": "1.0.0","dependency":"/uiTools/js/components/htmlImport.js"},
+	"DynamicActionLoader": {"version": "1.0.0","dependency":"/uiTools/js/components/dynamicActionLoader.js"}
 }

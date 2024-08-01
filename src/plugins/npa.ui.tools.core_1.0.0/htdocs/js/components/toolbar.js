@@ -7,8 +7,8 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 	pluggableActionHandlers = {};
 	toolbarBtnClass = 'btn-';
 	initialize(then){
-		$.loadCss('/uiTools/css/toolbar.css',then);
 		this.toolbarBtnClass += this.getId();
+		$.loadCss('/uiTools/css/toolbar.css',then);
 	}
 	render(){
 		let config = this.getConfiguration();

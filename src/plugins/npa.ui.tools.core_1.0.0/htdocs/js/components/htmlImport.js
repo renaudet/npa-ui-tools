@@ -7,6 +7,8 @@ npaUiCore.HtmlImport = class HtmlImport extends NpaUiComponent{
 	initialize(then){
 		if(this.getConfiguration().stylesheet){
 			$.loadCss(this.getConfiguration().stylesheet,then);
+		}else{
+			then();
 		}
 	}
 	render(){
