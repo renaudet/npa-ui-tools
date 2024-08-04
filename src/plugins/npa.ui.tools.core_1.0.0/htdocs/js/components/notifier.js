@@ -52,7 +52,7 @@ function createNotification(type,message,data=[]){
 }
 
 function showNotification(notificationType,msg,data=[]){
-	const toastId = createNotification(notificationType,msg);
+	const toastId = createNotification(notificationType,msg,data);
 	const toastDiv = document.getElementById(toastId);
 	const toastObj = bootstrap.Toast.getOrCreateInstance(toastDiv);
 	$(document).on('hidden.bs.toast','#'+toastId,function(){
