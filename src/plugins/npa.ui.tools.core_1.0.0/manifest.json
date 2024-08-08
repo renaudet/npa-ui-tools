@@ -32,7 +32,8 @@
   		"router": "npa.ui.tools.core.router",
   		"method": "GET",
   		"schema": "/getComponentMap",
-  		"handler": "getComponentMapHandler"
+  		"handler": "getComponentMapHandler",
+		"description": "Get the Map of registered UI components within the NPA-Utils framework"
   	},
   	{
   		"point": "npa.ui.locale.provider",

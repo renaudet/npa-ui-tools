@@ -74,7 +74,8 @@
   		"router": "npa.ui.test.application.router",
   		"method": "POST",
   		"schema": "/getRecords",
-  		"handler": "getRecordsHandler"
+  		"handler": "getRecordsHandler",
+		"description": "Get records from the test Datastoure"
   	},
   	{
   		"point": "npa.http.handler",
@@ -82,7 +83,8 @@
   		"router": "npa.ui.test.application.router",
   		"method": "POST",
   		"schema": "/record",
-  		"handler": "createRecordHandler"
+  		"handler": "createRecordHandler",
+		"description": "Create a new record in the test Datasource"
   	},
   	{
   		"point": "npa.http.handler",
@@ -90,7 +92,8 @@
   		"router": "npa.ui.test.application.router",
   		"method": "PUT",
   		"schema": "/record",
-  		"handler": "updateRecordHandler"
+  		"handler": "updateRecordHandler",
+		"description": "Update an existing record in the test Datasource"
   	},
   	{
   		"point": "npa.http.handler",
@@ -98,7 +101,8 @@
   		"router": "npa.ui.test.application.router",
   		"method": "DELETE",
   		"schema": "/record/:uuid",
-  		"handler": "deleteRecordHandler"
+  		"handler": "deleteRecordHandler",
+		"description": "Delete an existing record from the test Datasource"
   	}
   ],
   "provides": [

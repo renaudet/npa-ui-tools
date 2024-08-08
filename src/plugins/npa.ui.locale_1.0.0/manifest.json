@@ -19,7 +19,8 @@
   		"router": "npa.ui.locale.router",
   		"method": "GET",
   		"schema": "/localize",
-  		"handler": "localizeQueryHandler"
+  		"handler": "localizeQueryHandler",
+		"description": "Get the localized String from a localization identifier starting with @"
   	},
   	{
   		"point": "npa.http.handler",
@@ -27,7 +28,8 @@
   		"router": "npa.ui.locale.router",
   		"method": "GET",
   		"schema": "/localizationMap",
-  		"handler": "getLocalizationMapHandler"
+  		"handler": "getLocalizationMapHandler",
+		"description": "Get the whole localization Map in one single interaction for performance purpose"
   	}
   ],
   "provides": [
