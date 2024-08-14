@@ -20,16 +20,18 @@
   		"method": "GET",
   		"schema": "/localize",
   		"handler": "localizeQueryHandler",
-		"description": "Get the localized String from a localization identifier starting with @"
+		"description": "Get the localized String from a localization identifier starting with @",
+		"input": "ref=@some.localization.key&values=a,b,c,d&locale=FR_fr"
   	},
   	{
   		"point": "npa.http.handler",
-  		"id": "npa.ui.locale.localize.handler",
+  		"id": "npa.ui.locale.getMap.handler",
   		"router": "npa.ui.locale.router",
   		"method": "GET",
   		"schema": "/localizationMap",
   		"handler": "getLocalizationMapHandler",
-		"description": "Get the whole localization Map in one single interaction for performance purpose"
+		"description": "Get the whole localization Map in one single interaction for performance purpose",
+		"input": "locale=FR_fr"
   	}
   ],
   "provides": [

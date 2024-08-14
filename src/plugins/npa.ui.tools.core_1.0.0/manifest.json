@@ -33,7 +33,8 @@
   		"method": "GET",
   		"schema": "/getComponentMap",
   		"handler": "getComponentMapHandler",
-		"description": "Get the Map of registered UI components within the NPA-Utils framework"
+		"description": "Get the Map of registered UI components within the NPA-Utils framework",
+		"input": ""
   	},
   	{
   		"point": "npa.ui.locale.provider",

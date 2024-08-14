@@ -171,7 +171,13 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		console.log('rendering index: '+index);
 		console.log(column);
 		let html = '';
-		html += '<td>';
+		html += '<td';
+		if(column.width){
+			html += ' width="';
+			html += column.width;
+			html += '"';
+		}
+		html += '>';
 		if(typeof column.renderer!='undefined'){
 			let toEval = 'html += '+column.renderer.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
 			try{
@@ -189,7 +195,21 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 					if(j>0){
 						html += '&nbsp;';
 					}
-					html += '<img src="'+actionDef.icon+'" class="datatableAction" title="'+this.getLocalizedString(actionDef.label)+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
+					let imgClass = 'datatableAction';
+					if(actionDef.enabler){
+						let enable = false;
+						let toEval = 'enable = '+actionDef.enabler.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
+						try{
+							eval(toEval);
+						}catch(evalException){
+							console.log(toEval);
+							console.log(evalException);
+						}
+						if(!enable){
+							imgClass = '';
+						}
+					}
+					html += '<img src="'+actionDef.icon+'" class="'+imgClass+'" title="'+this.getLocalizedString(actionDef.label)+'" data-index="'+index+'" data-action="'+actionDef.actionId+'">';
 				}
 			}else{
 				if('text'==column.type || 'select'==column.type || 'date'==column.type){
@@ -211,6 +231,23 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 						leftMarge = column.leftMarge;
 					}
 					html += '<div style="text-align: right;padding-right: '+leftMarge+'px;">'+numberValue+'</div>';
+				}else
+				if('progress'==column.type){
+					let progressValue = item[column.field];
+					html += '<div class="progress" role="progressbar" style="margin-top: 3px;height: 20px;">';
+					var progressColor = '';
+					if(column.processor){
+						let toEval = 'progressColor = \' \' + ('+column.processor.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+');';
+						try{
+							eval(toEval);
+						}catch(evalException){
+							console.log(toEval);
+							console.log(evalException);
+						}
+					}
+					html += '    <div class="progress-bar progress-bar-striped'+progressColor+'" style="width: '+progressValue+'%">'+progressValue+'%</div>';
+					html += '    <div class="progress-bar bg-white" style="width: '+(100-progressValue)+'%"></div>';
+					html += '</div>';
 				}else
 				if('color'==column.type){
 					let colorValue = item[column.field];
