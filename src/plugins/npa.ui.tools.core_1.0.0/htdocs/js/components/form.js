@@ -838,7 +838,7 @@ class SelectField extends LabeledFormField{
 				var itemList = data;
 				let labelRenderer = null;
 				let valueRenderer = null;
-				if(field.config.renderer && field.config.renderer.title){
+				if(field.config.renderer && field.config.renderer.label){
 					labelRenderer = new window[field.config.renderer.label.type](field.config.renderer.label);
 				}else{
 					labelRenderer = new ItemRenderer({});
