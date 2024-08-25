@@ -54,21 +54,24 @@ npaUiCore.VerticalMenu = class VerticalMenu extends NpaUiComponent{
 				let contentDiv = childs[firstMenuItem.id];
 				contentDiv.css('display','inline');
 			}
-			let verticalMenu = this;
-			$('.npa-vertical-item').on('click',function(){
-				let id = $(this).attr('id');
-				for(var menuRef in childs){
-					let div = childs[menuRef];
-					if(menuRef!=id){
-						div.css('display','none');
-					}else{
-						div.css('display','inline');
-						npaUi.fireEvent('menu.item.selected',{"source": verticalMenu.getId(),"menu": menuRef});
-					}
-					//npaUi.fireEvent('menu.item.selected',{"source": verticalMenu.getId(),"menu": menuRef});
+			this.refreshEventHandlers();
+		}
+	}
+	refreshEventHandlers(){
+		var verticalMenu = this;
+		$('.npa-vertical-item').off('.'+this.getId());
+		$('.npa-vertical-item').on('click.'+this.getId(),function(){
+			let id = $(this).attr('id');
+			$('div[data-menu-ref]').each(function(index){
+				let pageId = $(this).data('menu-ref');
+				if(pageId==id){
+					$(this).css('display','inline');
+					npaUi.fireEvent('menu.item.selected',{"source": verticalMenu.getId(),"menu": pageId});
+				}else{
+					$(this).css('display','none');
 				}
 			});
-		}
+		});
 	}
 	stretch(){
 		let config = this.getConfiguration();
@@ -79,5 +82,18 @@ npaUiCore.VerticalMenu = class VerticalMenu extends NpaUiComponent{
 				$('#'+menu.getId()).height($('#'+config.expandsTo).height()-10);
 			});
 		}
+	}
+	addMenuItem(id,label,htmlContent){
+		let html = '';
+		html += '  <li class="nav-item">';
+		html += '    <a class="nav-link npa-vertical-item" id="'+id+'" href="#">'+this.getLocalizedString(label)+'</a>';
+		html += '  </li>';
+		$('#'+this.getId()).append(html);
+		const pageDiv = document.createElement("div");
+		pageDiv.setAttribute('data-menu-ref',id);
+		pageDiv.setAttribute('style','display: none;');
+		$('#'+this.getId()+'_content').append(pageDiv);
+		$('div[data-menu-ref="'+id+'"]').html(htmlContent);
+		this.refreshEventHandlers();
 	}
 }

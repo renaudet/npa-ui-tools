@@ -68,6 +68,8 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 					return [];
 				}
 			}else{
+				console.log('Datatable#adaptFormat()');
+				console.log(inputData);
 				return inputData;
 			}
 		}
