@@ -38,7 +38,7 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 			}
 			let html = '';
 			html += '<div id="'+this.getId()+'" class="card" style="margin-left: 3px;margin-right: 3px;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;">';
-			html += '  <div class="card-header npa-card-header">';
+			html += '  <div class="card-header'+this.getHeaderClass()+'">';
 			html += '    <img id="'+this.getId()+'_icon" src="'+config.icon+'" width="20" style="padding-bottom: 3px;"><span id="scafPageTitle" style="padding-left: 15px;">'+this.getLocalizedString(config.label)+'</span>&nbsp;&nbsp;&nbsp;<span class="visually-hidden spinner-border spinner-border-sm text-light" aria-hidden="true"></span>';
 			html += '  </div>';
 			html += '  <ul class="list-group list-group-flush">';
@@ -55,6 +55,13 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 			if(child){
 				$('#'+contentDivId).append(child);
 			}
+		}
+	}
+	getHeaderClass(){
+		if(typeof this.getConfiguration().headerClass!='undefined'){
+			return ' '+this.getConfiguration().headerClass;
+		}else{
+			return ' npa-card-header';
 		}
 	}
 	getContentDivId(){
