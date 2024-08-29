@@ -934,16 +934,12 @@ class SourceEditorField extends LabeledFormField{
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
-		var source = this;
-		$('#'+inputFieldId+'_buttonBar button').on('click',function(){
-			var actionId = $(this).data('actionid');
-			npaUi.fireEvent(actionId,{"action": actionId,"field": $('#'+inputFieldId)});
-		});
+		this.reloadEventsHandler();
 		let editorMode = 'json';
 		if(typeof this.config.type!='undefined' && this.config.type=='javascript'){
 			editorMode = 'javascript';
 		}
-		//console.log('CodeMirror editor mode is: '+editorMode);
+		var source = this;
 		loadDeps(CODE_MIRROR_DEPTS,function(){
 			var textArea = document.getElementById(inputFieldId);
 			source.form.editors[source.config.name] = CodeMirror.fromTextArea(textArea, {
@@ -961,6 +957,20 @@ class SourceEditorField extends LabeledFormField{
 				source.form.editors[source.config.name].setSize(null,DEFAULT_EDITOR_HEIGHT);
 			}
 		});
+	}
+	reloadEventsHandler(){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		$('#'+inputFieldId+'_buttonBar button').off('.'+inputFieldId);
+		$('#'+inputFieldId+'_buttonBar button').on('click.'+inputFieldId,function(){
+			var actionId = $(this).data('actionid');
+			npaUi.fireEvent(actionId,{"action": actionId,"field": $('#'+inputFieldId)});
+		});
+	}
+	addButton(buttonStruct){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		let html = '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+buttonStruct.actionId+'" disabled><img class="form-icon" src="'+buttonStruct.icon+'" title="'+this.getLocalizedString(buttonStruct.label)+'"></button>';
+		$('#'+inputFieldId+'_buttonBar').append(html);
+		this.reloadEventsHandler();
 	}
 	hide(){
 		super.hide();
@@ -1012,7 +1022,7 @@ class SourceEditorField extends LabeledFormField{
 		}
 	}
 	assignData(parentObj){
-		var inputFieldId = this.baseId+'_'+this.config.name;
+		//var inputFieldId = this.baseId+'_'+this.config.name;
 		parentObj[this.config.name] = this.form.editors[this.config.name].getValue();
 	}
 	vetoRaised(){
@@ -2195,6 +2205,9 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 			this.fieldCache[fieldConfig.name] = this.createFormField(fieldConfig);
 		}
 		this.renderFields();
+	}
+	getFieldEditor(fieldName){
+		return this.fieldCache[fieldName];
 	}
 	renderFields(){
 		let config = this.getConfiguration();
