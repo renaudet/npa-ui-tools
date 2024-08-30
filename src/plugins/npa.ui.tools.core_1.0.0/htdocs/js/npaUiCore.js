@@ -278,6 +278,9 @@ npaUi = {
 			}
 		}
 	},
+	clearComponentCacheByDivId: function(tagId){
+		delete this.componentByDivId[tagId];
+	},
     renderSingleComponent: function(tagId,componentConfig,then){
 		let placeholder = $('#'+tagId);
 		let cachedComponent = npaUi.componentByDivId[tagId];
