@@ -676,9 +676,28 @@ class RangeSelectorField extends LabeledFormField{
 		parent.append(html);
 		var source = this;
 		$('input[name='+inputFieldId+']').on('input',function(){
-			$('#'+source.baseId+'_'+source.config.name+'_value').html($(this).val());
+			source.displayValue();
 			source.fireFormEvent({"type": "change","source": source.config.name});
 		});
+	}
+	displayValue(){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		if(this.config.renderer){
+			let fieldValue = $('#'+inputFieldId).val();
+			let displayValue = fieldValue;
+			let toEval = 'displayValue = '+this.config.renderer.replace(/@/g,'fieldValue')+';';
+			try{
+				eval(toEval);
+			}catch(t){
+				console.log(toEval);
+				console.log(t);
+			}
+			finally{
+				$('#'+inputFieldId+'_value').html(displayValue);
+			}
+		}else{
+			$('#'+inputFieldId+'_value').html($('#'+inputFieldId).val());
+		}
 	}
 	hide(){
 		super.hide();
@@ -708,7 +727,7 @@ class RangeSelectorField extends LabeledFormField{
 		}else{
 			$('input[name='+inputFieldId+']').val(this.config.default);
 		}
-		$('#'+inputFieldId+'_value').html($('input[name='+inputFieldId+']').val());
+		this.displayValue();
 	}
 	assignData(parentObj){
 		var inputFieldId = this.baseId+'_'+this.config.name;
@@ -2128,6 +2147,7 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 	fieldCache = {};
 	editors = {};
 	formData = null;
+	formEventListeners = [];
 	initialize(then){
 		$.loadCss('/uiTools/css/form.css',then);
 	}
@@ -2297,10 +2317,20 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 			this.setData({});
 		}
 	}
+	registerEventListener(listener){
+		if(listener && listener.onFormEvent){
+			this.formEventListeners.push(listener);
+		}
+	}
 	fireFormEvent(event){
 		for(var fieldId in this.fieldCache){
 			let field = this.fieldCache[fieldId];
 			field.onFormEvent(event);
+		}
+		for(var i=0;i<this.formEventListeners.length;i++){
+			try{
+				this.formEventListeners[i].onFormEvent(event);
+			}catch(t){}
 		}
 	}
 	getEditor(fieldName){
