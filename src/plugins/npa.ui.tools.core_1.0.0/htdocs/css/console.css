@@ -1,0 +1,13 @@
+/***
+ * console.css - default CSS file for the NPA UI Console component
+ * Copyright 2024 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+ .npa-console {
+	background-color: #000000;
+	padding: 10px;
+	color: #00ff00;
+	font-family: courier;
+	font-size: 0.85rem;
+}

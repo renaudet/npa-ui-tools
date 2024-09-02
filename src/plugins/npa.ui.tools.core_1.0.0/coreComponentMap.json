@@ -14,5 +14,6 @@
 	"Carousel": {"version": "1.0.0","dependency":"/uiTools/js/components/carousel.js"},
 	"VerticalMenu": {"version": "1.0.0","dependency":"/uiTools/js/components/verticalMenu.js"},
 	"HtmlImport": {"version": "1.0.0","dependency":"/uiTools/js/components/htmlImport.js"},
-	"DynamicActionLoader": {"version": "1.0.0","dependency":"/uiTools/js/components/dynamicActionLoader.js"}
+	"DynamicActionLoader": {"version": "1.0.0","dependency":"/uiTools/js/components/dynamicActionLoader.js"},
+	"Console": {"version": "1.0.0","dependency":"/uiTools/js/components/console.js"}
 }
