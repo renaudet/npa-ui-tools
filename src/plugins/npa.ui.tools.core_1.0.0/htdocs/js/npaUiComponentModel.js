@@ -91,6 +91,13 @@ window.FieldItemRenderer = class FieldItemRenderer extends ItemRenderer{
 	}
 }
 
+window.PrimitiveTypeItemRenderer = class PrimitiveTypeItemRenderer extends ItemRenderer{
+	render(item){
+		console.log('PrimitiveTypeItemRenderer#render()');
+		return item;
+	}
+}
+
 class ItemSorter {
 	config = null;
 	constructor(configuration){

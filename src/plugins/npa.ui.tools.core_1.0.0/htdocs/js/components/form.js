@@ -774,7 +774,21 @@ class SelectField extends LabeledFormField{
 				console.log('SelectField#fetchDataFromDatasource() - using DataManager #'+datasource.manager);
 				let dataManager = npaUi.getComponent(datasource.manager);
 				if(typeof dataManager!='undefined'){
-					dataManager.query(payload).then(then);
+					dataManager.query(payload).then(function(data){
+						if(datasource.adapter){
+							var adaptedData = [];
+							var toEval = 'adaptedData = '+datasource.adapter.replace(/@/g,'data')+';'
+							try{
+								eval(toEval);
+								then(adaptedData);
+							}catch(t){
+								console.log('SelectField#fetchDataFromDatasource(data) - exception evaluating adapter for datasource');
+								then([]);
+							}
+						}else{
+							then(data);
+						}
+					});
 				}
 			}
 		}
