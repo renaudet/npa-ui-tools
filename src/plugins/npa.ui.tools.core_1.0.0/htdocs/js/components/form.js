@@ -789,6 +789,8 @@ class SelectField extends LabeledFormField{
 							then(data);
 						}
 					});
+				}else{
+					console.log('dataManager '+datasource.manager+' not found in context');
 				}
 			}
 		}
