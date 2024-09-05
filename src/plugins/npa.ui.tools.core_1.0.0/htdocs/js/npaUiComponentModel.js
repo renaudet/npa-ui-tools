@@ -3,6 +3,32 @@
  * Copyright 2024 Nicolas Renaudet - All rights reserved
  */
  
+class PluggableEditor {
+	field = null;
+	constructor(field){
+		this.field = field;
+	}
+	render(){
+		let html = '<div style="height: 50px;background-color: #c3c3c3;border: 1px solid #000000;margin: 5px;padding: 10px;">'+this.constructor.name+'</div>';
+		this.getSite().append(html);
+	}
+	getConfig(){
+		return this.field.config;
+	}
+	getSite(){
+		return $('#'+this.getConfig().siteId);
+	}
+	getValue(){
+		return '';
+	}
+	setValue(value){
+	}
+	setEnabled(enabledValue){
+	}
+	setFocus(){
+	}
+}
+ 
 class NpaUiComponent {
 	config = null;
 	parentDivId = null;

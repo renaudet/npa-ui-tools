@@ -1566,7 +1566,6 @@ class PlaceholderField extends LabeledFormField{
 	}
 }
 
-
 class MultipleReferenceEditorField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
@@ -2158,6 +2157,87 @@ class RichTextEditorField extends LabeledFormField{
 		return false;
 	}
 }
+
+/*
+ * {
+		"name": "fieldName,
+		"label": "fieldLabel",
+		"type": "pluggable",
+		"requires": [
+			{"type": "js","uri": "/<path>/<requiredLibrary>.js"}
+		],
+		"editor": "qualified-editor-class-name"
+   }
+ */
+class PluggableEditorField extends LabeledFormField{
+	innerEditor = null;
+	constructor(config,form){
+		super(config,form);
+	}
+	render(parent){
+		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		let html = '';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
+		html += this.generateLabel();
+		html += '  <div class="col-10" id="'+this.config.siteId+'">';
+		html += '  </div>';
+		html += '</div>';
+		parent.append(html);
+		var comp = this;
+		if(this.config.requires){
+			loadDeps(this.config.requires,function(){
+				comp.plugEditor();
+			});
+		}else{
+			this.plugEditor();
+		}
+	}
+	plugEditor(){
+		let dotIndex = this.config.editor.indexOf('.');
+		let namespace = '';
+		if(dotIndex<0){
+			namespace = 'npaUiCore.';
+		}
+		let editor = null;
+		let comp = this;
+		let toEval = 'editor = new '+namespace+this.config.editor+'(comp);';
+		try{
+			eval(toEval);
+			this.innerEditor = editor;
+			this.innerEditor.render();
+		}catch(t){
+			console.log(t);
+		}
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
+	}
+	setEnabled(editing){
+		this.innerEditor.setEnabled(editing);
+	}
+	setFocus(){
+		this.innerEditor.setFocus();
+	}
+	setData(parentObj){
+		if(typeof parentObj[this.config.name]!='undefined'){
+			this.innerEditor.setValue(parentObj[this.config.name]);
+		}
+	}
+	assignData(parentObj){
+		let value = this.innerEditor.getValue();
+		parentObj[this.config.name] = value;
+	}
+	vetoRaised(){
+		return false;
+	}
+}
  
 npaUiCore.Form = class Form extends NpaUiComponent{
 	fieldCache = {};
@@ -2227,6 +2307,9 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 		if('reference'==config.type && !config.multiple){
 			return new SingleReferenceEditorField(config,this);
+		}
+		if('pluggable'==config.type){
+			return new PluggableEditorField(config,this);
 		}
 		return new FormField(config,this);
 	}
