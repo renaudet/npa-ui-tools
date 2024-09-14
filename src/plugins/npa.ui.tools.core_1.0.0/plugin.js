@@ -8,6 +8,7 @@ const DEFAULT_NAMESPACE = 'npaUiCore';
 
 var plugin = new UIPlugin();
 plugin.compMap = {};
+plugin.registeredEditors = [];
 
 plugin.beforeExtensionPlugged = function(){
 	const baseMap = require('./coreComponentMap.json');
@@ -23,6 +24,10 @@ plugin.lazzyPlug = function(extenderId,extensionPointConfig){
 		}
 		this.compMap[extensionPointConfig.namespace][extensionPointConfig.name] = {"version": extensionPointConfig.version,"dependency": extensionPointConfig.dependency};
 	}
+	if('npa.ui.tools.core.editor'==extensionPointConfig.point){
+		this.info('plugin in Specialized Editor for datatype "'+extensionPointConfig.datatype+'" from plugin '+extenderId);
+		plugin.registeredEditors.push(extensionPointConfig);
+	}
 }
 
 plugin.getComponentMapHandler = function(req,res){
@@ -30,6 +35,13 @@ plugin.getComponentMapHandler = function(req,res){
 	res.set('Content-Type','application/json');
 	plugin.debug('<-getComponentMapHandler');
 	res.json({"status": 200,"message": "ok","data": plugin.compMap});
+}
+
+plugin.getEditorExtensionsHandler= function(req,res){
+	plugin.debug('->getEditorExtensionsHandler');
+	res.set('Content-Type','application/json');
+	plugin.debug('<-getEditorExtensionsHandler');
+	res.json({"status": 200,"message": "ok","data": plugin.registeredEditors});
 }
 
 module.exports = plugin;

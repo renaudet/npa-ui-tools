@@ -2220,7 +2220,12 @@ class PluggableEditorField extends LabeledFormField{
 		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
-		this.innerEditor.setEnabled(editing);
+		if(this.innerEditor!=null){
+			this.innerEditor.setEnabled(editing);
+		}else{
+			let field = this;
+			setTimeout(function(){ field.innerEditor.setEnabled(editing); },300);
+		}
 	}
 	setFocus(){
 		this.innerEditor.setFocus();
@@ -2244,8 +2249,24 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 	editors = {};
 	formData = null;
 	formEventListeners = [];
+	specializedEditors = {};
 	initialize(then){
-		$.loadCss('/uiTools/css/form.css',then);
+		var form = this;
+		$.loadCss('/uiTools/css/form.css',function(){
+			makeRESTCall('GET','/uiToolsApis/editors',{},function(response){
+				if(response.status==200 && response.data && response.data.length>0){
+					for(var i=0;i<response.data.length;i++){
+						let specializedEditorConfig = response.data[i];
+						form.specializedEditors[specializedEditorConfig.datatype] = specializedEditorConfig;
+					}
+				}
+				then();
+			},function(msg){
+				console.log('Caught exception while loading specialized editors');
+				console.log(msg);
+				then();
+			});
+		});
 	}
 	createFormField(config){
 		if(typeof config.type=='undefined'){
@@ -2310,6 +2331,13 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 		if('pluggable'==config.type){
 			return new PluggableEditorField(config,this);
+		}
+		let specializedPluggableEditor = this.specializedEditors[config.type];
+		if(typeof specializedPluggableEditor!='undefined'){
+			let newConfig = Object.assign({},config);
+			newConfig.requires = specializedPluggableEditor.libraries;
+			newConfig.editor = specializedPluggableEditor.editor;
+			return new PluggableEditorField(newConfig,this);
 		}
 		return new FormField(config,this);
 	}

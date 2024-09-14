@@ -59,9 +59,20 @@
   		"id": "npa.ui.tools.core.locale.provider",
   		"path": "i18n/npaComponents_fr_FR.locale",
   		"locale": "fr"
+  	},
+  	{
+  		"point": "npa.http.handler",
+  		"id": "npa.ui.tools.core.editors.handler",
+  		"router": "npa.ui.tools.core.router",
+  		"method": "GET",
+  		"schema": "/editors",
+  		"handler": "getEditorExtensionsHandler",
+		"description": "Get the list of registered Editors within the NPA-Utils framework",
+		"input": ""
   	}
   ],
   "provides": [
-  	{"id": "npa.ui.tools.core.component"}
+  	{"id": "npa.ui.tools.core.component"},
+  	{"id": "npa.ui.tools.core.editor"}
   ]
 }
