@@ -179,7 +179,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 			if(typeof item.tooltip!='undefined'){
 				title = ' title="'+this.getLocalizedString(item.tooltip)+'"';
 			}
-			html += '<img src="'+item.icon+'" style="margin-right: 5px;" width="16"'+title+'>&nbsp;';
+			html += '<img src="'+item.icon+'" style="margin-right: 5px;" width="20"'+title+'>&nbsp;';
 		}
 		html += this.getLocalizedString(item.label);
 		html += '</a>';
