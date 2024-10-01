@@ -82,6 +82,9 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 			$('#'+this.getId()+'_status').html('&nbsp;');
 		}
 	}
+	setContent(html){
+		$('#'+this.getContentDivId()).html(html);
+	}
 	clearStatus(txt){
 		$('#'+this.getId()+'_status').empty();
 	}
