@@ -44,7 +44,11 @@ function createNotification(type,message,data=[]){
 	html += '    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>';
 	html += '  </div>';
 	html += '  <div class="toast-body" style="background-color: #fff;max-height: 800px;overflow: auto;">';
-	html += npaUi.getLocalizedString(message,data);
+	if(typeof message=='object'){
+		html += JSON.stringify(message,null,'\t').replace(/\n/g,'<br>').replace(/\t/g,'&nbsp;&nbsp;');
+	}else{
+		html += npaUi.getLocalizedString(message,data);
+	}
 	html += '  </div>';
 	html += '</div>';
 	$('#uiToolsNotifications').append(html);
