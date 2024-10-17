@@ -180,7 +180,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			html += '"';
 		}
 		html += '>';
-		if(typeof column.renderer!='undefined'){
+		if(typeof column.renderer!='undefined' && column.renderer.length>0){
 			let toEval = 'html += '+column.renderer.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
 			try{
 				eval(toEval);
@@ -216,6 +216,13 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			}else{
 				if('text'==column.type || 'select'==column.type || 'date'==column.type){
 					let value = item[column.field];
+					html += value;
+				}else
+				if('textarea'==column.type){
+					let value = item[column.field];
+					if(value && value.length>15){
+						value = value.substring(0,14)+'<i>[...]</i>';
+					}
 					html += value;
 				}else
 				if('boolean'==column.type || 'check'==column.type){

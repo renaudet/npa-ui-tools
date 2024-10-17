@@ -152,6 +152,8 @@ class TextField extends LabeledFormField{
 		}else{
 			if(this.config.default && this.config.default.length>0){
 				$('#'+inputFieldId).val(this.config.default);
+			}else{
+				$('#'+inputFieldId).val('');
 			}
 		}
 		$('#'+inputFieldId).removeClass('is-invalid');
@@ -276,6 +278,103 @@ class PasswordField extends TextField{
 			}
 		}
 		return true;
+	}
+}
+
+class UrlField extends LabeledFormField{
+	constructor(config,form){
+		super(config,form);
+	}
+	render(parent){
+		this.baseId = parent.prop('id');
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		let html = '';
+		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
+		html += this.generateLabel();
+		html += '  <div class="col-10">';
+		html += '    <input type="text" id="'+inputFieldId+'" class="form-control-plaintext" readonly><span id="'+inputFieldId+'_link" style="display: none;"></span>';
+		html += '  </div>';
+		html += '</div>';
+		parent.append(html);
+		let field = this;
+		$('#'+inputFieldId).on('input',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
+	}
+	hide(){
+		super.hide();
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).hide();
+	}
+	show(){
+		let inputFielRowId = '#'+this.baseId+'_'+this.config.name+'_row';
+		$(inputFielRowId).show();
+	}
+	showLink(){
+		let inputFieldId = '#'+this.baseId+'_'+this.config.name;
+		let inputFielLinkId = '#'+this.baseId+'_'+this.config.name+'_link';
+		let urlValue = $(inputFieldId).val();
+		$(inputFielLinkId).html('<a href="" target="_other">'+urlValue+'</a>');
+		$(inputFielLinkId).css('display','inline');
+		$(inputFieldId).css('display','none');
+	}
+	hideLink(){
+		let inputFieldId = '#'+this.baseId+'_'+this.config.name;
+		let inputFielLinkId = '#'+this.baseId+'_'+this.config.name+'_link';
+		$(inputFielLinkId).css('display','none');
+		$(inputFieldId).css('display','inline');
+	}
+	setEnabled(editing){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		if(editing){
+			$('#'+inputFieldId).addClass('form-control');
+			$('#'+inputFieldId).removeClass('form-control-plaintext');
+			$('#'+inputFieldId).removeAttr('readonly');
+			this.hideLink();
+		}else{
+			$('#'+inputFieldId).removeClass('form-control');
+			$('#'+inputFieldId).addClass('form-control-plaintext');
+			$('#'+inputFieldId).attr('readonly');
+			this.showLink();
+		}
+	}
+	setFocus(){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		$('#'+inputFieldId).focus();
+	}
+	setData(parentObj){
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		if(parentObj[this.config.name]){
+			$('#'+inputFieldId).val(parentObj[this.config.name]);
+		}else{
+			if(this.config.default && this.config.default.length>0){
+				$('#'+inputFieldId).val(this.config.default);
+			}else{
+				$('#'+inputFieldId).val('');
+			}
+		}
+		$('#'+inputFieldId).removeClass('is-invalid');
+		let inputFielLinkId = '#'+this.baseId+'_'+this.config.name+'_link';
+		let urlValue = $('#'+inputFieldId).val();
+		console.log('urlValue: '+urlValue);
+		$(inputFielLinkId).html('<a href="'+urlValue+'" target="_other">'+urlValue+'</a>');
+	}
+	assignData(parentObj){
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		parentObj[this.config.name] = $('#'+inputFieldId).val();
+	}
+	vetoRaised(){
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		var fieldValue = $('#'+inputFieldId).val();
+		if(this.config.required && (typeof fieldValue=='undefined' || fieldValue.length==0) && !fieldValue.startsWith('http')){
+			$('#'+inputFieldId).addClass('is-invalid');
+			$('#'+inputFieldId).focus();
+			showError(this.getLocalizedString('@form.textField.error',[this.config.name]));
+			return true;
+		}else{
+			$('#'+inputFieldId).removeClass('is-invalid');
+			return false;
+		}
 	}
 }
 
@@ -1088,10 +1187,14 @@ class TextAreaField extends LabeledFormField{
 		if(typeof this.config.size!='undefined'){
 			size = this.config.size;
 		}
+		let style = '';
+		if(typeof this.config.style!='undefined'){
+			style = this.config.style;
+		}
 		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'">';
-		html += '    <textarea id="'+inputFieldId+'" class="form-control" style="'+this.config.style+'" row="'+this.config.rows+'" disabled="true"></textarea>';
+		html += '    <textarea id="'+inputFieldId+'" class="form-control" style="'+style+'" rows="'+this.config.rows+'" disabled="true"></textarea>';
 		html += '  </div>';
 		if(size<10){
 			html += '  <div class="col-'+(10-size)+'">&nbsp;</div>';
@@ -2277,6 +2380,9 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 		if('password'==config.type || 'passwordCheck'==config.type){
 			return new PasswordField(config,this)
+		}
+		if('url'==config.type){
+			return new UrlField(config,this)
 		}
 		if('integer'==config.type){
 			return new NumericField(config,this)
