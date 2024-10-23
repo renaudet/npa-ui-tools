@@ -225,7 +225,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 					}
 					html += value;
 				}else
-				if('boolean'==column.type || 'check'==column.type){
+				if('boolean'==column.type || 'check'==column.type || 'switch'==column.type){
 					let booleanValue = item[column.field];
 					if(booleanValue){
 						html += '<img src="/uiTools/img/silk/accept.png">';
