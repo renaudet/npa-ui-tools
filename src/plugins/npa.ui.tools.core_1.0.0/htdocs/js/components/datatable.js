@@ -180,6 +180,16 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			html += '"';
 		}
 		html += '>';
+		if(typeof column.altRenderer!='undefined' && column.altRenderer.length>0){
+			let toEval = 'html += '+column.altRenderer.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
+			try{
+				eval(toEval);
+			}catch(evalException){
+				console.log(toEval);
+				console.log(evalException);
+				html += '???';
+			}
+		}else
 		if(typeof column.renderer!='undefined' && column.renderer.length>0){
 			let toEval = 'html += '+column.renderer.replace(/@/g,'item').replace(/{/g,'\'+').replace(/}/g,'+\'')+';';
 			try{
