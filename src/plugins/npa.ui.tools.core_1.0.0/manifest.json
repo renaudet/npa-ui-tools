@@ -21,6 +21,11 @@
   		"path": "/uiToolsApis"
   	},
   	{
+  		"point": "npa.http.ws.router",
+  		"id": "npa.ui.tools.core.ws.router",
+  		"path": "/npaUi"
+  	},
+  	{
   		"point": "npa.http.static",
   		"id": "npa.ui.tools.core.htdocs",
   		"path": "/uiTools",
@@ -69,6 +74,15 @@
   		"handler": "getEditorExtensionsHandler",
 		"description": "Get the list of registered Editors within the NPA-Utils framework",
 		"input": ""
+  	},
+  	{
+  		"point": "npa.http.ws.handler",
+  		"id": "npa.ui.tools.core.ws.handler",
+  		"router": "npa.ui.tools.core.ws.router",
+  		"schema": "/ws",
+  		"handler": "wsMessageHandler",
+  		"securityRole": "operator",
+		"description": "WebSocket message handler for npaUi components"
   	}
   ],
   "provides": [

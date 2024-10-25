@@ -5,6 +5,7 @@
  
 const UIPlugin = require('../../npaUtil.js');
 const DEFAULT_NAMESPACE = 'npaUiCore';
+const HTTP_SERVICE_NAME = 'http';
 
 var plugin = new UIPlugin();
 plugin.compMap = {};
@@ -42,6 +43,18 @@ plugin.getEditorExtensionsHandler= function(req,res){
 	res.set('Content-Type','application/json');
 	plugin.debug('<-getEditorExtensionsHandler');
 	res.json({"status": 200,"message": "ok","data": plugin.registeredEditors});
+}
+
+plugin.wsMessageHandler = function(ws,req){
+	plugin.debug('->wsMessageHandler()');
+	let wsInstance = plugin.getService(HTTP_SERVICE_NAME).wsEndpoint;
+	plugin.debug('new WebSocket connection created!');
+	ws.on('message', function(msg) {
+		wsInstance.getWss().clients.forEach(function(client){
+		  plugin.debug('->wsMessageHandler() delivering msg to client');
+	      client.send(msg);
+	   })
+	});
 }
 
 module.exports = plugin;
