@@ -119,14 +119,16 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 				let filterStr = $('#'+source.getId()+'_filter').val();
 				source.filter(filterStr);
 			});
-		}else{
-			$('#'+this.getId()).empty();
 		}
 		var source = this;
 		this.fetchDataFromDatasource(function(data){
 			let sortedData = source.itemSorter.sort(data);
 			source.load(sortedData);
 		});
+	}
+	clean(){
+		$('#'+this.getId()).empty();
+		this.items = [];
 	}
 	filter(filterStr){
 		var normalizedFilterStr = filterStr?filterStr.toUpperCase():'';
@@ -142,7 +144,7 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 		});
 	}
 	load(data){
-		this.items = [];
+		this.clean();
 		var source = this;
 		data.map(function(item,index){
 			source.addItem(item);
