@@ -314,7 +314,7 @@ class UrlField extends LabeledFormField{
 		let inputFieldId = '#'+this.baseId+'_'+this.config.name;
 		let inputFielLinkId = '#'+this.baseId+'_'+this.config.name+'_link';
 		let urlValue = $(inputFieldId).val();
-		$(inputFielLinkId).html('<a href="" target="_other">'+urlValue+'</a>');
+		$(inputFielLinkId).html('<a href="'+urlValue+'" target="_other">'+urlValue+'</a>');
 		$(inputFielLinkId).css('display','inline');
 		$(inputFieldId).css('display','none');
 	}
