@@ -122,12 +122,10 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 			if(typeof config.constraints!='undefined'){
 				if(typeof config.constraints['height']!='undefined'){
 					let heightConstraint = config.constraints['height'].processor;
-					let sourceId ='#'+config.constraints['height'].sourceId;
 					let componentId = '#'+this.getId();
-					if(typeof heightConstraint!='undefined' && typeof sourceId!='undefined'){
+					if(typeof heightConstraint!='undefined'){
 						let toEval = 'height = '+heightConstraint;
-						//console.log('toEval: '+toEval);
-						$(sourceId).on('resize',function(){
+						$(window).on('resize',function(){
 							let height = 0;
 							eval(toEval);
 							$(componentId).height(height);
