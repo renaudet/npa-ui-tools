@@ -119,6 +119,29 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 				let filterStr = $('#'+source.getId()+'_filter').val();
 				source.filter(filterStr);
 			});
+			if(typeof config.constraints!='undefined'){
+				if(typeof config.constraints['height']!='undefined'){
+					let heightConstraint = config.constraints['height'].processor;
+					let sourceId ='#'+config.constraints['height'].sourceId;
+					let componentId = '#'+this.getId();
+					if(typeof heightConstraint!='undefined' && typeof sourceId!='undefined'){
+						let toEval = 'height = '+heightConstraint;
+						//console.log('toEval: '+toEval);
+						$(sourceId).on('resize',function(){
+							let height = 0;
+							eval(toEval);
+							$(componentId).height(height);
+							$(componentId).css('overflow','auto');
+							$(componentId).css('max-height',height+'px');
+						});
+						let height = 0;
+						eval(toEval);
+						$(componentId).height(height);
+						$(componentId).css('overflow','auto');
+						$(componentId).css('max-height',height+'px');
+					}
+				}
+			}
 		}
 		var source = this;
 		this.fetchDataFromDatasource(function(data){
