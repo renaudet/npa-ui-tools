@@ -2269,22 +2269,36 @@ class RichTextEditorField extends LabeledFormField{
 		"requires": [
 			{"type": "js","uri": "/<path>/<requiredLibrary>.js"}
 		],
-		"editor": "qualified-editor-class-name"
+		"editor": "qualified-editor-class-name",
+		"siteId": "<some-DIV-#ID>"
    }
  */
 class PluggableEditorField extends LabeledFormField{
 	innerEditor = null;
+	pendingValue = null;
+	siteId = null;
 	constructor(config,form){
 		super(config,form);
 	}
 	render(parent){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
+		this.siteId = inputFieldId+'_site';
+		if(this.config.siteId){
+			this.siteId = this.config.siteId;
+		}
 		let html = '';
 		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
-		html += '  <div class="col-10" id="'+this.config.siteId+'">';
+		let size = 10;
+		if(this.config.size){
+			size = this.config.size;
+		}
+		html += '  <div class="col-'+size+'" id="'+this.siteId+'">';
 		html += '  </div>';
+		if(size<10){
+			html += '  <div class="col-'+(10-size)+'">&nbsp;</div>';
+		}
 		html += '</div>';
 		parent.append(html);
 		var comp = this;
@@ -2295,6 +2309,9 @@ class PluggableEditorField extends LabeledFormField{
 		}else{
 			this.plugEditor();
 		}
+	}
+	getPluginSite(){
+		return $('#'+this.siteId);
 	}
 	plugEditor(){
 		let dotIndex = this.config.editor.indexOf('.');
@@ -2335,12 +2352,18 @@ class PluggableEditorField extends LabeledFormField{
 	}
 	setData(parentObj){
 		if(typeof parentObj[this.config.name]!='undefined'){
+			if(this.innerEditor){
 			this.innerEditor.setValue(parentObj[this.config.name]);
+			}else{
+				this.pendingValue = parentObj[this.config.name];
+			}
 		}
 	}
 	assignData(parentObj){
-		let value = this.innerEditor.getValue();
-		parentObj[this.config.name] = value;
+		if(this.innerEditor){
+			let value = this.innerEditor.getValue();
+			parentObj[this.config.name] = value;
+		}
 	}
 	vetoRaised(){
 		return false;

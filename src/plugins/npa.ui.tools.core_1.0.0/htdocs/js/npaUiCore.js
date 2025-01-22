@@ -125,30 +125,72 @@ function sortOn(list,attributeName,descending=true){
 		console.log('sortOn('+attributeName+')');
 		console.trace();
 	}
-	if(list.length>1){
-		for(var i=0;i<list.length-1;i++){
-			for(var j=i+1;j<list.length;j++){
-				var listi = list[i];
-				var listj = list[j];
-				if(typeof listj[attributeName]!='undefined' && typeof listi[attributeName]!='undefined'){
-					if(Number.isInteger(listj[attributeName])){
-						if(listj[attributeName]<listi[attributeName]){
-							var tmp = listi;
-							list[i] = listj;
-							list[j] = tmp;
-						}
-					}else{
-						if(descending){
-							if(listj[attributeName].localeCompare(listi[attributeName])<0){
+	if(attributeName.length>0){
+		if(list.length>1){
+			for(var i=0;i<list.length-1;i++){
+				for(var j=i+1;j<list.length;j++){
+					var listi = list[i];
+					var listj = list[j];
+					if(typeof listj[attributeName]!='undefined' && typeof listi[attributeName]!='undefined'){
+						if(Number.isInteger(listj[attributeName])){
+							if(listj[attributeName]<listi[attributeName]){
 								var tmp = listi;
 								list[i] = listj;
 								list[j] = tmp;
 							}
 						}else{
-							if(listj[attributeName].localeCompare(listi[attributeName])>0){
-								var tmp = listi;
-								list[i] = listj;
-								list[j] = tmp;
+							if(descending){
+								if(listj[attributeName].localeCompare(listi[attributeName])<0){
+									var tmp = listi;
+									list[i] = listj;
+									list[j] = tmp;
+								}
+							}else{
+								if(listj[attributeName].localeCompare(listi[attributeName])>0){
+									var tmp = listi;
+									list[i] = listj;
+									list[j] = tmp;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}else{
+		if(list.length>1){
+			for(var i=0;i<list.length-1;i++){
+				for(var j=i+1;j<list.length;j++){
+					var listi = list[i];
+					var listj = list[j];
+					if(typeof listj!='undefined' && typeof listi!='undefined'){
+						if(Number.isInteger(listj)){
+							if(descending){
+								if(listj<listi){
+									var tmp = listi;
+									list[i] = listj;
+									list[j] = tmp;
+								}
+							}else{
+								if(listj>listi){
+									var tmp = listi;
+									list[i] = listj;
+									list[j] = tmp;
+								}
+							}
+						}else{
+							if(descending){
+								if(listj.localeCompare(listi)<0){
+									var tmp = listi;
+									list[i] = listj;
+									list[j] = tmp;
+								}
+							}else{
+								if(listj.localeCompare(listi)>0){
+									var tmp = listi;
+									list[i] = listj;
+									list[j] = tmp;
+								}
 							}
 						}
 					}

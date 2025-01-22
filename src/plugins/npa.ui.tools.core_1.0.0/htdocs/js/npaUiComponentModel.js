@@ -7,6 +7,10 @@ class PluggableEditor {
 	field = null;
 	constructor(field){
 		this.field = field;
+		this.initialize();
+	}
+	initialize(){
+		// super implementation does nothing
 	}
 	render(){
 		let html = '<div style="height: 50px;background-color: #c3c3c3;border: 1px solid #000000;margin: 5px;padding: 10px;">'+this.constructor.name+'</div>';
@@ -16,7 +20,8 @@ class PluggableEditor {
 		return this.field.config;
 	}
 	getSite(){
-		return $('#'+this.getConfig().siteId);
+		//return $('#'+this.getConfig().siteId);
+		return this.field.getPluginSite();
 	}
 	getValue(){
 		return '';
