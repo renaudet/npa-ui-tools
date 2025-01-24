@@ -243,7 +243,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 						html += '<img src="/uiTools/img/silk/cross.png">';
 					}
 				}else
-				if('number'==column.type){
+				if('number'==column.type || 'integer'==column.type || 'numeric'==column.type){
 					let numberValue = item[column.field];
 					let leftMarge = 15;
 					if(typeof column.leftMarge!='undefined'){
