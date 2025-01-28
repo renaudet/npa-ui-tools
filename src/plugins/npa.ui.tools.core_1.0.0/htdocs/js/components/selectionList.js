@@ -97,7 +97,7 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 				html += '</td>';
 				html += '<td><img id="'+this.getId()+'_toggleFilterBtn" src="/uiTools/img/silk/layout_delete.png" class="npa-selection-list-filter-icon " title="'+this.getLocalizedString('@selection.list.button.toggle')+'"></td>';
 				html += '<tr id="'+this.getId()+'_filterSection" style="display: none;"><td><input id="'+this.getId()+'_filter" class="form-control form-control-sm"></td><td><button id="'+this.getId()+'_filterBtn" type="button" class="btn btn-sm btn-primary">'+this.getLocalizedString('@selection.list.button.ok')+'</button></td></tr>';
-				html += '</tr></table>'
+				html += '</tr></table>';
 				html += '</div>';
 			}
 			html += '<ul id="'+this.getId()+'" class="list-group list-group-flush npa-selection-list">';
