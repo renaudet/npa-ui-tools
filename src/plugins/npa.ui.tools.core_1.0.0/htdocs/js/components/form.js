@@ -2230,13 +2230,16 @@ class RichTextEditorField extends LabeledFormField{
 		console.log('RichTextEditorField#setEnabled('+editing+')');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		if(typeof this.form.editors[this.config.name]!='undefined'){
+			let editor = this.form.editors[this.config.name];
 			if(editing){
-				this.form.editors[this.config.name].enable();
+				//this.form.editors[this.config.name].enable();
+				setTimeout(function(){ editor.enable(); },500);
 				if(typeof this.config.buttons!='undefined'){
 					$('#'+inputFieldId+'_buttonBar button').prop('disabled',false);
 				}
 			}else{
-				this.form.editors[this.config.name].disable();
+				//this.form.editors[this.config.name].disable();
+				setTimeout(function(){ editor.disable(); },500);
 				if(typeof this.config.buttons!='undefined'){
 					$('#'+inputFieldId+'_buttonBar button').prop('disabled',true);
 				}
