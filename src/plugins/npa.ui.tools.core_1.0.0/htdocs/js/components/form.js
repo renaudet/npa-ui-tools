@@ -1083,14 +1083,17 @@ class SourceEditorField extends LabeledFormField{
 			    mode:  editorMode,
 			    readOnly: true
 			});
-			setTimeout(function(){ source.form.editors[source.config.name].setOption("mode",editorMode); },100);
-			
+			//setTimeout(function(){ source.form.editors[source.config.name].setOption("mode",editorMode); },100);
+			setTimeout(function(){ source.getEditor().setOption("mode",editorMode);source.getEditor().refresh(); },200);
 			if(typeof source.config.height!='undefined'){
 				source.form.editors[source.config.name].setSize(null,source.config.height);
 			}else{
 				source.form.editors[source.config.name].setSize(null,DEFAULT_EDITOR_HEIGHT);
 			}
 		});
+	}
+	getEditor(){
+		return this.form.editors[this.config.name];
 	}
 	reloadEventsHandler(){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -1116,18 +1119,18 @@ class SourceEditorField extends LabeledFormField{
 		$(inputFielRowId).show();
 	}
 	setEnabled(editing){
-		if(typeof this.form.editors[this.config.name]=='undefined'){
-			let editor = this;
-			setTimeout(function(){ editor.setEnabled(editing);},500);
+		let comp = this;
+		if(typeof this.getEditor()=='undefined'){
+			setTimeout(function(){ comp.setEnabled(editing);},500);
 		}else{
 			let inputFieldId = this.baseId+'_'+this.config.name;
 			if(editing){
-				this.form.editors[this.config.name].setOption('readOnly',false);
+				setTimeout(function(){ comp.getEditor().setOption('readOnly',false);},200);
 				if(typeof this.config.buttons!='undefined'){
 					$('#'+inputFieldId+'_buttonBar button').prop('disabled',false);
 				}
 			}else{
-				this.form.editors[this.config.name].setOption('readOnly',true);
+				setTimeout(function(){ comp.getEditor().setOption('readOnly',true);},200);
 				if(typeof this.config.buttons!='undefined'){
 					$('#'+inputFieldId+'_buttonBar button').prop('disabled',true);
 				}
@@ -1137,26 +1140,31 @@ class SourceEditorField extends LabeledFormField{
 	setFocus(){
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		$('#'+inputFieldId).focus();
+		let comp = this;
+		setTimeout(function(){ comp.getEditor().focus();},200);
 	}
 	setData(parentObj){
 		if(typeof this.form.editors[this.config.name]=='undefined'){
 			let editor = this;
 			setTimeout(function(){ editor.setData(parentObj);},500);
 		}else{
+			let comp = this;
 			if(typeof parentObj[this.config.name]!='undefined'){
-				this.form.editors[this.config.name].setValue(parentObj[this.config.name]);
+				let txt = parentObj[this.config.name];
+				setTimeout(function(){ comp.getEditor().setValue(txt);comp.getEditor().refresh();},500);
 			}else{
 				if(this.config.type=='json'){
-					this.form.editors[this.config.name].setValue('{\n}');
+					let txt = '{\n}';
+					setTimeout(function(){ comp.getEditor().setValue(txt);comp.getEditor().refresh();},500);
 				}
 				if(this.config.type=='javascript'){
-					this.form.editors[this.config.name].setValue('//some javascript code snippet here\n');
+					let txt = '//some javascript code snippet here\n';
+					setTimeout(function(){ comp.getEditor().setValue(txt);comp.getEditor().refresh();},500);
 				}
 			}
 		}
 	}
 	assignData(parentObj){
-		//var inputFieldId = this.baseId+'_'+this.config.name;
 		parentObj[this.config.name] = this.form.editors[this.config.name].getValue();
 	}
 	vetoRaised(){
