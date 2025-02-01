@@ -1815,6 +1815,9 @@ class MultipleReferenceEditorField extends LabeledFormField{
 		var field = this;
 		this.fetchDataFromDatasource(function(data){
 			var itemList = data;
+			if(field.config.sortField){
+				itemList = sortOn(itemList,field.config.sortField);
+			}
 			let titleRenderer = null;
 			let valueRenderer = null;
 			if(field.config.renderer && field.config.renderer.title){
