@@ -2486,15 +2486,18 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 	}
 	render(){
 		let config = this.getConfiguration();
-		let html = '';
-		html += '<form id="'+this.getId()+'_form" class="'+config.class+'">';
-		html += '</form>';
-		this.parentDiv().html(html);
-		for(var i=0;i<config.fields.length;i++){
-			var fieldConfig = config.fields[i];
-			this.fieldCache[fieldConfig.name] = this.createFormField(fieldConfig);
+		if(this.parentDiv().data('loaded')!='true'){
+			let html = '';
+			html += '<form id="'+this.getId()+'_form" class="'+config.class+'">';
+			html += '</form>';
+			//this.parentDiv().html(html);
+			this.parentDiv().append(html);
+			for(var i=0;i<config.fields.length;i++){
+				var fieldConfig = config.fields[i];
+				this.fieldCache[fieldConfig.name] = this.createFormField(fieldConfig);
+			}
+			this.renderFields();
 		}
-		this.renderFields();
 	}
 	getFieldEditor(fieldName){
 		return this.fieldCache[fieldName];
