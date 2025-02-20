@@ -16,7 +16,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 			$.loadCss('/uiTools/css/navBar.css',then);
 		}
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		let html = '';
 		html += '<nav id="'+this.getId()+'" class="navbar navbar-expand-lg bg-dark npa-ui-nav" data-bs-theme="dark">';
@@ -49,6 +49,7 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 				}else
 					npaUi.fireEvent(actionId,item);
 			});
+			then();
 		});
 	}
 	generateNavBarMenu(then){

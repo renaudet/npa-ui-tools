@@ -76,7 +76,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		console.log('datatable.js#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
 		return [];
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if($('#'+this.getId()+'_table').length==0){
 			let html = '';
@@ -110,6 +110,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 			this.parentDiv().html(html);
 		}
 		this.refresh();
+		then();
 	}
 	refresh(){
 		console.log('Datatable#refresh()');

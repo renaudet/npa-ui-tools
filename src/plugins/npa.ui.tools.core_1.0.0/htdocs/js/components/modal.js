@@ -7,7 +7,7 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 	initialize(then){
 		$.loadCss('/uiTools/css/modal.css',then);
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let size = '';
@@ -70,6 +70,7 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 			if(child){
 				$('#'+this.getId()+'_body').append(child);
 			}
+			then();
 		}
 	}
 	setBody(html){

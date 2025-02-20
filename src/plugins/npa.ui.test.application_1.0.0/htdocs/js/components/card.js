@@ -15,7 +15,7 @@ function stretchWorkArea(){
 }
  
 npaTest.Card = class Card extends NpaUiComponent{
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		let html = '';
 		let style='';
@@ -33,5 +33,6 @@ npaTest.Card = class Card extends NpaUiComponent{
 		html += '</div>';
 		this.parentDiv().html(html);
 		stretchWorkArea();
+		then();
 	}
 }

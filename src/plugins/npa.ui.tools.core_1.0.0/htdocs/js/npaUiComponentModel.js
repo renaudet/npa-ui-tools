@@ -12,9 +12,10 @@ class PluggableEditor {
 	initialize(){
 		// super implementation does nothing
 	}
-	render(){
+	render(then){
 		let html = '<div style="height: 50px;background-color: #c3c3c3;border: 1px solid #000000;margin: 5px;padding: 10px;">'+this.constructor.name+'</div>';
 		this.getSite().append(html);
+		then();
 	}
 	getConfig(){
 		return this.field.config;
@@ -55,8 +56,9 @@ class NpaUiComponent {
 			then();
 		}
 	}
-	render(){
+	render(then){
 		console.log('NpaUiComponent#render() was called');
+		then();
 	}
 	getLocalizedString(stringExpr,data=[]){
 		return npaUi.getLocalizedString(stringExpr,data);

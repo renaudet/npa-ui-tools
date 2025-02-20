@@ -60,7 +60,8 @@ npaUiCore.ReactiveDataManager = class ReactiveDataManager extends NpaUiComponent
 		    }
 		};
 	}
-	render(){
+	render(then){
+		then();
 	}
 	setConfiguration(config){
 		this.config.configuration = config;

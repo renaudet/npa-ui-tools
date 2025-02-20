@@ -86,7 +86,7 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 		console.log('selectionList.js#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
 		return [];
 	}
-	render(){
+	render(then){
 		if(this.parentDiv().data('loaded')!='true'){
 			let config = this.getConfiguration();
 			let html = '';
@@ -145,6 +145,7 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 		this.fetchDataFromDatasource(function(data){
 			let sortedData = source.itemSorter.sort(data);
 			source.load(sortedData);
+			then();
 		});
 	}
 	clean(){

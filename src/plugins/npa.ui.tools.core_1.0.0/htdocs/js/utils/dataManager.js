@@ -24,7 +24,8 @@ npaUiCore.DataManager = class DataManager extends NpaUiComponent{
 	initialize(then){
 		then();
 	}
-	render(){
+	render(then){
+		then();
 	}
 	setConfiguration(config){
 		this.config.configuration = config;

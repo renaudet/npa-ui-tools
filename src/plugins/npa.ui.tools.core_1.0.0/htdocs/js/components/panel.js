@@ -7,7 +7,7 @@ npaUiCore.Panel = class Panel extends NpaUiComponent{
 	initialize(then){
 		$.loadCss('/uiTools/css/npaUiTheme.css',then);
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		let html = '';
 		let style='';
@@ -16,5 +16,6 @@ npaUiCore.Panel = class Panel extends NpaUiComponent{
 		}
 		html += '<div id="'+this.getId()+'" class="panel" style="'+style+'"></div>';
 		this.parentDiv().html(html);
+		then();
 	}
 }

@@ -16,7 +16,7 @@ npaTest.Graphic = class Graphic extends NpaUiComponent{
 			then();
 		}
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			this.gcManager = new ReactivArea(this.getId(),this.parentDivId,config.width,config.height);
@@ -25,5 +25,6 @@ npaTest.Graphic = class Graphic extends NpaUiComponent{
 		}else{
 			this.gcManager.repaint();
 		}
+		then();
 	}
 }

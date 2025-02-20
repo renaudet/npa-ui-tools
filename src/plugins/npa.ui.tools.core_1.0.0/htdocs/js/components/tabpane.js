@@ -7,7 +7,7 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 	initialize(then){
 		$.loadCss('/uiTools/css/tabPane.css',then);
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			var classList = this.parentDiv().attr('class').split(/\s+/);
@@ -59,6 +59,9 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 					appendChild(div,'#'+tabId+'_pane');
 				}
 			}
+			then();
+		}else{
+			then();
 		}
 	}
 }

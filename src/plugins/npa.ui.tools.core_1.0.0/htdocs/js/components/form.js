@@ -13,8 +13,9 @@ class FormField {
 		this.config = config;
 		this.form = form;
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
+		then();
 	}
 	setFocus(){
 	}
@@ -92,7 +93,7 @@ class TextField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -119,6 +120,7 @@ class TextField extends LabeledFormField{
 		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -181,7 +183,7 @@ class PasswordField extends TextField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -208,6 +210,7 @@ class PasswordField extends TextField{
 		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -285,7 +288,7 @@ class UrlField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -300,6 +303,7 @@ class UrlField extends LabeledFormField{
 		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -382,7 +386,7 @@ class NumericField extends TextField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -413,6 +417,7 @@ class NumericField extends TextField{
 		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -473,7 +478,7 @@ class DateField extends TextField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var size = typeof this.config.size!='undefined'?this.config.size:3;
@@ -493,13 +498,13 @@ class DateField extends TextField{
 		}
 		html += '</div>';
 		parent.append(html);
-		var target = this;
-		loadDeps(DATE_PICKER_DEPTS,function(){
-			  $('#'+inputFieldId).val(moment().format('YYYY/MM/DD'));
-		});
 		let field = this;
 		$('#'+inputFieldId).on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
+		loadDeps(DATE_PICKER_DEPTS,function(){
+			  $('#'+inputFieldId).val(moment().format('YYYY/MM/DD'));
+			  then();
 		});
 	}
 	hide(){
@@ -530,7 +535,7 @@ class CheckField extends FormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
@@ -569,6 +574,7 @@ class CheckField extends FormField{
 		$('#'+inputFieldId).on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -621,7 +627,7 @@ class RadioField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
@@ -650,6 +656,7 @@ class RadioField extends LabeledFormField{
 		$('[name="'+inputFieldId+'"]').on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -691,7 +698,7 @@ class ColorPickerField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
@@ -711,6 +718,7 @@ class ColorPickerField extends LabeledFormField{
 		$('#'+inputFieldId).on('change',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -754,7 +762,7 @@ class RangeSelectorField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -782,6 +790,7 @@ class RangeSelectorField extends LabeledFormField{
 			source.displayValue();
 			source.fireFormEvent({"type": "change","source": source.config.name});
 		});
+		then();
 	}
 	displayValue(){
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -922,7 +931,7 @@ class SelectField extends LabeledFormField{
 		console.log('SelectField#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
 		return [];
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -996,7 +1005,10 @@ class SelectField extends LabeledFormField{
 					html += '</option>';
 					$('#'+inputFieldId).append(html);
 				}
+				then();
 			});
+		}else{
+			then();
 		}
 	}
 	hide(){
@@ -1053,7 +1065,7 @@ class SourceEditorField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
@@ -1087,13 +1099,12 @@ class SourceEditorField extends LabeledFormField{
 			    mode:  editorMode,
 			    readOnly: true
 			});
-			//setTimeout(function(){ source.form.editors[source.config.name].setOption("mode",editorMode); },100);
-			setTimeout(function(){ source.getEditor().setOption("mode",editorMode);source.getEditor().refresh(); },200);
 			if(typeof source.config.height!='undefined'){
 				source.form.editors[source.config.name].setSize(null,source.config.height);
 			}else{
 				source.form.editors[source.config.name].setSize(null,DEFAULT_EDITOR_HEIGHT);
 			}
+			setTimeout(function(){ source.getEditor().setOption("mode",editorMode);source.getEditor().refresh();then(); },200);
 		});
 	}
 	getEditor(){
@@ -1191,7 +1202,7 @@ class TextAreaField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -1217,6 +1228,7 @@ class TextAreaField extends LabeledFormField{
 		$('#'+inputFieldId).on('input',function(){
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -1268,7 +1280,7 @@ class ArrayEditorField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -1413,6 +1425,7 @@ class ArrayEditorField extends LabeledFormField{
 				next.prop('selected', true);
 			}
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -1485,7 +1498,7 @@ class DatatypeField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
@@ -1502,6 +1515,7 @@ class DatatypeField extends LabeledFormField{
 		}
 		html += '</div>';
 		parent.append(html);
+		then();
 	}
 	hide(){
 		super.hide();
@@ -1544,7 +1558,7 @@ class UploadField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -1566,10 +1580,10 @@ class UploadField extends LabeledFormField{
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
-		var source = this;
 		$('#'+inputFieldId+'_submit').on('click',function(){
 			npaUi.fireEvent(action,{"action": action,"field": $('#'+inputFieldId)});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -1603,7 +1617,7 @@ class ButtonField extends FormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
@@ -1618,6 +1632,7 @@ class ButtonField extends FormField{
 		$('#'+inputFieldId).on('click',function(){
 			npaUi.fireEvent(source.config.actionId,{"action": source.config.actionId,"field": $('#'+inputFieldId)});
 		});
+		then();
 	}
 	hide(){
 		super.hide();
@@ -1649,7 +1664,7 @@ class PlaceholderField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let html = '';
@@ -1666,6 +1681,7 @@ class PlaceholderField extends LabeledFormField{
 		}
 		html += '</div>';
 		parent.append(html);
+		then();
 	}
 	hide(){
 		super.hide();
@@ -1788,7 +1804,7 @@ class MultipleReferenceEditorField extends LabeledFormField{
 		console.log('MultipleReferenceEditorField#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
 		return [];
 	}
-	render(parent){
+	render(parent,then){
 		let visibleRowCount = 5;
 		if(typeof this.config.rows!='undefined'){
 			visibleRowCount = this.config.rows;
@@ -1817,6 +1833,33 @@ class MultipleReferenceEditorField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		var field = this;
+		$('#'+this.baseId+'_source_'+this.config.name).on('change',function(e){
+			$('#'+inputFieldId+'_addBtn').prop('disabled',false);
+		});
+		$('#'+inputFieldId).on('change',function(e){
+			$('#'+inputFieldId+'_removeBtn').prop('disabled',false);
+		});
+		$('#'+inputFieldId+'_addBtn').on('click',function(){
+			var selectedId = $('#'+field.baseId+'_source_'+field.config.name+' option:selected').val();
+			var selectedOption =  $('#'+field.baseId+'_source_'+field.config.name+' option[value=\''+selectedId+'\']');
+			//is the selected option already right
+			var itemAlreadyAssociated = false;
+			$('#'+field.baseId+'_'+field.config.name+' option').each(function(){
+			    var associatedOptionId = $(this).val();
+			    if(associatedOptionId==selectedId){
+					itemAlreadyAssociated = true;
+				}
+			});
+			if(!itemAlreadyAssociated || typeof field.config.unique=='undefined' || !field.config.unique){
+				var html = '<option value="'+selectedId+'" title="'+selectedOption.prop('title')+'">'+selectedOption.text()+'</option>';
+				$('#'+inputFieldId).append(html);
+			}
+		});
+		$('#'+inputFieldId+'_removeBtn').on('click',function(){
+			var selectedId = $('#'+inputFieldId+' option:selected').val();
+			var selectedOption =  $('#'+inputFieldId+' option[value=\''+selectedId+'\']');
+			selectedOption.remove();
+		});
 		this.fetchDataFromDatasource(function(data){
 			var itemList = data;
 			if(field.config.sortField){
@@ -1844,34 +1887,7 @@ class MultipleReferenceEditorField extends LabeledFormField{
 				html += '</option>';
 				$('#'+field.baseId+'_source_'+field.config.name).append(html);
 			}
-		});
-		var field = this;
-		$('#'+this.baseId+'_source_'+this.config.name).on('change',function(e){
-			$('#'+inputFieldId+'_addBtn').prop('disabled',false);
-		});
-		$('#'+inputFieldId).on('change',function(e){
-			$('#'+inputFieldId+'_removeBtn').prop('disabled',false);
-		});
-		$('#'+inputFieldId+'_addBtn').on('click',function(){
-			var selectedId = $('#'+field.baseId+'_source_'+field.config.name+' option:selected').val();
-			var selectedOption =  $('#'+field.baseId+'_source_'+field.config.name+' option[value=\''+selectedId+'\']');
-			//is the selected option already right
-			var itemAlreadyAssociated = false;
-			$('#'+field.baseId+'_'+field.config.name+' option').each(function(){
-			    var associatedOptionId = $(this).val();
-			    if(associatedOptionId==selectedId){
-					itemAlreadyAssociated = true;
-				}
-			});
-			if(!itemAlreadyAssociated || typeof field.config.unique=='undefined' || !field.config.unique){
-				var html = '<option value="'+selectedId+'" title="'+selectedOption.prop('title')+'">'+selectedOption.text()+'</option>';
-				$('#'+inputFieldId).append(html);
-			}
-		});
-		$('#'+inputFieldId+'_removeBtn').on('click',function(){
-			var selectedId = $('#'+inputFieldId+' option:selected').val();
-			var selectedOption =  $('#'+inputFieldId+' option[value=\''+selectedId+'\']');
-			selectedOption.remove();
+			then();
 		});
 	}
 	hide(){
@@ -2079,7 +2095,7 @@ class SingleReferenceEditorField extends LabeledFormField{
 		console.log('SingleReferenceEditorField#adaptFormat(inputData) - no adapter configured for datasource type '+dsType);
 		return [];
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		let size = 8;
@@ -2107,6 +2123,9 @@ class SingleReferenceEditorField extends LabeledFormField{
 		html += '</div>';
 		parent.append(html);
 		let field = this;
+		$('#'+inputFieldId).on('change',function(){
+			field.fireFormEvent({"type": "change","source": field.config.name});
+		});
 		this.fetchDataFromDatasource(function(data){
 			var itemList = data;
 			let titleRenderer = null;
@@ -2131,9 +2150,7 @@ class SingleReferenceEditorField extends LabeledFormField{
 				html += '</option>';
 				$('#'+inputFieldId).append(html);
 			}
-		});
-		$('#'+inputFieldId).on('change',function(){
-			field.fireFormEvent({"type": "change","source": field.config.name});
+			then();
 		});
 	}
 	hide(){
@@ -2183,7 +2200,7 @@ class RichTextEditorField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		var html = '';
@@ -2222,6 +2239,7 @@ class RichTextEditorField extends LabeledFormField{
 			editor.init($('#'+parentId).get(0));
 			editor.disable();
 			source.form.editors[source.config.name] = editor;
+			then();
 		});
 	}
 	hide(){
@@ -2298,7 +2316,7 @@ class PluggableEditorField extends LabeledFormField{
 	constructor(config,form){
 		super(config,form);
 	}
-	render(parent){
+	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
 		this.siteId = inputFieldId+'_site';
@@ -2322,30 +2340,33 @@ class PluggableEditorField extends LabeledFormField{
 		var comp = this;
 		if(this.config.requires){
 			loadDeps(this.config.requires,function(){
-				comp.plugEditor();
+				comp.plugEditor(then);
 			});
 		}else{
-			this.plugEditor();
+			this.plugEditor(then);
 		}
 	}
 	getPluginSite(){
 		return $('#'+this.siteId);
 	}
-	plugEditor(){
+	plugEditor(then){
 		let dotIndex = this.config.editor.indexOf('.');
 		let namespace = '';
 		if(dotIndex<0){
 			namespace = 'npaUiCore.';
 		}
 		let editor = null;
+		// do not remove the following line! (used in eval())
 		let comp = this;
 		let toEval = 'editor = new '+namespace+this.config.editor+'(comp);';
 		try{
 			eval(toEval);
 			this.innerEditor = editor;
-			this.innerEditor.render();
+			this.innerEditor.render(then);
 		}catch(t){
+			console.log('ERROR: in PluggableEditorField#plugEditor()');
 			console.log(t);
+			then();
 		}
 	}
 	hide(){
@@ -2488,7 +2509,7 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		}
 		return new FormField(config,this);
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let html = '';
@@ -2500,13 +2521,15 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 				var fieldConfig = config.fields[i];
 				this.fieldCache[fieldConfig.name] = this.createFormField(fieldConfig);
 			}
-			this.renderFields();
+			this.renderFields(then);
+		}else{
+			then();
 		}
 	}
 	getFieldEditor(fieldName){
 		return this.fieldCache[fieldName];
 	}
-	renderFields(){
+	renderFields(then){
 		let config = this.getConfiguration();
 		let html = '';
 		let formClass = 'form-frame';
@@ -2521,7 +2544,7 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		$('#'+this.getId()+'_form').append(html);
 		var parent = $('#'+this.getId());
 		let orderedFieldList = sortOn(config.fields,'displayIndex');
-		for(var i=0;i<orderedFieldList.length;i++){
+		/*for(var i=0;i<orderedFieldList.length;i++){
 			var fieldId = orderedFieldList[i].name;
 			console.log('looking for helper class for field #'+fieldId+' ('+orderedFieldList[i].type+')');
 			var field = this.fieldCache[fieldId];
@@ -2531,7 +2554,27 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 			}else{
 				console.log('helper class not found in cache');
 			}
+		}*/
+		let form = this;
+		let renderFieldList = function(list,index,next){
+			if(index<list.length){
+				var fieldId = list[index].name;
+				console.log('looking for helper class for field #'+fieldId+' ('+list[index].type+')');
+				var field = form.fieldCache[fieldId];
+				if(typeof field!='undefined'){
+					console.log('calling '+field.config.type+' rendering');
+					field.render(parent,function(){
+						renderFieldList(list,index+1,next);
+					});
+				}else{
+					console.log('WARNING: helper class not found in cache for field '+fieldId);
+					renderFieldList(list,index+1,next);
+				}
+			}else{
+				next();
+			}
 		}
+		renderFieldList(orderedFieldList,0,then);
 	}
 	setEditMode(mode){
 		console.log('form#setEditMode('+mode+')');

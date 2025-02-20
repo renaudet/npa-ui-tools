@@ -9,7 +9,7 @@ npaUiCore.Console = class Console extends NpaUiComponent{
 	initialize(then){
 		$.loadCss('/uiTools/css/console.css',then);
 	}
-	render(){
+	render(then){
 		let html = '';
 		let style = '';
 		style += 'height:'+this.getHeight()+'px;';
@@ -17,6 +17,7 @@ npaUiCore.Console = class Console extends NpaUiComponent{
 		style += this.getCustomStyle();
 		html += '<div id="'+this.getId()+'" class="npa-console" style="'+style+'">&nbsp;</div>';
 		this.parentDiv().html(html);
+		then();
 	}
 	getHeight(){
 		if(this.getConfiguration().height){

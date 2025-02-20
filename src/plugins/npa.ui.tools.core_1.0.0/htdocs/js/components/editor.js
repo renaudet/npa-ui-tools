@@ -21,7 +21,7 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 	initialize(then){
 		loadDeps(DEPTS,then);
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		let html = '';
 		if(typeof config.toolbar!='undefined' && 'top'==config.toolbar.position){
@@ -82,8 +82,6 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 			mode:  "javascript",
 			readOnly: readonly
 		});
-		let source = this;
-		setTimeout(function(){ source.editor.setOption("mode","javascript"); },100);
 		if(typeof config.height!='undefined'){
 			this.editor.setSize(null,config.height);
 		}else{
@@ -96,6 +94,8 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 				editor.triggersActionEvent(actionId)
 			});
 		}
+		let source = this;
+		setTimeout(function(){ source.editor.setOption("mode","javascript");then(); },200);
 	}
 	triggersActionEvent(actionId){
 		let actionHandler = this.pluggableActionHandlers[actionId];
@@ -116,7 +116,9 @@ npaUiCore.Editor = class Editor extends NpaUiComponent{
 		setTimeout(function(){ comp.editor.refresh();comp.editor.focus();},200);
 	}
 	setText(txt){
-		this.editor.setValue(txt);
+		//this.editor.setValue(txt);
+		let comp = this;
+		setTimeout(function(){ comp.editor.setValue(txt);comp.editor.refresh();},500);
 	}
 	getText(){
 		return this.editor.getValue();

@@ -15,7 +15,7 @@ npaUiCore.Carousel = class Carousel extends NpaUiComponent{
 			$.loadCss('/uiTools/css/carousel.css',then);
 		}
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let childs = {};
@@ -66,6 +66,9 @@ npaUiCore.Carousel = class Carousel extends NpaUiComponent{
 			html += '  <span class="visually-hidden">Next</span>';
 			html += '</button>';
 			$('#'+this.getId()+'_inner').append(html);
+			then();
+		}else{
+			then();
 		}
 	}
 	stretch(){

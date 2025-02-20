@@ -10,7 +10,7 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 		this.toolbarBtnClass += this.getId();
 		$.loadCss('/uiTools/css/toolbar.css',then);
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let html = '';
@@ -77,6 +77,9 @@ npaUiCore.Toolbar = class Toolbar extends NpaUiComponent{
 					this.pluggableActionHandlers[actionHandlerConfig.actionId] = actionHandlerConfig;
 				}
 			}
+			then();
+		}else{
+			then();
 		}
 	}
 	triggersActionEvent(actionId){

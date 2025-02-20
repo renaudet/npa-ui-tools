@@ -11,7 +11,7 @@ npaUiCore.HtmlImport = class HtmlImport extends NpaUiComponent{
 			then();
 		}
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let pageUrl = config.url;
@@ -24,7 +24,10 @@ npaUiCore.HtmlImport = class HtmlImport extends NpaUiComponent{
 		    }).done(function(htmlFragment){
 				htmlImport.parentDiv().append(htmlFragment);
 				//htmlImport.parentDiv().data('loaded') = 'true';
+				then();
 			});
+		}else{
+			then();
 		}
 	}
 }

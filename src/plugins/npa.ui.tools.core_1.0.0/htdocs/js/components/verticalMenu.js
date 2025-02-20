@@ -7,7 +7,7 @@ npaUiCore.VerticalMenu = class VerticalMenu extends NpaUiComponent{
 	initialize(then){
 		$.loadCss('/uiTools/css/verticalMenu.css',then);
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let childs = {};
@@ -55,6 +55,9 @@ npaUiCore.VerticalMenu = class VerticalMenu extends NpaUiComponent{
 				contentDiv.css('display','inline');
 			}
 			this.refreshEventHandlers();
+			then();
+		}else{
+			then();
 		}
 	}
 	refreshEventHandlers(){

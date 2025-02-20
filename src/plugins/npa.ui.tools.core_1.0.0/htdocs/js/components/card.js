@@ -25,7 +25,7 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 			$.loadCss('/uiTools/css/card.css',then);
 		}
 	}
-	render(){
+	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
 			let child = null;
@@ -55,6 +55,9 @@ npaUiCore.Card = class Card extends NpaUiComponent{
 			if(child){
 				$('#'+contentDivId).append(child);
 			}
+			then();
+		}else{
+			then();
 		}
 	}
 	getHeaderClass(){
