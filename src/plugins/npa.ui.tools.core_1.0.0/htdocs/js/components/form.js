@@ -478,6 +478,23 @@ class DateField extends TextField{
 	constructor(config,form){
 		super(config,form);
 	}
+	getDisplayFormat(){
+		if(this.config.displayFormat){
+			return this.config.displayFormat;
+		}
+		return 'YYYY/MM/DD';
+	}
+	getStorageFormat(){
+		if(this.config.storageFormat){
+			return this.config.storageFormat;
+		}
+		return 'YYYY/MM/DD';
+	}
+	getDatePickerFormat(){
+		let format = this.getDisplayFormat();
+		format = format.replace(/Y/g,'y').replace(/M/g,'m').replace(/D/g,'d');
+		return format;
+	}
 	render(parent,then){
 		this.baseId = parent.prop('id');
 		let inputFieldId = this.baseId+'_'+this.config.name;
@@ -486,7 +503,7 @@ class DateField extends TextField{
 		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
 		html += '  <div class="col-'+size+'">';
-		html += '    <input type="text" id="'+inputFieldId+'" class="form-control-plaintext" style="'+this.config.style+'" placeholder="YYYY/MM/DD" data-provide="datepicker" data-date-format="yyyy/mm/dd" readonly>';
+		html += '    <input type="text" id="'+inputFieldId+'" class="form-control-plaintext" style="'+this.config.style+'" placeholder="'+this.getDisplayFormat()+'" data-provide="datepicker" data-date-format="'+this.getDatePickerFormat()+'" readonly>';
 		if(this.config.help){
 			html += '<div class="collapse" id="'+inputFieldId+'_help">';
 			html += '  <div class="card card-body form-help">'+this.getLocalizedString(this.config.help)+'</div>';
@@ -503,9 +520,33 @@ class DateField extends TextField{
 			field.fireFormEvent({"type": "change","source": field.config.name});
 		});
 		loadDeps(DATE_PICKER_DEPTS,function(){
-			  $('#'+inputFieldId).val(moment().format('YYYY/MM/DD'));
+			  $('#'+inputFieldId).val(moment().format(field.getDisplayFormat()));
 			  then();
 		});
+	}
+	setData(parentObj){
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		if(parentObj[this.config.name]){
+			let date = moment(parentObj[this.config.name],this.getStorageFormat());
+			$('#'+inputFieldId).val(date.format(this.getDisplayFormat()));
+		}else{
+			if(this.config.default && this.config.default.length>0){
+				$('#'+inputFieldId).val(this.config.default);
+			}else{
+				$('#'+inputFieldId).val('');
+			}
+		}
+		$('#'+inputFieldId).removeClass('is-invalid');
+	}
+	assignData(parentObj){
+		var inputFieldId = this.baseId+'_'+this.config.name;
+		let textValue = $('#'+inputFieldId).val();
+		if(textValue && textValue.length>0){
+			let date = moment(textValue,this.getDisplayFormat());
+			parentObj[this.config.name] = date.format(this.getStorageFormat());
+		}else{
+			parentObj[this.config.name] = '';
+		}
 	}
 	hide(){
 		super.hide();
@@ -519,7 +560,8 @@ class DateField extends TextField{
 	vetoRaised(){
 		var inputFieldId = this.baseId+'_'+this.config.name;
 		var fieldValue = $('#'+inputFieldId).val();
-		if(this.config.required && (typeof fieldValue=='undefined' || fieldValue.length<10 || fieldValue.indexOf('/')<0)){
+		var date = moment(fieldValue,this.getDisplayFormat());
+		if(this.config.required && (typeof fieldValue=='undefined' || !date.isValid())){
 			$('#'+inputFieldId).addClass('is-invalid');
 			$('#'+inputFieldId).focus();
 			showError(this.getLocalizedString('@form.dateField.error',[this.config.name]));
