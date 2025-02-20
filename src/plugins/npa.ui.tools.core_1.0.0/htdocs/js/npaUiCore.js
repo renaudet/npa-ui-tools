@@ -212,6 +212,7 @@ npaUi = {
 	selectionListeners: {},
 	localizationMap: null,
     render: function(targetClass='npaUi'){
+		const noOp = function(){};
 		let toLoad = [];
 		console.log('npaUi#render('+targetClass+')');
 		$('.'+targetClass).each(function(index,element){
@@ -221,7 +222,7 @@ npaUi = {
             if(typeof cachedComponent=='undefined'){
 				toLoad.push(placeholder);
 			}else{
-				cachedComponent.render();
+				cachedComponent.render(noOp);
 			}
 		});
 		if(toLoad.length>0){
