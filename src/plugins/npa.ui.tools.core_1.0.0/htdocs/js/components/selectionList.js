@@ -209,6 +209,6 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 		return null;
 	}
 	refresh(){
-		this.render();
+		this.render(function(){});
 	}
 }

@@ -321,6 +321,7 @@ npaUi = {
 		delete this.componentByDivId[tagId];
 	},
     renderSingleComponent: function(tagId,componentConfig,then){
+		console.log('npaUiCore#renderSingleComponent(#'+componentConfig.id+',type='+componentConfig.type+')');
 		let placeholder = $('#'+tagId);
 		let cachedComponent = npaUi.componentByDivId[tagId];
         if(typeof cachedComponent=='undefined'){
@@ -329,8 +330,8 @@ npaUi = {
 				then();
 			});
 		}else{
+			console.log('npaUiCore#renderSingleComponent() returned using cached instance');
 			cachedComponent.render(then);
-			//then();
 		}
 	},
     loadConfigFrom: function(configFileUri,then){
