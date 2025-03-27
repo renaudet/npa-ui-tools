@@ -24,7 +24,7 @@
   		"port": "5984",
   		"username_": "admin",
   		"password_": "admin4couch",
-  		"dbname": "scaf_fragments",
+  		"dbname": "npa_test",
   		"maxPageSize": 500,
   		"environment": {
   			"hostname": "COUCH_DB_HOST",
