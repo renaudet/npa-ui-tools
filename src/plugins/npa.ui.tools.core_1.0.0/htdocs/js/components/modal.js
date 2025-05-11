@@ -50,7 +50,7 @@ npaUiCore.ModalDialog = class ModalDialog extends NpaUiComponent{
 					}
 				}
 			}else{
-				html += '        <button id="'+this.getId()+'_closeBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">'+this.getLocalizedString('@modal.button.close')+'Close</button>';
+				html += '        <button id="'+this.getId()+'_closeBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">'+this.getLocalizedString('@modal.button.close')+'</button>';
 			}
 			html += '      </div>';
 			html += '    </div>';
