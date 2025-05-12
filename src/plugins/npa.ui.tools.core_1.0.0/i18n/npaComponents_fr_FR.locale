@@ -18,6 +18,7 @@ form.multiple.reference.button.add=Ajouter &agrave; ce {0}
 form.multiple.reference.button.remove=Retirer de ce {0}
 form.SingleReferenceEditorField.select.value=-- s&eacute;lectionner une valeur --
 modal.button.close=Fermer
+modal.button.cancel=Annuler
 selection.list.button.toggle=R&eacute;v&eacute;ler le filtre...
 selection.list.button.ok=Ok
 notifier.title=Notification
