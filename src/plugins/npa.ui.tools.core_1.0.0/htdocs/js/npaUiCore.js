@@ -342,6 +342,7 @@ npaUi = {
 		});
 	},
 	registerComponentConfig: function(reference,componentConfig){
+		console.log('npaUi#registerComponentConfig('+reference+',...)');
 		this.globalConfig.components[reference] = componentConfig;
 	},
 	getComponent: function(componentId){
@@ -409,7 +410,9 @@ npaUi = {
 		});
 	},
 	onRenderingCompleted: function(){
+		console.log('npaUi#onRenderingCompleted()');
 		this.localizeTags();
+		console.log('calling the onComponentLoaded() callback...');
 		this.onComponentLoaded();
 		$(window).trigger('resize');
 	},

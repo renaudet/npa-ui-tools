@@ -146,6 +146,9 @@ npaUiCore.ReactiveDataManager = class ReactiveDataManager extends NpaUiComponent
 	query(filterExpr){
 		console.log('ReactiveDataManager#query()');
 		let interactionConfig = this.getConfiguration().query;
+		if(typeof interactionConfig=='undefined'){
+			interactionConfig = {};
+		}
 		let type = 'local';
 		let method = 'GET';
 		let payload = {};
@@ -155,7 +158,7 @@ npaUiCore.ReactiveDataManager = class ReactiveDataManager extends NpaUiComponent
 		if(typeof interactionConfig.method!='undefined'){
 			method = interactionConfig.method;
 		}
-		if(typeof filterExpr!='undefined'){
+		if(typeof filterExpr!='undefined' && filterExpr.selector){
 			payload = filterExpr;
 		}else{
 			if(typeof interactionConfig.payload!='undefined'){

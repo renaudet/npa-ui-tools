@@ -2554,6 +2554,8 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 	render(then){
 		let config = this.getConfiguration();
 		if(this.parentDiv().data('loaded')!='true'){
+			this.parentDiv().data('loaded','true');
+			console.log('tools#form#render()');
 			let html = '';
 			html += '<form id="'+this.getId()+'_form" class="'+config.class+'">';
 			html += '</form>';
@@ -2588,7 +2590,7 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		let orderedFieldList = sortOn(config.fields,'displayIndex');
 		/*for(var i=0;i<orderedFieldList.length;i++){
 			var fieldId = orderedFieldList[i].name;
-			console.log('looking for helper class for field #'+fieldId+' ('+orderedFieldList[i].type+')');
+			console.log('npaUiCore.Form#renderFields() looking for helper class for field #'+fieldId+' ('+orderedFieldList[i].type+')');
 			var field = this.fieldCache[fieldId];
 			if(typeof field!='undefined'){
 				console.log('calling '+field.config.type+' rendering');
@@ -2601,7 +2603,7 @@ npaUiCore.Form = class Form extends NpaUiComponent{
 		let renderFieldList = function(list,index,next){
 			if(index<list.length){
 				var fieldId = list[index].name;
-				console.log('looking for helper class for field #'+fieldId+' ('+list[index].type+')');
+				console.log('npaUiCore.Form#renderFields() looking for helper class for field #'+fieldId+' ('+list[index].type+')');
 				var field = form.fieldCache[fieldId];
 				if(typeof field!='undefined'){
 					console.log('calling '+field.config.type+' rendering');

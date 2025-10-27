@@ -4,6 +4,7 @@
  */
  
 npaUiCore.TabPane = class TabPane extends NpaUiComponent{
+	eventListeners = {};
 	initialize(then){
 		$.loadCss('/uiTools/css/tabPane.css',then);
 	}
@@ -42,6 +43,17 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 			html += '</div>';
 			this.parentDiv().append(html);
 			
+			// manage events
+			let tabPane = this;
+			for(var i=0;i<config.tabs.length;i++){
+				let tab = config.tabs[i];
+				$('#'+tab.id).on('click',function(){
+					tabPane.onTabShown(tab.id);
+				});
+			}
+
+
+			
 			let appendChild = function(child,targetId){
 				setTimeout(function(){ $(targetId).append(child);npaUi.render(namespace);},500);
 			}
@@ -63,5 +75,20 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 		}else{
 			then();
 		}
+	}
+	onTabShown(tabId){
+		console.log('TabPane#onTabShown('+tabId+')');
+		let listenerFunc = this.eventListeners[tabId];
+		if(typeof listenerFunc!='undefined'){
+			try{
+				listenerFunc();
+			}catch(e){
+				
+			}
+		}
+	}
+	addTabEventListener(tabId,listener){
+		console.log('TabPane#addTabEventListener('+tabId+',listener)');
+		this.eventListeners[tabId] = listener;
 	}
 }

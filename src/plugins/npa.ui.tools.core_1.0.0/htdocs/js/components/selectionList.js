@@ -8,6 +8,7 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 	itemRenderer = null;
 	itemSorter = null;
 	selectedIndex = -1;
+	selectionEnabled = true;
 	initialize(then){
 		if(this.getConfiguration().stylesheet){
 			$.loadCss(this.getConfiguration().stylesheet,then);
@@ -173,9 +174,11 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 		});
 		$('.'+this.getId()+'_selection_provider').off('.'+this.getId());
 		$('.'+this.getId()+'_selection_provider').on('click.'+this.getId(),function(){
-			source.select(parseInt($(this).data('index')));
-			$('#'+source.getId()+' li').removeClass('active');
-			$(this).addClass('active');
+			if(source.selectionEnabled){
+				source.select(parseInt($(this).data('index')));
+				$('#'+source.getId()+' li').removeClass('active');
+				$(this).addClass('active');
+			}
 		});
 	}
 	select(itemIndex){
@@ -210,5 +213,13 @@ npaUiCore.SelectionList = class SelectionList extends NpaUiComponent{
 	}
 	refresh(){
 		this.render(function(){});
+	}
+	enable(){
+		this.selectionEnabled = true;
+		$('.'+this.getId()+'_selection_provider').prop('disabled',false);
+	}
+	disable(){
+		this.selectionEnabled = false;
+		$('.'+this.getId()+'_selection_provider').prop('disabled',true);
 	}
 }
