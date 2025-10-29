@@ -116,7 +116,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		console.log('Datatable#refresh()');
 		var datatable = this;
 		let config = this.getConfiguration();
-		if(typeof config.datasource!='undefined'){
+		if(typeof config.datasource!='undefined' && config.datasource.type!='manual'){
 			this.fetchDataFromDatasource(function(data){
 				console.log('received '+data.length+' rows from datasource');
 				console.log(data);
@@ -127,6 +127,7 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 		}
 	}
 	renderData(data){
+		console.log('Datatable#renderData()');
 		$('#'+this.getId()+'_table tbody').empty();
 		let config = this.getConfiguration();
 		let datatable = this;
@@ -345,5 +346,9 @@ npaUiCore.Datatable = class Datatable extends NpaUiComponent{
 				$(this).hide();
 			}
 		});
+	}
+	setData(data){
+		this.dataset = data;
+		this.refresh();
 	}
 }
