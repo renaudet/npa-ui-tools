@@ -13,7 +13,7 @@
   	{
   		"point": "npa.log.provider",
   		"id": "npa.ui.tools.core.logger",
-  		"dir": "uiTools"
+  		"dir": "npa.ui.tools.core"
   	},
   	{
   		"point": "npa.http.router",
