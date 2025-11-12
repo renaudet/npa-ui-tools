@@ -43,25 +43,25 @@
   	},
   	{
   		"point": "npa.ui.locale.provider",
-  		"id": "npa.ui.tools.core.locale.provider",
+  		"id": "npa.ui.tools.core.locale.provider.enUS",
   		"path": "i18n/npaComponents_en_US.locale",
   		"locale": "en-US"
   	},
   	{
   		"point": "npa.ui.locale.provider",
-  		"id": "npa.ui.tools.core.locale.provider",
+  		"id": "npa.ui.tools.core.locale.provider.en",
   		"path": "i18n/npaComponents_en_US.locale",
   		"locale": "en"
   	},
   	{
   		"point": "npa.ui.locale.provider",
-  		"id": "npa.ui.tools.core.locale.provider",
+  		"id": "npa.ui.tools.core.locale.provider.frFR",
   		"path": "i18n/npaComponents_fr_FR.locale",
   		"locale": "fr-FR"
   	},
   	{
   		"point": "npa.ui.locale.provider",
-  		"id": "npa.ui.tools.core.locale.provider",
+  		"id": "npa.ui.tools.core.locale.provider.fr",
   		"path": "i18n/npaComponents_fr_FR.locale",
   		"locale": "fr"
   	},
