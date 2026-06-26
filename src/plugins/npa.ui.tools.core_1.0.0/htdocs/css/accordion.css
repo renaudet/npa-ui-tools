@@ -1,0 +1,9 @@
+/***
+ * accordion.css - default CSS file for the NPA UI Accordion component
+ * Copyright 2026 Nicolas Renaudet - All rights reserved
+ *
+ ***/
+ 
+.npa-accordion-header {
+	background-color: #d3d3d3;
+}
