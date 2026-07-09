@@ -42,6 +42,10 @@ npaUiCore.TabPane = class TabPane extends NpaUiComponent{
 			}
 			html += '</div>';
 			this.parentDiv().append(html);
+			if(config.parentId){
+				this.parentDiv().addClass('npa-tab-pane');
+				this.parentDiv().css('max-height',($('#'+config.parentId).height()-5)+'px');
+			}
 			
 			// manage events
 			let tabPane = this;
