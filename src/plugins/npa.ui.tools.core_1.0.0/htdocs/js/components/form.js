@@ -2434,10 +2434,12 @@ class PluggableEditorField extends LabeledFormField{
 	setData(parentObj){
 		if(typeof parentObj[this.config.name]!='undefined'){
 			if(this.innerEditor){
-			this.innerEditor.setValue(parentObj[this.config.name]);
+				this.innerEditor.setValue(parentObj[this.config.name]);
 			}else{
 				this.pendingValue = parentObj[this.config.name];
 			}
+		}else{
+			this.innerEditor.setValue(undefined);
 		}
 	}
 	assignData(parentObj){
