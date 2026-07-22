@@ -29,7 +29,9 @@ plugin.lazzyPlug = function(extenderId,extensionPointConfig){
 }
 
 plugin.loadLocalizationFile = function(filePath,locale){
-	this.trace('->loadLocalizationFile()');
+	this.debug('->loadLocalizationFile()');
+	this.debug('filePath: '+filePath);
+	this.debug('locale: '+locale);
 	let normalizedLocale = locale.toLowerCase();
 	var fileContent = fs.readFileSync(filePath, 'utf8');
 	let provider = this.providers[normalizedLocale];
@@ -37,15 +39,16 @@ plugin.loadLocalizationFile = function(filePath,locale){
 		provider = {};
 		this.providers[normalizedLocale] = provider;
 	}
-	let lines = fileContent.split('\r\n');
+	let lines = fileContent.replace(/\r/g,'').split('\n');
 	for(var i=0;i<lines.length;i++){
 		let line = lines[i].trim();
 		if(line.length>0 && !line.startsWith('#')){
 			let token = line.split('=');
+			this.trace('adding key '+token[0]+' / '+token[1]);
 			provider[token[0]] = token[1];
 		}
 	}
-	this.trace('<-loadLocalizationFile()');
+	this.debug('<-loadLocalizationFile()');
 }
 
 plugin.setDefaultLocale = function(locale){
