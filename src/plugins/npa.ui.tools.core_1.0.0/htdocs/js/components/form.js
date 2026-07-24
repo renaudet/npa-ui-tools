@@ -1208,7 +1208,15 @@ class SourceEditorField extends LabeledFormField{
 			let comp = this;
 			if(typeof parentObj[this.config.name]!='undefined'){
 				let txt = parentObj[this.config.name];
-				setTimeout(function(){ comp.getEditor().setValue(txt);comp.getEditor().refresh();},500);
+				if(this.config.type=='json' && this.config.jsonData===true){
+					if(typeof txt=='string'){
+						setTimeout(function(){ comp.getEditor().setValue(txt);comp.getEditor().refresh();},500);
+					}else{
+						setTimeout(function(){ comp.getEditor().setValue(JSON.stringify(txt,null,2));comp.getEditor().refresh();},500);
+					}
+				}else{
+					setTimeout(function(){ comp.getEditor().setValue(txt);comp.getEditor().refresh();},500);
+				}
 			}else{
 				if(this.config.type=='json'){
 					let txt = '{\n}';
@@ -1222,7 +1230,12 @@ class SourceEditorField extends LabeledFormField{
 		}
 	}
 	assignData(parentObj){
-		parentObj[this.config.name] = this.form.editors[this.config.name].getValue();
+		let value = this.form.editors[this.config.name].getValue();
+		if(this.config.type=='json' && this.config.jsonData===true){
+			parentObj[this.config.name] = JSON.parse(value);
+		}else{
+			parentObj[this.config.name] = value;
+		}
 	}
 	vetoRaised(){
 		if(this.config.type=='json'){
