@@ -69,13 +69,14 @@ npaUiCore.Splitter = class Splitter extends NpaUiComponent {
 		let secondId    = splitterId + '_second';
 		let resizerId   = splitterId + '_resizer';
 
-		// Build structure
-		let sizeProp = isVertical ? 'height' : 'width';
+		// Build structure — use flex-grow proportional to percentages so the
+		// resizer's fixed size (5px) is automatically subtracted from the
+		// available space, avoiding any overflow from pct[0]+pct[1]==100%.
 		let html = '';
 		html += '<div id="' + splitterId + '_container" class="npa-splitter' + (isVertical ? ' vertical' : '') + '">';
-		html += '  <div id="' + firstId  + '" class="npa-splitter-pane" style="' + sizeProp + ':' + pct[0] + '%"></div>';
+		html += '  <div id="' + firstId  + '" class="npa-splitter-pane" style="flex:' + pct[0] + '"></div>';
 		html += '  <div id="' + resizerId + '" class="npa-splitter-resizer"></div>';
-		html += '  <div id="' + secondId + '" class="npa-splitter-pane" style="' + sizeProp + ':' + pct[1] + '%"></div>';
+		html += '  <div id="' + secondId + '" class="npa-splitter-pane" style="flex:' + pct[1] + '"></div>';
 		html += '</div>';
 		this.parentDiv().html(html);
 
@@ -133,16 +134,10 @@ npaUiCore.Splitter = class Splitter extends NpaUiComponent {
 			if (newFirst  < minPx) { newFirst  = minPx; newSecond = available - minPx; }
 			if (newSecond < minPx) { newSecond = minPx; newFirst  = available - minPx; }
 
-			let firstPct  = (newFirst  / available * 100).toFixed(2);
-			let secondPct = (newSecond / available * 100).toFixed(2);
-
-			if (isVertical) {
-				firstPane.style.height  = firstPct  + '%';
-				secondPane.style.height = secondPct + '%';
-			} else {
-				firstPane.style.width  = firstPct  + '%';
-				secondPane.style.width = secondPct + '%';
-			}
+			// Use flex values (unitless ratio) so the resizer's fixed size is
+			// automatically excluded from the distribution — no overflow.
+			firstPane.style.flex  = newFirst.toFixed(2);
+			secondPane.style.flex = newSecond.toFixed(2);
 		});
 
 		document.addEventListener('mouseup', function () {
