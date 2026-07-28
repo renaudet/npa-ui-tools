@@ -1104,6 +1104,7 @@ const CODE_MIRROR_DEPTS = [
 const DEFAULT_EDITOR_HEIGHT = 300;
 
 class SourceEditorField extends LabeledFormField{
+	expanded = false;
 	constructor(config,form){
 		super(config,form);
 	}
@@ -1113,12 +1114,16 @@ class SourceEditorField extends LabeledFormField{
 		var html = '';
 		html += '<div class="row form-row" id="'+inputFieldId+'_row">';
 		html += this.generateLabel();
-		html += '  <div class="col-10">';
+		html += '  <div class="col-10" id="'+inputFieldId+'_col">';
 		if(typeof this.config.buttons!='undefined'){
-			html += '<div id="'+inputFieldId+'_buttonBar" class="d-grid gap-2 d-md-flex">';//justify-content-md-end
+			html += '<div id="'+inputFieldId+'_buttonBar" class="d-grid gap-2 d-md-flex">';
 			for(var i=0;i<this.config.buttons.length;i++){
 				var button = this.config.buttons[i];
-				html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="form-icon" src="'+button.icon+'" title="'+this.getLocalizedString(button.label)+'"></button>';
+				if(button.actionId==='expandCollapse'){
+					html += '<button type="button" class="btn btn-sm btn-icon" id="'+inputFieldId+'_expandBtn" disabled><img class="form-icon" id="'+inputFieldId+'_expandIcon" src="'+button.icon+'" title="'+this.getLocalizedString(button.label)+'"></button>';
+				}else{
+					html += '<button type="button" class="btn btn-sm btn-icon" data-actionid="'+button.actionId+'" disabled><img class="form-icon" src="'+button.icon+'" title="'+this.getLocalizedString(button.label)+'"></button>';
+				}
 			}
 			html += '</div>';
 		}
@@ -1126,12 +1131,18 @@ class SourceEditorField extends LabeledFormField{
 		html += '  </div>';
 		html += '</div>';
 		parent.append(html);
+		// Wire the expand/collapse handler directly — bypasses reloadEventsHandler()
+		var source = this;
+		if($('#'+inputFieldId+'_expandBtn').length){
+			$('#'+inputFieldId+'_expandBtn').on('click',function(){
+				if(source.expanded){ source.collapse(); }else{ source.expand(); }
+			});
+		}
 		this.reloadEventsHandler();
 		let editorMode = 'json';
 		if(typeof this.config.type!='undefined' && this.config.type=='javascript'){
 			editorMode = 'javascript';
 		}
-		var source = this;
 		loadDeps(CODE_MIRROR_DEPTS,function(){
 			var textArea = document.getElementById(inputFieldId);
 			source.form.editors[source.config.name] = CodeMirror.fromTextArea(textArea, {
@@ -1149,13 +1160,79 @@ class SourceEditorField extends LabeledFormField{
 			setTimeout(function(){ source.getEditor().setOption("mode",editorMode);source.getEditor().refresh();then(); },200);
 		});
 	}
+	expand(){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		let row = $('#'+inputFieldId+'_row');
+		let col = $('#'+inputFieldId+'_col');
+		this._savedHeight = this.config.height || DEFAULT_EDITOR_HEIGHT;
+		let expandParent = this.config.expandParent ? $('#'+this.config.expandParent) : null;
+		if(expandParent && expandParent.length){
+			// Insert the row into the configured parent div, filling it entirely
+			this._savedParent  = row.parent();
+			this._savedSibling = row.next();
+			expandParent.css({'position':'relative'});
+			row.detach().appendTo(expandParent);
+			row.css({
+				'position': 'absolute', 'inset': '0', 'z-index': '1040',
+				'background': '#ffffff', 'padding': '8px', 'margin': '0',
+				'display': 'flex', 'flex-direction': 'column'
+			});
+			let barHeight = $('#'+inputFieldId+'_buttonBar').outerHeight(true) || 0;
+			let newHeight = expandParent.height() - barHeight - 24;
+			this.getEditor().setSize(null, newHeight);
+		} else {
+			// Default: fixed overlay covering the full viewport
+			row.css({
+				'position': 'fixed', 'inset': '0', 'z-index': '1040',
+				'background': '#ffffff', 'padding': '8px', 'margin': '0',
+				'display': 'flex', 'flex-direction': 'column'
+			});
+			let barHeight = $('#'+inputFieldId+'_buttonBar').outerHeight(true) || 0;
+			let newHeight = $(window).height() - barHeight - 24;
+			this.getEditor().setSize(null, newHeight);
+		}
+		// Hide the label div (col-2 form-row-label) and stretch the editor col
+		row.children('.form-row-label').hide();
+		col.removeClass('col-10').addClass('col-12');
+		col.css({'display':'flex','flex-direction':'column','flex':'1','min-height':'0'});
+		this.getEditor().refresh();
+		$('#'+inputFieldId+'_expandIcon').attr('src','/uiTools/img/silk/arrow_in.png');
+		this.expanded = true;
+	}
+	collapse(){
+		let inputFieldId = this.baseId+'_'+this.config.name;
+		let row = $('#'+inputFieldId+'_row');
+		let col = $('#'+inputFieldId+'_col');
+		// If the row was moved into an expandParent, move it back
+		if(this._savedParent){
+			row.detach();
+			if(this._savedSibling && this._savedSibling.length){
+				row.insertBefore(this._savedSibling);
+			}else{
+				row.appendTo(this._savedParent);
+			}
+			this._savedParent  = null;
+			this._savedSibling = null;
+		}
+		row.css({'position':'','inset':'','z-index':'','background':'','padding':'','margin':'','display':'','flex-direction':''});
+		// Restore the label div
+		row.children('.form-row-label').show();
+		col.removeClass('col-12').addClass('col-10');
+		col.css({'display':'','flex-direction':'','flex':'','min-height':''});
+		this.getEditor().setSize(null, this._savedHeight);
+		this.getEditor().refresh();
+		let expandBtn = this.config.buttons && this.config.buttons.find(function(b){ return b.actionId==='expandCollapse'; });
+		if(expandBtn){ $('#'+inputFieldId+'_expandIcon').attr('src', expandBtn.icon); }
+		this.expanded = false;
+	}
 	getEditor(){
 		return this.form.editors[this.config.name];
 	}
 	reloadEventsHandler(){
 		let inputFieldId = this.baseId+'_'+this.config.name;
-		$('#'+inputFieldId+'_buttonBar button').off('.'+inputFieldId);
-		$('#'+inputFieldId+'_buttonBar button').on('click.'+inputFieldId,function(){
+		// Only wire buttons that are NOT the expandCollapse button
+		$('#'+inputFieldId+'_buttonBar button[data-actionid]').off('.'+inputFieldId);
+		$('#'+inputFieldId+'_buttonBar button[data-actionid]').on('click.'+inputFieldId,function(){
 			var actionId = $(this).data('actionid');
 			npaUi.fireEvent(actionId,{"action": actionId,"field": $('#'+inputFieldId)});
 		});
@@ -1189,7 +1266,8 @@ class SourceEditorField extends LabeledFormField{
 			}else{
 				setTimeout(function(){ comp.getEditor().setOption('readOnly',true);},200);
 				if(typeof this.config.buttons!='undefined'){
-					$('#'+inputFieldId+'_buttonBar button').prop('disabled',true);
+					// disable action buttons but keep expandCollapse always available
+					$('#'+inputFieldId+'_buttonBar button[data-actionid]').prop('disabled',true);
 				}
 			}
 		}
