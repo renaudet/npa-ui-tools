@@ -17,5 +17,6 @@
 	"DynamicActionLoader": {"version": "1.0.0","dependency":"/uiTools/js/components/dynamicActionLoader.js"},
 	"Console": {"version": "1.0.0","dependency":"/uiTools/js/components/console.js"},
 	"ReactiveDataManager": {"version": "1.0.0","dependency":"/uiTools/js/utils/reactiveDataManager.js"},
-	"Accordion": {"version": "1.0.0","dependency":"/uiTools/js/components/accordion.js"}
+	"Accordion": {"version": "1.0.0","dependency":"/uiTools/js/components/accordion.js"},
+	"Splitter": {"version": "1.0.0","dependency":"/uiTools/js/components/splitter.js"}
 }
