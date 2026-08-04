@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - VerticalMenu component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>VerticalMenu - npaUi Component</title>
+	</head>
+	<body>
+		<h1>VerticalMenu &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>VerticalMenu</b> renders a two-column layout: a narrow left column with a Bootstrap
+		<code>nav flex-column</code> menu, and a wide right content area. Clicking a menu item reveals
+		its associated content div and hides all others. A <code>menu.item.selected</code> event is
+		fired on each selection.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>items</code></td><td>array</td><td>Menu item descriptors (see below)</td></tr>
+			<tr><td><code>expandsTo</code></td><td>string</td><td>Id of a parent element; the menu height tracks its parent on resize</td></tr>
+		</table>
+
+		<h3>Item Descriptor</h3>
+		<table>
+			<tr><th>Field</th><th>Description</th></tr>
+			<tr><td><code>id</code></td><td>Unique item id — matches the <code>data-menu-ref</code> attribute on child content divs</td></tr>
+			<tr><td><code>label</code></td><td>Menu item text — supports <code>@key</code> i18n</td></tr>
+			<tr><td><code>active</code></td><td>Set to <code>false</code> to disable this item; defaults to <code>true</code></td></tr>
+		</table>
+
+		<h2>HTML Structure</h2>
+
+		Pre-place content divs with <code>data-menu-ref</code> matching each item's <code>id</code>:
+
+		<div class="code">
+		&lt;div class=<span style="color:#3469e3;">"npaUi"</span> id=<span style="color:#3469e3;">"myMenu"</span> data-config=<span style="color:#3469e3;">"/my/menuConfig.json"</span>&gt;<br>
+		&nbsp;&nbsp;&lt;div data-menu-ref=<span style="color:#3469e3;">"page1"</span>&gt;&lt;p&gt;Page 1 content&lt;/p&gt;&lt;/div&gt;<br>
+		&nbsp;&nbsp;&lt;div data-menu-ref=<span style="color:#3469e3;">"page2"</span>&gt;&lt;p&gt;Page 2 content&lt;/p&gt;&lt;/div&gt;<br>
+		&lt;/div&gt;
+		</div>
+
+		The first item's content is visible by default; all others are hidden.
+
+		<h2>JavaScript API</h2>
+
+		<div class="code">let menu = npaUi.getComponent(<span style="color:#3469e3;">'myMenu'</span>);</div>
+
+		<h3><code>menu.addMenuItem(id, label, htmlContent)</code></h3>
+		Dynamically adds a new item to the menu and injects its HTML content into the content area.
+	</body>
+</html>

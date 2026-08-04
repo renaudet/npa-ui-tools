@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - Card component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>Card - npaUi Component</title>
+	</head>
+	<body>
+
+		<h1>Card &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>Card</b> is the standard page container in APAF applications. It renders a Bootstrap
+		card with a coloured header (icon + title), a scrollable working area, and a status bar footer.
+		It automatically stretches to fill the available window height on resize.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+			<tr><td><code>label</code></td><td>string</td><td>yes</td><td>Title displayed in the header — supports <code>@key</code> i18n references</td></tr>
+			<tr><td><code>icon</code></td><td>string</td><td>yes</td><td>URL of the icon displayed in the header (16×16 px)</td></tr>
+			<tr><td><code>contentDivId</code></td><td>string</td><td>no</td><td>Id of the inner working-area <code>&lt;li&gt;</code> element; defaults to <code>workArea</code></td></tr>
+			<tr><td><code>headerClass</code></td><td>string</td><td>no</td><td>Additional CSS class for the header; defaults to <code>npa-card-header</code></td></tr>
+			<tr><td><code>stylesheet</code></td><td>string</td><td>no</td><td>Custom CSS URL to load instead of the default <code>/uiTools/css/card.css</code></td></tr>
+			<tr><td><code>height</code></td><td>number</td><td>no</td><td>Fixed height in px for the working area; if omitted the Card auto-stretches to fill the window</td></tr>
+		</table>
+
+		<h2>Example Configuration File</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"mainCard"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"Card"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@my.page.title"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"icon"</span>: <span style="color:#3469e3;">"/uiTools/img/silk/application.png"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"contentDivId"</span>: <span style="color:#3469e3;">"workArea"</span><br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		<h2>JavaScript API</h2>
+
+		<div class="code">
+		let card = npaUi.getComponent(<span style="color:#3469e3;">'mainCard'</span>);
+		</div>
+
+		<h3><code>card.setStatus(text)</code></h3>
+		Sets the footer status bar text. Pass an empty string or <code>null</code> to clear it.
+		Accepts raw HTML.
+
+		<h3><code>card.clearStatus()</code></h3>
+		Empties the footer status bar.
+
+		<h3><code>card.setIcon(iconPath)</code></h3>
+		Replaces the header icon image with a new URL.
+
+		<h3><code>card.setContent(html)</code></h3>
+		Replaces the entire working-area content with arbitrary HTML.
+
+		<h3><code>card.getContentDivId()</code></h3>
+		Returns the id of the inner working-area element (useful for appending child HTML).
+
+		<h2>Notes</h2>
+		<ul>
+			<li>Any HTML child placed inside the Card's host <code>&lt;div&gt;</code> before rendering is
+			    detached and re-injected into the working area after the Card structure is built —
+			    this allows pre-placing a <code>Splitter</code> or other sub-components inside the Card.</li>
+			<li>The status bar renders a non-breaking space when empty to preserve footer height.</li>
+		</ul>
+
+	</body>
+</html>

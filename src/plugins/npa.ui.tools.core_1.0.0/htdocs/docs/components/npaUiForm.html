@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - Form component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>Form - npaUi Component</title>
+	</head>
+	<body>
+
+		<h1>Form &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>Form</b> component renders a data-entry form from a declarative field list.
+		It supports read-only and edit modes, multiple field types, client-side validation via
+		<code>constraint</code> expressions, and fires form events when field values change.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>fields</code></td><td>array</td><td>List of field descriptors (see below)</td></tr>
+			<tr><td><code>selectionListener</code></td><td>boolean</td><td>When <code>true</code>, the form listens for selection events from <code>selectionProvider</code> and calls <code>setData()</code> automatically</td></tr>
+			<tr><td><code>selectionProvider</code></td><td>string</td><td>Id of the source component</td></tr>
+		</table>
+
+		<h3>Field Descriptor</h3>
+		<table>
+			<tr><th>Field</th><th>Description</th></tr>
+			<tr><td><code>name</code></td><td>Property name in the data object — also used as the field's DOM id base</td></tr>
+			<tr><td><code>label</code></td><td>Display label — supports <code>@key</code> i18n</td></tr>
+			<tr><td><code>type</code></td><td>Field type: <code>text</code>, <code>password</code>, <code>textarea</code>, <code>integer</code>, <code>float</code>, <code>boolean</code>, <code>select</code>, <code>date</code>, <code>custom</code></td></tr>
+			<tr><td><code>size</code></td><td>Bootstrap column width (1–10); defaults to 10</td></tr>
+			<tr><td><code>mandatory</code></td><td>Marks the field as required (red asterisk)</td></tr>
+			<tr><td><code>isIdField</code></td><td>Marks this field as the record id (displayed with a red asterisk)</td></tr>
+			<tr><td><code>readOnly</code></td><td>Field is always read-only regardless of form edit mode</td></tr>
+			<tr><td><code>constraint</code></td><td>JS expression evaluated on form events; use <code>@</code> for the data object and <code>#</code> for the field instance</td></tr>
+			<tr><td><code>constrainedBy</code></td><td>Id of another field that triggers this field's constraint evaluation</td></tr>
+		</table>
+
+		<h2>Example Configuration</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"myForm"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"Form"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"selectionListener"</span>: true,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"selectionProvider"</span>: <span style="color:#3469e3;">"myTable"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"fields"</span>: [<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"name"</span>: <span style="color:#3469e3;">"id"</span>, <span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@field.id"</span>, <span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"text"</span>, <span style="color:#3469e3;">"isIdField"</span>: true },<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"name"</span>: <span style="color:#3469e3;">"name"</span>, <span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@field.name"</span>, <span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"text"</span>, <span style="color:#3469e3;">"mandatory"</span>: true },<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"name"</span>: <span style="color:#3469e3;">"active"</span>, <span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@field.active"</span>, <span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"boolean"</span> }<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		<h2>JavaScript API</h2>
+
+		<div class="code">let form = npaUi.getComponent(<span style="color:#3469e3;">'myForm'</span>);</div>
+
+		<h3><code>form.setData(dataObject)</code></h3>
+		Populates the form fields with the values from <code>dataObject</code>.
+
+		<h3><code>form.getData()</code></h3>
+		Returns an object with the current values of all form fields.
+
+		<h3><code>form.setEditMode(editable)</code></h3>
+		Switches the form between read-only (<code>false</code>) and edit (<code>true</code>) mode.
+		In read-only mode all input fields are disabled.
+
+		<h3><code>form.checkForm()</code></h3>
+		Returns <code>true</code> if all mandatory fields are filled and no field has raised a veto.
+
+		<h2>Notes</h2>
+		<ul>
+			<li>When <code>selectionListener: true</code> is set, the form automatically calls
+			    <code>setData(selectedItem)</code> whenever the user selects a row in the linked component.</li>
+			<li>Constraint expressions are evaluated in the context of the current form data (<code>@</code>)
+			    and the field instance (<code>#</code>), allowing show/hide/enable logic such as
+			    <code>"#.setEnabled(@.type === 'advanced')"</code>.</li>
+		</ul>
+
+	</body>
+</html>

@@ -7,7 +7,8 @@
   	{"type": "plugin","id": "npa.core","version": "1.0.0"},
   	{"type": "plugin","id": "npa.logging","version": "1.0.0"},
   	{"type": "plugin","id": "npa.http","version": "1.0.0"},
-  	{"type": "plugin","id": "npa.ui.locale","version": "1.0.0"}
+  	{"type": "plugin","id": "npa.ui.locale","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.documentation","version": "1.0.0"}
   ],
   "extends": [
   	{
@@ -64,6 +65,150 @@
   		"id": "npa.ui.tools.core.locale.provider.fr",
   		"path": "i18n/npaComponents_fr_FR.locale",
   		"locale": "fr"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.framework.doc",
+  		"label": "npa.ui.tools.core - npaUi Framework",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Framework",
+  		"url": "/uiTools/docs/npaUiFramework.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.card.doc",
+  		"label": "Card",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiCard.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.navbar.doc",
+  		"label": "NavBar",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiNavBar.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.notifier.doc",
+  		"label": "Notifier",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiNotifier.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.datatable.doc",
+  		"label": "Datatable",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiDatatable.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.toolbar.doc",
+  		"label": "Toolbar",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiToolbar.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.form.doc",
+  		"label": "Form",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiForm.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.splitter.doc",
+  		"label": "Splitter",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiSplitter.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.modal.doc",
+  		"label": "ModalDialog",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiModalDialog.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.panel.doc",
+  		"label": "Panel",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiPanel.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.console.doc",
+  		"label": "Console",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiConsole.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.tabpane.doc",
+  		"label": "TabPane",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiTabPane.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.selectionlist.doc",
+  		"label": "SelectionList",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiSelectionList.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.accordion.doc",
+  		"label": "Accordion",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiAccordion.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.carousel.doc",
+  		"label": "Carousel",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiCarousel.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.verticalmenu.doc",
+  		"label": "VerticalMenu",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiVerticalMenu.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.htmlimport.doc",
+  		"label": "HtmlImport",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiHtmlImport.html"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.tools.core.dynamicactionloader.doc",
+  		"label": "DynamicActionLoader",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/uiTools/docs/components/npaUiDynamicActionLoader.html"
   	},
   	{
   		"point": "npa.http.handler",

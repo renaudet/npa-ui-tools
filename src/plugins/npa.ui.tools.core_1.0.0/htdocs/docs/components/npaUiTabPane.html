@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - TabPane component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>TabPane - npaUi Component</title>
+	</head>
+	<body>
+		<h1>TabPane &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>TabPane</b> renders a Bootstrap tabbed interface. Each tab has a labelled button in the
+		header and a dedicated content pane. Child npaUi components can be pre-placed in each pane
+		using the <code>data-tab-target</code> HTML attribute.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>tabs</code></td><td>array</td><td>Tab descriptors (see below)</td></tr>
+			<tr><td><code>parentId</code></td><td>string</td><td>Optional — id of the parent element; when set, the TabPane constrains its height to fit inside it</td></tr>
+		</table>
+
+		<h3>Tab Descriptor</h3>
+		<table>
+			<tr><th>Field</th><th>Description</th></tr>
+			<tr><td><code>id</code></td><td>Unique tab id — also used as the pane DOM id (suffix <code>_pane</code>)</td></tr>
+			<tr><td><code>label</code></td><td>Tab header text — supports <code>@key</code> i18n</td></tr>
+			<tr><td><code>active</code></td><td>Set to <code>false</code> to render this tab disabled; defaults to <code>true</code></td></tr>
+		</table>
+
+		<h2>HTML Structure</h2>
+
+		Pre-place npaUi components in a tab by setting <code>data-tab-target</code> to the tab's <code>id</code>:
+
+		<div class="code">
+		&lt;div class=<span style="color:#3469e3;">"npaUi"</span> id=<span style="color:#3469e3;">"myTabs"</span> data-config=<span style="color:#3469e3;">"/my/tabsConfig.json"</span>&gt;<br>
+		&nbsp;&nbsp;&lt;div data-tab-target=<span style="color:#3469e3;">"tab1"</span>&gt;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> data-config=<span style="color:#3469e3;">"/my/tab1Content.json"</span>&gt;&lt;/div&gt;<br>
+		&nbsp;&nbsp;&lt;/div&gt;<br>
+		&nbsp;&nbsp;&lt;div data-tab-target=<span style="color:#3469e3;">"tab2"</span>&gt;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> data-config=<span style="color:#3469e3;">"/my/tab2Content.json"</span>&gt;&lt;/div&gt;<br>
+		&nbsp;&nbsp;&lt;/div&gt;<br>
+		&lt;/div&gt;
+		</div>
+
+		<h2>JavaScript API</h2>
+
+		<div class="code">let tabs = npaUi.getComponent(<span style="color:#3469e3;">'myTabs'</span>);</div>
+
+		<h3><code>tabs.addTabEventListener(tabId, listener)</code></h3>
+		Registers a callback function to be called when the tab with the given id is clicked/shown.
+	</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - ModalDialog component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>ModalDialog - npaUi Component</title>
+	</head>
+	<body>
+
+		<h1>ModalDialog &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>ModalDialog</b> renders a Bootstrap modal dialog with a header, scrollable body area,
+		and a footer with configurable buttons. Content can be set programmatically or pre-placed as
+		a child div inside the host element.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>title</code></td><td>string</td><td>Dialog title — supports <code>@key</code> i18n</td></tr>
+			<tr><td><code>size</code></td><td>string</td><td>Dialog size: <code>"S"</code> (small), <code>"XL"</code> (large), <code>"XXL"</code> (extra large); default is medium</td></tr>
+			<tr><td><code>buttons</code></td><td>array</td><td>Footer button descriptors (see below); if omitted a default Close button is rendered</td></tr>
+		</table>
+
+		<h3>Button Descriptor</h3>
+		<table>
+			<tr><th>Field</th><th>Description</th></tr>
+			<tr><td><code>action</code></td><td><code>"close"</code> (primary blue, dismisses modal) or <code>"cancel"</code> (warning yellow, dismisses modal)</td></tr>
+			<tr><td><code>label</code></td><td>Button text — supports <code>@key</code> i18n</td></tr>
+		</table>
+
+		<h2>Example Configuration</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"confirmDialog"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"ModalDialog"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"title"</span>: <span style="color:#3469e3;">"@dialog.confirm.title"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"size"</span>: <span style="color:#3469e3;">"XL"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"buttons"</span>: [<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"action"</span>: <span style="color:#3469e3;">"close"</span>, <span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@dialog.btn.ok"</span> },<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"action"</span>: <span style="color:#3469e3;">"cancel"</span>, <span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@dialog.btn.cancel"</span> }<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		<h2>JavaScript API</h2>
+
+		<div class="code">let dialog = npaUi.getComponent(<span style="color:#3469e3;">'confirmDialog'</span>);</div>
+
+		<h3><code>dialog.open()</code></h3>
+		Opens (shows) the modal dialog.
+
+		<h3><code>dialog.close()</code></h3>
+		Programmatically closes the modal dialog.
+
+		<h3><code>dialog.setTitle(title)</code></h3>
+		Updates the dialog header title. Supports <code>@key</code> i18n.
+
+		<h3><code>dialog.setBody(html)</code></h3>
+		Replaces the modal body content with arbitrary HTML.
+
+		<h2>Notes</h2>
+		<ul>
+			<li>The dialog uses <code>data-bs-backdrop="static"</code> — clicking outside the dialog
+			    does not dismiss it. Only the declared buttons or programmatic <code>close()</code> can dismiss it.</li>
+			<li>Any child <code>&lt;div&gt;</code> placed inside the host element before rendering is
+			    automatically moved into the modal body — useful for embedding a Form component directly.</li>
+		</ul>
+
+	</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - Toolbar component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>Toolbar - npaUi Component</title>
+	</head>
+	<body>
+
+		<h1>Toolbar &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>Toolbar</b> renders a horizontal row of icon buttons. Each button dispatches an event
+		via <code>npaUi.fireEvent()</code> when clicked. Buttons can be statically defined, conditionally
+		shown/hidden, or include a text filter input control.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>actions</code></td><td>array</td><td>List of button descriptors (see below)</td></tr>
+			<tr><td><code>pluggableActionHandlers</code></td><td>array</td><td>Optional list of pluggable handler configs for dynamic action delegation</td></tr>
+		</table>
+
+		<h3>Action Descriptor Fields</h3>
+		<table>
+			<tr><th>Field</th><th>Description</th></tr>
+			<tr><td><code>actionId</code></td><td>Event id dispatched on click; also used as the button's DOM id suffix</td></tr>
+			<tr><td><code>label</code></td><td>Tooltip text — supports <code>@key</code> i18n</td></tr>
+			<tr><td><code>icon</code></td><td>URL of the button icon</td></tr>
+			<tr><td><code>symbol</code></td><td>Text symbol rendered inside the button (alternative to icon)</td></tr>
+			<tr><td><code>enabled</code></td><td>Set to <code>false</code> to render the button initially disabled</td></tr>
+			<tr><td><code>type</code></td><td><code>"separator"</code> for a visual divider; <code>"conditional"</code> to render hidden by default; <code>"control"</code> with <code>"kind": "filter"</code> for a text input+button combo</td></tr>
+		</table>
+
+		<h2>Example Configuration</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"myToolbar"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"Toolbar"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"actions"</span>: [<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"actionId"</span>: <span style="color:#3469e3;">"refresh"</span>, <span style="color:#3469e3;">"icon"</span>: <span style="color:#3469e3;">"/uiTools/img/silk/arrow_refresh.png"</span>, <span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@toolbar.refresh"</span> },<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"separator"</span> },<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"actionId"</span>: <span style="color:#3469e3;">"delete"</span>, <span style="color:#3469e3;">"icon"</span>: <span style="color:#3469e3;">"/uiTools/img/silk/delete.png"</span>, <span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@toolbar.delete"</span>, <span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"conditional"</span> }<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		<h2>JavaScript API</h2>
+
+		<div class="code">let toolbar = npaUi.getComponent(<span style="color:#3469e3;">'myToolbar'</span>);</div>
+
+		<h3><code>toolbar.setEnabled(actionId, enabled)</code></h3>
+		Enables or disables the button with the given <code>actionId</code>.
+
+		<h3><code>toolbar.show(actionId)</code> / <code>toolbar.hide(actionId)</code></h3>
+		Shows or hides a <code>conditional</code> button.
+
+		<h3>Handling button clicks</h3>
+		Register a handler via <code>npaUi.on()</code>:
+
+		<div class="code">
+		npaUi.on(<span style="color:#3469e3;">'refresh'</span>, function(event) {<br>
+		&nbsp;&nbsp;loadData();<br>
+		});<br>
+		<br>
+		npaUi.on(<span style="color:#3469e3;">'delete'</span>, function(event) {<br>
+		&nbsp;&nbsp;deleteSelected();<br>
+		});
+		</div>
+
+	</body>
+</html>

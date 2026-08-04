@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - HtmlImport component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>HtmlImport - npaUi Component</title>
+	</head>
+	<body>
+		<h1>HtmlImport &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>HtmlImport</b> fetches an HTML fragment from a URL and appends it into the component's
+		host element. It is a simple inclusion mechanism — useful for injecting server-rendered or
+		static HTML partials into a page without a full page reload.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>url</code></td><td>string</td><td>URL of the HTML fragment to load (absolute or relative)</td></tr>
+			<tr><td><code>stylesheet</code></td><td>string</td><td>Optional CSS URL to load before the fragment is rendered</td></tr>
+		</table>
+
+		<h2>Example Configuration</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"myImport"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"HtmlImport"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"url"</span>: <span style="color:#3469e3;">"/my-plugin/html/partial.html"</span><br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		<h2>Notes</h2>
+		<ul>
+			<li>The fragment is loaded once — on subsequent <code>npaUi.render()</code> calls the component is skipped (host div is already marked as loaded).</li>
+			<li>The fetched content is <b>appended</b> (not replaced) into the host div.</li>
+			<li>No script tags in the imported fragment are executed — use this for HTML structure only.</li>
+		</ul>
+	</body>
+</html>

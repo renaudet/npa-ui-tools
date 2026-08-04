@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - npa.ui.locale plugin">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>npa.ui.locale - UI Internationalization Plugin</title>
+	</head>
+	<body>
+
+		<h1>npa.ui.locale &mdash; UI Internationalization Plugin</h1>
+
+		<h2>Overview</h2>
+
+		The <b>npa.ui.locale</b> plugin provides server-side i18n support for NPA UI pages.
+		It collects locale files contributed by any plugin, merges them into a per-locale key/value map,
+		and exposes that map to the browser via HTTP. The <code>npaUi</code> client framework loads this
+		map at startup and resolves all <code>@key</code> references in component configurations and
+		<code>&lt;var&gt;</code> HTML tags automatically.
+
+		<h2>Extension Point: <code>npa.ui.locale.provider</code></h2>
+
+		Any plugin can contribute translation strings by declaring one or more
+		<code>npa.ui.locale.provider</code> extensions in its <code>manifest.json</code>:
+
+		<div class="code">
+		&nbsp;1.&nbsp;{<br>
+		&nbsp;2.&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"point"</span>: <span style="color:#3469e3;">"npa.ui.locale.provider"</span>,<br>
+		&nbsp;3.&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"my.plugin.locale.en"</span>,<br>
+		&nbsp;4.&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"path"</span>: <span style="color:#3469e3;">"i18n/myPlugin_en_US.locale"</span>,<br>
+		&nbsp;5.&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"locale"</span>: <span style="color:#3469e3;">"en-US"</span><br>
+		&nbsp;6.&nbsp;},<br>
+		&nbsp;7.&nbsp;{<br>
+		&nbsp;8.&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"point"</span>: <span style="color:#3469e3;">"npa.ui.locale.provider"</span>,<br>
+		&nbsp;9.&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"my.plugin.locale.fr"</span>,<br>
+		10.&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"path"</span>: <span style="color:#3469e3;">"i18n/myPlugin_fr_FR.locale"</span>,<br>
+		11.&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"locale"</span>: <span style="color:#3469e3;">"fr-FR"</span><br>
+		12.&nbsp;}
+		</div>
+
+		The <code>path</code> is relative to the contributing plugin's directory.
+		Multiple plugins can contribute to the same locale — entries are merged, with later contributors
+		overriding earlier ones for duplicate keys.<br>
+		<br>
+		It is recommended to register the same file for both <code>"en-US"</code> and <code>"en"</code>
+		(and <code>"fr-FR"</code> and <code>"fr"</code>) so that both short and long locale tags resolve correctly.
+
+		<h2>Locale File Format</h2>
+
+		Locale files are plain text, one key=value pair per line. Lines starting with <code>#</code> are
+		treated as comments and ignored. Keys are typically dot-separated namespaced identifiers.
+
+		<div class="code">
+		&nbsp;1.&nbsp;<span style="color:#888;"># My Plugin - English translations</span><br>
+		&nbsp;2.&nbsp;my.plugin.title=My Plugin<br>
+		&nbsp;3.&nbsp;my.plugin.action.save=Save<br>
+		&nbsp;4.&nbsp;my.plugin.action.cancel=Cancel<br>
+		&nbsp;5.&nbsp;my.plugin.msg.saved=Item {0} saved successfully
+		</div>
+
+		Placeholders <code>{0}</code>, <code>{1}</code>, etc. are replaced at resolution time when
+		a <code>data</code> array is passed to <code>npaUi.getLocalizedString()</code>.
+
+		<h2>HTTP Endpoints</h2>
+
+		<h3><code>GET /i18n/localizationMap?locale=&lt;locale&gt;</code></h3>
+
+		Returns the full key/value map for the requested locale as a JSON object.
+		If the locale is not found, the default locale (<code>en-US</code>) is returned as fallback.
+		This endpoint is called by <code>npaUi.initialize()</code> at page load time using
+		<code>navigator.language</code> as the locale.<br>
+		<br>
+		Example response:
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"my.plugin.title"</span>: <span style="color:#3469e3;">"My Plugin"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"my.plugin.action.save"</span>: <span style="color:#3469e3;">"Save"</span>,<br>
+		&nbsp;&nbsp;...<br>
+		}
+		</div>
+
+		<h3><code>GET /i18n/localize?ref=@key&amp;values=a,b&amp;locale=en-US</code></h3>
+
+		Resolves a single localization key server-side. Useful for server-generated strings or
+		emails. <code>values</code> is an optional comma-separated list of positional substitution values.
+
+		<h2>Client-side Usage</h2>
+
+		In browser JavaScript, strings are resolved via <code>npaUi.getLocalizedString()</code>:
+
+		<div class="code">
+		<span style="color:#888;">// Simple lookup — key starts with @</span><br>
+		let title = npaUi.getLocalizedString(<span style="color:#3469e3;">'@my.plugin.title'</span>);<br>
+		<br>
+		<span style="color:#888;">// With substitutions</span><br>
+		let msg = npaUi.getLocalizedString(<span style="color:#3469e3;">'@my.plugin.msg.saved'</span>, [<span style="color:#3469e3;">'myItem'</span>]);<br>
+		<span style="color:#888;">// → "Item myItem saved successfully"</span><br>
+		<br>
+		<span style="color:#888;">// Literal string (no @ prefix) — returned as-is</span><br>
+		let raw = npaUi.getLocalizedString(<span style="color:#3469e3;">'Some literal text'</span>);
+		</div>
+
+		In HTML, <code>&lt;var&gt;</code> tags are automatically replaced with the localized string
+		after <code>npaUi.render()</code> completes:
+
+		<div class="code">
+		&lt;var&gt;my.plugin.title&lt;/var&gt;<br>
+		<span style="color:#888;">&lt;!-- rendered as: My Plugin --&gt;</span>
+		</div>
+
+		In component configuration JSON, any string value starting with <code>@</code> is treated as
+		a localization reference and resolved automatically by the component:
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@my.plugin.title"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"Card"</span><br>
+		}
+		</div>
+
+	</body>
+</html>

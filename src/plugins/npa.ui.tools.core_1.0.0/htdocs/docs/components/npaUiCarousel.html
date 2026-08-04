@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - Carousel component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>Carousel - npaUi Component</title>
+	</head>
+	<body>
+		<h1>Carousel &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>Carousel</b> renders a Bootstrap slide carousel with Previous/Next navigation arrows.
+		Each slide hosts a child div placed with the <code>data-slide-id</code> HTML attribute.
+		The carousel can optionally auto-play and use a fade transition.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>transitionStyle</code></td><td>string</td><td>Set to <code>"fade"</code> for a cross-fade transition; omit for the default slide</td></tr>
+			<tr><td><code>autoPlay</code></td><td>boolean</td><td>When <code>true</code>, the carousel cycles automatically (<code>data-bs-ride="carousel"</code>)</td></tr>
+			<tr><td><code>expandsTo</code></td><td>string</td><td>Id of a parent element to match height against (carousel inner height = parent height − 30px), with responsive resize on window resize</td></tr>
+			<tr><td><code>stylesheet</code></td><td>string</td><td>Custom CSS URL; defaults to <code>/uiTools/css/carousel.css</code></td></tr>
+		</table>
+
+		<h2>HTML Structure</h2>
+
+		Place child divs with <code>data-slide-id</code> inside the host element:
+
+		<div class="code">
+		&lt;div class=<span style="color:#3469e3;">"npaUi"</span> id=<span style="color:#3469e3;">"myCarousel"</span> data-config=<span style="color:#3469e3;">"/my/carouselConfig.json"</span>&gt;<br>
+		&nbsp;&nbsp;&lt;div data-slide-id=<span style="color:#3469e3;">"slide1"</span>&gt;&lt;p&gt;Slide 1 content&lt;/p&gt;&lt;/div&gt;<br>
+		&nbsp;&nbsp;&lt;div data-slide-id=<span style="color:#3469e3;">"slide2"</span>&gt;&lt;p&gt;Slide 2 content&lt;/p&gt;&lt;/div&gt;<br>
+		&lt;/div&gt;
+		</div>
+
+		Each slide is centred in a 8-column Bootstrap grid (col-2 / col-8 / col-2 layout).
+		The first slide is active by default.
+
+		<h2>Notes</h2>
+		<ul>
+			<li>Slide ids must be unique across the page as they are used as DOM element ids.</li>
+			<li>The <code>expandsTo</code> option is useful when the carousel is inside a Card or Panel
+			    of a known id — the carousel inner area will track its height on window resize.</li>
+		</ul>
+	</body>
+</html>

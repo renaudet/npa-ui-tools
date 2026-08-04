@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - npaUi Client Framework">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>npa.ui.tools.core - npaUi Client Framework</title>
+	</head>
+	<body>
+
+		<h1>npa.ui.tools.core &mdash; npaUi Client Framework</h1>
+
+		<h2>Overview</h2>
+
+		<b>npa.ui.tools.core</b> is the server-side plugin that hosts the <b>npaUi</b> client-side
+		UI framework. It serves static assets under <code>/uiTools/</code>, registers the component
+		map API (<code>GET /uiToolsApis/getComponentMap</code>), and provides two extension points
+		for contributing custom UI components and specialized editors.<br>
+		<br>
+		On the browser side, <code>npaUiCore.js</code> defines the global <code>npaUi</code> object —
+		the runtime that discovers, lazy-loads, instantiates and renders all UI components on a page.
+
+		<h2>Page Bootstrapping Pattern</h2>
+
+		Every APAF HTML page follows this standard pattern:
+
+		<div class="code">
+		&nbsp;1.&nbsp;<span style="color:#888;">&lt;!-- 1. Include the framework --&gt;</span><br>
+		&nbsp;2.&nbsp;&lt;script src=<span style="color:#3469e3;">"/uiTools/js/npaUiCore.js"</span>&gt;&lt;/script&gt;<br>
+		&nbsp;3.&nbsp;<br>
+		&nbsp;4.&nbsp;<span style="color:#888;">&lt;!-- 2. Declare component placeholders --&gt;</span><br>
+		&nbsp;5.&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> id=<span style="color:#3469e3;">"navbar"</span> data-config=<span style="color:#3469e3;">"/myPlugin/json/navBarConfig.json"</span>&gt;&lt;/div&gt;<br>
+		&nbsp;6.&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> id=<span style="color:#3469e3;">"mainCard"</span> data-config=<span style="color:#3469e3;">"/myPlugin/json/cardConfig.json"</span>&gt;&lt;/div&gt;<br>
+		&nbsp;7.&nbsp;<br>
+		&nbsp;8.&nbsp;<span style="color:#888;">&lt;!-- 3. Initialize and render in a script block --&gt;</span><br>
+		&nbsp;9.&nbsp;&lt;script&gt;<br>
+		10.&nbsp;function initializeUi() {<br>
+		11.&nbsp;&nbsp;&nbsp;npaUi.initialize(function() {<br>
+		12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;npaUi.onComponentLoaded = function() {<br>
+		13.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#888;">// Called once all components are rendered</span><br>
+		14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let card = npaUi.getComponent(<span style="color:#3469e3;">'mainCard'</span>);<br>
+		15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;card.setStatus(<span style="color:#3469e3;">'Ready'</span>);<br>
+		16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+		17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;npaUi.render();<br>
+		18.&nbsp;&nbsp;&nbsp;});<br>
+		19.&nbsp;}<br>
+		20.&nbsp;&lt;/script&gt;<br>
+		21.&nbsp;&lt;body onload=<span style="color:#3469e3;">"initializeUi()"</span>&gt;
+		</div>
+
+		<h2>Component Configuration</h2>
+
+		Each component placeholder uses one of three resolution strategies, checked in order:
+
+		<ol>
+			<li><b>Inline JSON config</b> passed programmatically via <code>npaUi.renderSingleComponent()</code></li>
+			<li><b><code>data-config</code></b> attribute pointing to a JSON file URI — the most common pattern</li>
+			<li><b><code>data-ref</code></b> attribute referencing an entry in the global config loaded via <code>npaUi.loadConfigFrom()</code></li>
+		</ol>
+
+		A component configuration JSON file must declare at minimum <code>id</code>, <code>type</code> and
+		<code>version</code>, plus a <code>configuration</code> object specific to the component:
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"mainCard"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"Card"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@my.page.title"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"icon"</span>: <span style="color:#3469e3;">"/uiTools/img/silk/application.png"</span><br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		The <code>type</code> field can be a simple name (resolved in the <code>npaUiCore</code> namespace)
+		or a namespaced name <code>"namespace.ComponentType"</code> for components contributed by extension.
+
+		<h2>npaUi API Reference</h2>
+
+		<h3><code>npaUi.initialize(then)</code></h3>
+		Loads the CSS theme, component model JS, fetches the component map from the server, and fetches
+		the localization map for the browser's locale. Must be called before <code>render()</code>.
+
+		<h3><code>npaUi.render(targetClass='npaUi')</code></h3>
+		Scans the DOM for all elements with the given CSS class and instantiates/renders each one.
+		Already-loaded components are re-rendered (not re-instantiated). Calls <code>onRenderingCompleted()</code>
+		when all components are ready.
+
+		<h3><code>npaUi.renderSingleComponent(tagId, componentConfig, then)</code></h3>
+		Renders a single component into the DOM element with id <code>tagId</code>, using the provided
+		config object. Uses the cached instance if already loaded.
+
+		<h3><code>npaUi.getComponent(componentId)</code></h3>
+		Returns the live component instance registered under <code>componentId</code>.
+
+		<h3><code>npaUi.onComponentLoaded()</code></h3>
+		Callback override point — called after all components have been rendered.
+		Override this in your page script to run post-render initialization.
+
+		<h3><code>npaUi.fireEvent(actionId, event)</code></h3>
+		Dispatches an event. Built-in action ids:
+		<ul>
+			<li><code>'select'</code> — notifies all registered selection listeners for <code>event.source</code> via <code>listener.onItemSelected(event.item)</code></li>
+			<li><code>'redirect'</code> — navigates to <code>event.uri</code>; if <code>event.newWindow === true</code>, opens in a new browser tab</li>
+			<li>Any other id — dispatched to the handler registered via <code>registerActionHandler()</code></li>
+		</ul>
+
+		<h3><code>npaUi.on(actionId, callback)</code></h3>
+		Shorthand for registering an action handler. Equivalent to
+		<code>npaUi.registerActionHandler(actionId, { handleEvent: callback })</code>.
+
+		<h3><code>npaUi.registerSelectionListener(source, listener)</code></h3>
+		Registers a component as a selection listener for another component's selections.
+		<code>listener</code> must implement <code>onItemSelected(item)</code>.
+		This wiring is also done automatically when <code>configuration.selectionListener: true</code>
+		and <code>configuration.selectionProvider: "&lt;componentId&gt;"</code> are set in the config.
+
+		<h3><code>npaUi.getLocalizedString(stringExpr, data)</code></h3>
+		Resolves a localized string:
+		<ul>
+			<li>If <code>stringExpr</code> starts with <code>@</code> — looks up the key in the localization map, with optional <code>{0}</code>...<code>{n}</code> substitution from <code>data[]</code></li>
+			<li>If it starts with <code>#</code> — returns a <code>&lt;span id="..."&gt;</code> wrapper (for programmatic binding)</li>
+			<li>Otherwise — returns the string as-is</li>
+		</ul>
+
+		<h3><code>npaUi.loadConfigFrom(configFileUri, then)</code></h3>
+		Loads a global component configuration file (JSON) and merges it into <code>npaUi.globalConfig</code>.
+
+		<h3><code>npaUi.unLoad(componentId)</code></h3>
+		Removes a component instance from the cache, allowing it to be re-instantiated on the next <code>render()</code>.
+
+		<h2>Extension Point: <code>npa.ui.tools.core.component</code></h2>
+
+		Plugins can contribute custom components to be available under their own namespace:
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"point"</span>: <span style="color:#3469e3;">"npa.ui.tools.core.component"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"my.plugin.myComponent.contribution"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"namespace"</span>: <span style="color:#3469e3;">"myNamespace"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"name"</span>: <span style="color:#3469e3;">"MyComponent"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"dependency"</span>: <span style="color:#3469e3;">"/my-plugin/js/myComponent.js"</span><br>
+		}
+		</div>
+
+		The component is then referenced in config JSON as <code>"type": "myNamespace.MyComponent"</code>.
+		The <code>dependency</code> JS file is lazy-loaded by the browser on first use.<br>
+		<br>
+		The JS file must define the class on the target namespace object:
+
+		<div class="code">
+		myNamespace.MyComponent = class MyComponent extends NpaUiComponent {<br>
+		&nbsp;&nbsp;initialize(then) { ... then(); }<br>
+		&nbsp;&nbsp;render(then) { ... then(); }<br>
+		}
+		</div>
+
+		<h2>Utility Functions</h2>
+
+		<code>npaUiCore.js</code> also exposes several global utility functions available to all page scripts:
+
+		<table>
+			<tr><th>Function</th><th>Description</th></tr>
+			<tr><td><code>makeRESTCall(method, uri, params, onSuccess, onError)</code></td><td>jQuery-based AJAX helper, JSON in/out</td></tr>
+			<tr><td><code>loadDeps(depArray, then)</code></td><td>Sequentially loads an array of JS/CSS/JSON dependencies; JSON results are accumulated and passed to <code>then(jsonResources)</code></td></tr>
+			<tr><td><code>sortOn(list, attributeName, descending)</code></td><td>In-place bubble sort of an array of objects by a named attribute</td></tr>
+		</table>
+
+	</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - Console component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>Console - npaUi Component</title>
+	</head>
+	<body>
+		<h1>Console &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>Console</b> is a scrollable, fixed-height text output area. It is used to display
+		logs, command output or any sequential text stream. Text is appended line by line and the
+		console auto-scrolls to the bottom.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>height</code></td><td>number</td><td>Display height in px; defaults to 300</td></tr>
+			<tr><td><code>style</code></td><td>string</td><td>Additional inline CSS appended to the container style</td></tr>
+		</table>
+
+		<h2>Example Configuration</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"outputConsole"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"Console"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"height"</span>: 400<br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		<h2>JavaScript API</h2>
+
+		<div class="code">let console = npaUi.getComponent(<span style="color:#3469e3;">'outputConsole'</span>);</div>
+
+		<h3><code>console.println(text)</code></h3>
+		Appends <code>text</code> followed by a line break. Tabs, carriage returns and newlines are
+		converted to HTML equivalents. Auto-scrolls to the bottom.
+
+		<h3><code>console.print(text)</code></h3>
+		Appends <code>text</code> without a trailing line break.
+
+		<h3><code>console.clear()</code></h3>
+		Empties all content from the console.
+
+		<h3><code>console.setHeight(height)</code></h3>
+		Dynamically changes the display height in px.
+	</body>
+</html>

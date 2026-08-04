@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - Splitter component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>Splitter - npaUi Component</title>
+	</head>
+	<body>
+
+		<h1>Splitter &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>Splitter</b> divides its container into two resizable panes separated by a draggable
+		handle. Panes can be arranged side-by-side (default) or top/bottom. Any npaUi sub-components
+		placed inside the panes are automatically rendered after layout is applied.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+			<tr><td><code>vertical</code></td><td>boolean</td><td><code>false</code></td><td>When <code>true</code>, panes are stacked top/bottom instead of side-by-side</td></tr>
+			<tr><td><code>percentages</code></td><td>number[2]</td><td><code>[50, 50]</code></td><td>Initial size of each pane as a percentage of the container; must sum to 100</td></tr>
+		</table>
+
+		<h2>HTML Structure</h2>
+
+		Place two child <code>&lt;div&gt;</code> elements inside the Splitter host, each with a
+		<code>data-splitter-target</code> attribute set to <code>"first"</code> or <code>"second"</code>.
+		Any npaUi components inside them are declared normally:
+
+		<div class="code">
+		&nbsp;1.&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> id=<span style="color:#3469e3;">"mySplitter"</span> data-config=<span style="color:#3469e3;">"/myPlugin/json/splitterConfig.json"</span>&gt;<br>
+		&nbsp;2.&nbsp;&nbsp;&nbsp;&lt;div data-splitter-target=<span style="color:#3469e3;">"first"</span>&gt;<br>
+		&nbsp;3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> data-config=<span style="color:#3469e3;">"/myPlugin/json/leftPanel.json"</span>&gt;&lt;/div&gt;<br>
+		&nbsp;4.&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+		&nbsp;5.&nbsp;&nbsp;&nbsp;&lt;div data-splitter-target=<span style="color:#3469e3;">"second"</span>&gt;<br>
+		&nbsp;6.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> data-config=<span style="color:#3469e3;">"/myPlugin/json/rightPanel.json"</span>&gt;&lt;/div&gt;<br>
+		&nbsp;7.&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+		&nbsp;8.&nbsp;&lt;/div&gt;
+		</div>
+
+		<h2>Example Configuration File</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"mySplitter"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"Splitter"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"vertical"</span>: false,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"percentages"</span>: [25, 75]<br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		<h2>Notes</h2>
+		<ul>
+			<li>The Splitter is typically placed inside a <b>Card</b> by pre-placing it as a child div
+			    of the Card's host element — the Card preserves and re-injects it into its working area.</li>
+			<li>Panes use CSS <code>flex</code> values proportional to the percentages; the 5px resizer
+			    thickness is automatically excluded, preventing overflow.</li>
+			<li>Each pane cannot be dragged below 1% of the container width/height.</li>
+			<li>Sub-components are rendered with a 100ms delay after the layout is applied to allow
+			    the DOM to settle before <code>npaUi.render()</code> scans for nested component tags.</li>
+		</ul>
+
+	</body>
+</html>

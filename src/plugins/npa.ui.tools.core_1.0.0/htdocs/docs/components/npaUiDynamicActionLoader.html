@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - DynamicActionLoader component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>DynamicActionLoader - npaUi Component</title>
+	</head>
+	<body>
+		<h1>DynamicActionLoader &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>DynamicActionLoader</b> is an invisible component — it renders no HTML. Its sole purpose
+		is to lazily load a JavaScript library and register a global function from that library as the
+		handler for a named npaUi event. Use it to decouple heavy action handlers from the page bootstrap.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>actionId</code></td><td>string</td><td>The npaUi event id to handle (registered via <code>npaUi.on()</code>)</td></tr>
+			<tr><td><code>library</code></td><td>string</td><td>URL of the JavaScript library to load (via <code>$.loadScript()</code>)</td></tr>
+			<tr><td><code>handler</code></td><td>string</td><td>Name of the global function (exposed on <code>window</code>) in the library to use as the event handler</td></tr>
+		</table>
+
+		<h2>Example Configuration</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"exportLoader"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"DynamicActionLoader"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"actionId"</span>: <span style="color:#3469e3;">"export"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"library"</span>: <span style="color:#3469e3;">"/my-plugin/js/exportHandler.js"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"handler"</span>: <span style="color:#3469e3;">"handleExport"</span><br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		The library is loaded once when the component is first rendered. It must expose the handler
+		as a global function on <code>window</code>:
+
+		<div class="code">
+		<span style="color:#888;">// exportHandler.js</span><br>
+		function handleExport(event) {<br>
+		&nbsp;&nbsp;<span style="color:#888;">// event is the object passed to npaUi.fireEvent('export', event)</span><br>
+		&nbsp;&nbsp;console.log(<span style="color:#3469e3;">'exporting...'</span>);<br>
+		}
+		</div>
+	</body>
+</html>

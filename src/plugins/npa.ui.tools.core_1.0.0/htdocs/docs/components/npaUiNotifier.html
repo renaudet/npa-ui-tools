@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - Notifier component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>Notifier - npaUi Component</title>
+	</head>
+	<body>
+
+		<h1>Notifier &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>Notifier</b> renders a Bootstrap Toast container in the top-right corner of the page.
+		It exposes five global convenience functions for displaying transient notifications.
+		The component requires no configuration — it simply anchors the notification area.
+
+		<h2>Configuration</h2>
+
+		The Notifier has no configuration fields. A minimal config file:
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"notifier"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"Notifier"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {}<br>
+		}
+		</div>
+
+		<h2>Global Notification Functions</h2>
+
+		Once the Notifier component is rendered on the page, these functions are available globally:
+
+		<table>
+			<tr><th>Function</th><th>Type</th><th>Auto-hide</th><th>Description</th></tr>
+			<tr><td><code>showInfo(msg, data)</code></td><td>info (blue)</td><td>no</td><td>Informational notification, stays until closed</td></tr>
+			<tr><td><code>showWarning(msg, data)</code></td><td>warning (yellow)</td><td>no</td><td>Warning, stays until closed</td></tr>
+			<tr><td><code>showError(msg, data)</code></td><td>error (red)</td><td>no</td><td>Error notification, stays until closed</td></tr>
+			<tr><td><code>showConfirm(msg, data)</code></td><td>confirm (green)</td><td>4s</td><td>Success confirmation, auto-hides after 4 seconds</td></tr>
+			<tr><td><code>flash(msg, data)</code></td><td>flash (green)</td><td>2s</td><td>Brief flash message, auto-hides after 2 seconds</td></tr>
+		</table>
+
+		The <code>msg</code> parameter accepts:
+		<ul>
+			<li>A plain string — displayed as-is</li>
+			<li>A string starting with <code>@</code> — resolved as an i18n key via <code>npaUi.getLocalizedString()</code></li>
+			<li>A JSON object — pretty-printed automatically</li>
+		</ul>
+
+		The optional <code>data</code> parameter is an array of substitution values for <code>{0}</code>...<code>{n}</code> placeholders in i18n strings.
+
+		<h2>Usage Example</h2>
+
+		<div class="code">
+		<span style="color:#888;">// Simple message</span><br>
+		showInfo(<span style="color:#3469e3;">'Record saved.'</span>);<br>
+		<br>
+		<span style="color:#888;">// i18n key with substitution</span><br>
+		showConfirm(<span style="color:#3469e3;">'@my.msg.saved'</span>, [<span style="color:#3469e3;">'myItemName'</span>]);<br>
+		<br>
+		<span style="color:#888;">// Display an error response object</span><br>
+		showError(response);
+		</div>
+
+	</body>
+</html>

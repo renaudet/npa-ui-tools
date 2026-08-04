@@ -6,13 +6,28 @@
   "requires": [
   	{"type": "plugin","id": "npa.core","version": "1.0.0"},
   	{"type": "plugin","id": "npa.logging","version": "1.0.0"},
-  	{"type": "plugin","id": "npa.http","version": "1.0.0"}
+  	{"type": "plugin","id": "npa.http","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.documentation","version": "1.0.0"}
   ],
   "extends": [
   	{
   		"point": "npa.log.provider",
   		"id": "npa.ui.locale.logger",
   		"dir": "npa.ui.locale"
+  	},
+  	{
+  		"point": "npa.http.static",
+  		"id": "npa.ui.locale.htdocs",
+  		"path": "/npa-ui-locale",
+  		"localDir": "htdocs"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.locale.doc",
+  		"label": "npa.ui.locale - UI Internationalization",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Framework",
+  		"url": "/npa-ui-locale/docs/npaUiLocale.html"
   	},
   	{
   		"point": "npa.http.router",

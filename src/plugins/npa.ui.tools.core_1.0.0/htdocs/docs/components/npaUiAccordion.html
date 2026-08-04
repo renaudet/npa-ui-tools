@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - Accordion component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>Accordion - npaUi Component</title>
+	</head>
+	<body>
+		<h1>Accordion &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>Accordion</b> renders a Bootstrap accordion (collapsible sections). Only one section
+		is expanded at a time. Child npaUi components can be placed in each section using the
+		<code>data-section</code> HTML attribute.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>sections</code></td><td>array</td><td>Section descriptors (see below)</td></tr>
+			<tr><td><code>stylesheet</code></td><td>string</td><td>Custom CSS URL; defaults to <code>/uiTools/css/accordion.css</code></td></tr>
+		</table>
+
+		<h3>Section Descriptor</h3>
+		<table>
+			<tr><th>Field</th><th>Description</th></tr>
+			<tr><td><code>id</code></td><td>Unique section id — used as the pane DOM id suffix and to match <code>data-section</code> on child divs</td></tr>
+			<tr><td><code>label</code></td><td>Section header text (supports <code>@key</code> i18n)</td></tr>
+		</table>
+
+		<h2>HTML Structure</h2>
+
+		Pre-place child content in each section using <code>data-section</code> on a child <code>&lt;div&gt;</code>:
+
+		<div class="code">
+		&lt;div class=<span style="color:#3469e3;">"npaUi"</span> id=<span style="color:#3469e3;">"myAccordion"</span> data-config=<span style="color:#3469e3;">"/my/accordionConfig.json"</span>&gt;<br>
+		&nbsp;&nbsp;&lt;div data-section=<span style="color:#3469e3;">"section1"</span>&gt;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> data-config=<span style="color:#3469e3;">"/my/section1Content.json"</span>&gt;&lt;/div&gt;<br>
+		&nbsp;&nbsp;&lt;/div&gt;<br>
+		&nbsp;&nbsp;&lt;div data-section=<span style="color:#3469e3;">"section2"</span>&gt;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span style="color:#3469e3;">"npaUi"</span> data-config=<span style="color:#3469e3;">"/my/section2Content.json"</span>&gt;&lt;/div&gt;<br>
+		&nbsp;&nbsp;&lt;/div&gt;<br>
+		&lt;/div&gt;
+		</div>
+
+		The first section is expanded by default. Child components inside sections are rendered
+		with an 800ms delay to allow Bootstrap's collapse animation to complete before
+		<code>npaUi.render()</code> scans for sub-component tags.
+	</body>
+</html>

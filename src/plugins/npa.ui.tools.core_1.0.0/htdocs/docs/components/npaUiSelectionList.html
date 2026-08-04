@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - SelectionList component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>SelectionList - npaUi Component</title>
+	</head>
+	<body>
+		<h1>SelectionList &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>SelectionList</b> renders a Bootstrap list group where clicking an item fires a
+		<code>select</code> event. It shares the same datasource and adapter model as the
+		<b>Datatable</b> and supports an optional toggle filter input.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+			<tr><td><code>datasource</code></td><td>object</td><td>Same descriptor as Datatable (<code>uri</code>, <code>method</code>, <code>adapter</code>, <code>type</code>, <code>manager</code>)</td></tr>
+			<tr><td><code>renderer</code></td><td>object</td><td>Optional custom renderer: <code>{ "type": "MyRenderer" }</code> — class must be loaded and extend <code>ItemRenderer</code></td></tr>
+			<tr><td><code>sorter</code></td><td>object</td><td>Optional custom sorter: <code>{ "type": "MySorter" }</code> — class must extend <code>ItemSorter</code></td></tr>
+			<tr><td><code>header</code></td><td>object</td><td>Optional header area: <code>{ "title": "@list.title" }</code> — also enables the toggle filter input</td></tr>
+			<tr><td><code>constraints</code></td><td>object</td><td>Optional height constraint: <code>{ "height": { "processor": "$(window).height()-200" } }</code></td></tr>
+			<tr><td><code>stylesheet</code></td><td>string</td><td>Custom CSS URL; defaults to <code>/uiTools/css/selectionList.css</code></td></tr>
+		</table>
+
+		<h2>JavaScript API</h2>
+
+		<div class="code">let list = npaUi.getComponent(<span style="color:#3469e3;">'myList'</span>);</div>
+
+		<h3><code>list.refresh()</code></h3>
+		Reloads data from the datasource and re-renders the list.
+
+		<h3><code>list.load(dataArray)</code></h3>
+		Loads a local array directly without a REST call.
+
+		<h3><code>list.addItem(item)</code></h3>
+		Appends a single item to the list without a full reload.
+
+		<h3><code>list.select(index)</code></h3>
+		Programmatically selects the item at the given index and fires the <code>select</code> event.
+
+		<h3><code>list.getSelectedItem()</code></h3>
+		Returns the currently selected item, or <code>null</code> if nothing is selected.
+
+		<h3><code>list.filter(filterStr)</code></h3>
+		Filters the visible items by text content (case-insensitive substring match).
+
+		<h3><code>list.enable()</code> / <code>list.disable()</code></h3>
+		Enables or disables click selection.
+
+		<h3><code>list.clean()</code></h3>
+		Clears all items from the list.
+	</body>
+</html>

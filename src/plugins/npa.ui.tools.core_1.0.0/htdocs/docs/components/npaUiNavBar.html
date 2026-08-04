@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - NavBar component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2025 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/dev/css/apafDocumentation.css" rel="stylesheet">
+		<title>NavBar - npaUi Component</title>
+	</head>
+	<body>
+
+		<h1>NavBar &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>NavBar</b> renders a Bootstrap dark navigation bar with a brand icon, application title,
+		and a dynamic menu system. Menus can be defined statically in the configuration file or loaded
+		dynamically from a server endpoint (or both — dynamic items are merged before static ones).
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+			<tr><td><code>applicationName</code></td><td>string</td><td>yes</td><td>Brand text — supports <code>@key</code> i18n</td></tr>
+			<tr><td><code>icon</code></td><td>string</td><td>yes</td><td>URL of the brand icon (30×30 px)</td></tr>
+			<tr><td><code>homeRef</code></td><td>string</td><td>yes</td><td>URL of the brand link (clicking the icon/title navigates here)</td></tr>
+			<tr><td><code>providerUrl</code></td><td>string</td><td>no</td><td>REST endpoint that returns additional menu definitions — merged with <code>menus</code></td></tr>
+			<tr><td><code>menus</code></td><td>array</td><td>no</td><td>Static top-level menu definitions</td></tr>
+			<tr><td><code>stylesheet</code></td><td>string</td><td>no</td><td>Custom CSS URL; defaults to <code>/uiTools/css/navBar.css</code></td></tr>
+		</table>
+
+		<h2>Menu Item Structure</h2>
+
+		Each entry in <code>menus</code> defines a top-level dropdown:
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@menu.help"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"items"</span>: [<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"documentation"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@menu.help.docs"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"actionId"</span>: <span style="color:#3469e3;">"redirect"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"uri"</span>: <span style="color:#3469e3;">"/apaf-documentation/html/documentation.html"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"newWindow"</span>: true,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"icon"</span>: <span style="color:#3469e3;">"/uiTools/img/silk/book_open.png"</span><br>
+		&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"separator"</span> },<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"about"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"@menu.help.about"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"actionId"</span>: <span style="color:#3469e3;">"showAbout"</span><br>
+		&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+		&nbsp;&nbsp;]<br>
+		}
+		</div>
+
+		<h3>Menu Item Fields</h3>
+		<table>
+			<tr><th>Field</th><th>Description</th></tr>
+			<tr><td><code>id</code></td><td>Unique item identifier, used as the event <code>actionId</code> dispatched via <code>npaUi.fireEvent()</code></td></tr>
+			<tr><td><code>label</code></td><td>Display text — supports <code>@key</code> i18n</td></tr>
+			<tr><td><code>actionId</code></td><td>Action to fire: <code>"redirect"</code> for navigation, or any custom action registered via <code>npaUi.on()</code></td></tr>
+			<tr><td><code>uri</code></td><td>Target URL (required when <code>actionId</code> is <code>"redirect"</code>)</td></tr>
+			<tr><td><code>newWindow</code></td><td><code>true</code> to open the URI in a new browser tab</td></tr>
+			<tr><td><code>icon</code></td><td>Optional icon URL shown next to the label</td></tr>
+			<tr><td><code>type</code></td><td>Set to <code>"separator"</code> for a visual divider; set to <code>"placeholder"</code> with an <code>id</code> for dynamic injection points</td></tr>
+		</table>
+
+		<h2>Dynamic Menu Injection</h2>
+
+		Items marked <code>"type": "placeholder"</code> are <b>injection points</b> that server-side
+		plugins fill at runtime via the <code>apaf.menu.item.provider</code> extension point.
+		This is how APAF plugins (e.g. <code>apaf.documentation</code>) add entries to the Help menu
+		without modifying the static NavBar configuration.
+
+	</body>
+</html>
