@@ -58,7 +58,13 @@ npaUiCore.NavBar = class NavBar extends NpaUiComponent{
 		if(typeof config.providerUrl!='undefined'){
 			makeRESTCall('GET',config.providerUrl,{},function(response){
 				if(response.status==200){
-					navbar.generateUpperMenus(response.data);
+					let menus = response.data;
+					menus.sort(function(a, b){
+						let la = navbar.getLocalizedString(a.label).toLowerCase();
+						let lb = navbar.getLocalizedString(b.label).toLowerCase();
+						return la.localeCompare(lb);
+					});
+					navbar.generateUpperMenus(menus);
 				}
 				navbar.generateUpperMenus(config.menus);
 				then();
