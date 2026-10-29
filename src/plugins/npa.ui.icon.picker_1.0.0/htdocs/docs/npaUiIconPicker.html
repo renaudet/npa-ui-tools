@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="description" content="APAF Documentation - IconPicker component">
+		<meta name="Author" lang="fr" content="Nicolas Renaudet">
+		<meta name="Copyright" content="2026 Nicolas Renaudet - All rights reserved">
+		<meta charset="ISO-8859-1">
+		<meta http-equiv="Content-Type" content="text/html; ISO-8859-1">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link href="/npa-documentation/css/npaDocumentation.css" rel="stylesheet">
+		<title>IconPicker - npaUi Component</title>
+	</head>
+	<body>
+
+		<h1>IconPicker &mdash; npaUi Component</h1>
+
+		<h2>Overview</h2>
+
+		The <b>IconPicker</b> is provided by the <b>npa.ui.icon.picker</b> plugin under the <code>npaIconPicker</code> namespace.
+		It behaves like an HTML file selector: a read-only field displays the path of the selected icon, with a 16x16 (or 32x32) preview, and a
+		<b>Browse...</b> button opens a modal dialog presenting the available icons visually.
+		Sub-directories of the plugin's <code>htdocs/img</code> folder are displayed as folders: click a folder to open it, use the breadcrumb or the
+		parent button to go back. A filter field narrows the icons displayed in the current folder.
+		Double-click an icon to select it immediately.
+
+		<h2>Icon packs</h2>
+
+		Icons are discovered <b>dynamically</b> at runtime by scanning the <code>htdocs/img</code> folder of the plugin (<code>npa.ui.icon.picker_x.y.z/htdocs/img</code>).
+		To add an icon pack, simply drop a new folder (e.g. <code>htdocs/img/mypack</code>) containing icon files: no configuration file, manifest or code needs to be modified.
+		Supported file types: <code>png, gif, jpg, jpeg, svg, ico, webp</code>. The plugin initially ships the <code>silk</code> pack.
+		Selected values are public URIs such as <code>/npaIconPicker/img/silk/application.png</code>.
+
+		<h2>Configuration</h2>
+
+		<table>
+			<tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+			<tr><td><code>value</code></td><td>string</td><td><code>""</code></td><td>Initial icon path</td></tr>
+			<tr><td><code>previewSize</code></td><td>number</td><td><code>16</code></td><td>Size of the preview in pixels: <code>16</code> or <code>32</code></td></tr>
+			<tr><td><code>placeholder</code></td><td>string</td><td>localized default</td><td>Text (or <code>@key</code>) displayed when no icon is selected</td></tr>
+		</table>
+
+		<h2>Example Configuration</h2>
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"id"</span>: <span style="color:#3469e3;">"myIcon"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"npaIconPicker.IconPicker"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"version"</span>: <span style="color:#3469e3;">"1.0.0"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"configuration"</span>: {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"value"</span>: <span style="color:#3469e3;">"/npaIconPicker/img/silk/application.png"</span>,<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#3469e3;">"previewSize"</span>: 16<br>
+		&nbsp;&nbsp;}<br>
+		}
+		</div>
+
+		<h2>JavaScript API</h2>
+
+		<table>
+			<tr><th>Method</th><th>Description</th></tr>
+			<tr><td><code>getValue()</code></td><td>Returns the selected icon path (empty string if none)</td></tr>
+			<tr><td><code>setValue(path, notify=false)</code></td><td>Sets the icon path, updates the preview; calls the change listeners when <code>notify</code> is true</td></tr>
+			<tr><td><code>onChange(callback)</code></td><td>Registers a listener called with the new value each time the user changes the selection</td></tr>
+			<tr><td><code>setEnabled(boolean)</code></td><td>Enables or disables the Browse and Clear buttons</td></tr>
+			<tr><td><code>open()</code></td><td>Opens the selection dialog programmatically</td></tr>
+		</table>
+
+		<h2>Usage in a dynamic APAF application</h2>
+
+		<div class="code">
+		let card = $apaf('genericApplicationsCard');<br>
+		card.setContent('&lt;div id="iconDiv" class="user-app" data-ref="myIcon"&gt;&lt;/div&gt;');<br>
+		npaUi.registerComponentConfig('myIcon', { id: 'myIcon', type: 'npaIconPicker.IconPicker', version: '1.0.0', configuration: {} });<br>
+		npaUi.render('user-app');<br>
+		// later: npaUi.getComponent('myIcon').getValue()
+		</div>
+
+		<h2>REST API</h2>
+
+		<table>
+			<tr><th>Method</th><th>URI</th><th>Description</th></tr>
+			<tr><td>GET</td><td><code>/npaIconPickerApis/icons?path=&lt;folder&gt;</code></td><td>Lists the sub-folders and icon files of <code>htdocs/img/&lt;folder&gt;</code>. The <code>path</code> parameter is relative to <code>htdocs/img</code> (default: root). Paths trying to leave <code>htdocs/img</code> are rejected with status 400.</td></tr>
+		</table>
+
+		<h2>Extension point</h2>
+
+		The component is registered through the <code>npa.ui.tools.core.component</code> extension point with namespace <code>npaIconPicker</code> and name <code>IconPicker</code>.
+
+	</body>
+</html>

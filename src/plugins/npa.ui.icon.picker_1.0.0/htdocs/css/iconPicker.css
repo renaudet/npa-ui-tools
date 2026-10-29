@@ -1,0 +1,90 @@
+/*
+ * iconPicker.css - NPA UI Tools Icon Picker component
+ * Copyright 2026 Nicolas Renaudet - All rights reserved
+ */
+.npa-icon-picker .npa-icon-picker-preview {
+	min-width: 40px;
+	justify-content: center;
+	background-color: #ffffff;
+}
+.npa-icon-picker input[readonly] {
+	background-color: #f7f8fa;
+}
+.npa-icon-picker-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+.npa-icon-picker-crumbs {
+	flex: 1 1 auto;
+	font-size: 13px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.npa-icon-picker-crumb {
+	color: #3b82d4;
+	cursor: pointer;
+}
+.npa-icon-picker-crumb:hover {
+	text-decoration: underline;
+}
+.npa-icon-picker-crumb.active {
+	color: #1f2328;
+	cursor: default;
+	font-weight: 600;
+	text-decoration: none;
+}
+.npa-icon-picker-crumb-sep {
+	color: #57606a;
+	padding: 0 4px;
+}
+.npa-icon-picker-filter {
+	flex: 0 0 200px;
+	width: 200px;
+}
+.npa-icon-picker-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	min-height: 260px;
+	align-content: flex-start;
+}
+.npa-icon-picker-item {
+	width: 96px;
+	padding: 6px 4px;
+	text-align: center;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.npa-icon-picker-item:hover {
+	background-color: #f0f4ff;
+	border-color: #e5e7eb;
+}
+.npa-icon-picker-item.selected {
+	background-color: #dbeafe;
+	border-color: #3b82d4;
+}
+.npa-icon-picker-name {
+	font-size: 11px;
+	line-height: 1.2;
+	margin-top: 4px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.npa-icon-picker-empty {
+	width: 100%;
+	padding: 40px 0;
+	text-align: center;
+	color: #57606a;
+}
+.npa-icon-picker-footer .npa-icon-picker-selection {
+	flex: 1 1 auto;
+	font-size: 13px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

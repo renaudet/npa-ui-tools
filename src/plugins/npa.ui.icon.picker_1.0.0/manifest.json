@@ -1,0 +1,83 @@
+{
+  "id": "npa.ui.icon.picker",
+  "name": "Icon Picker component for NPA UI Tools",
+  "version": "1.0.0",
+  "plugin": "plugin.js",
+  "requires": [
+  	{"type": "plugin","id": "npa.core","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.logging","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.http","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.ui.locale","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.ui.tools.core","version": "1.0.0"},
+  	{"type": "plugin","id": "npa.documentation","version": "1.0.0"}
+  ],
+  "extends": [
+  	{
+  		"point": "npa.log.provider",
+  		"id": "npa.ui.icon.picker.logger",
+  		"dir": "npa.ui.icon.picker"
+  	},
+  	{
+  		"point": "npa.http.router",
+  		"id": "npa.ui.icon.picker.router",
+  		"path": "/npaIconPickerApis"
+  	},
+  	{
+  		"point": "npa.http.static",
+  		"id": "npa.ui.icon.picker.htdocs",
+  		"path": "/npaIconPicker",
+  		"localDir": "htdocs"
+  	},
+  	{
+  		"point": "npa.http.handler",
+  		"id": "npa.ui.icon.picker.icons.handler",
+  		"router": "npa.ui.icon.picker.router",
+  		"method": "GET",
+  		"schema": "/icons",
+  		"handler": "getIconsHandler",
+  		"description": "List the sub-folders and icon files located in the plugin's htdocs/img folder. Optional query parameter: path (relative folder, default: root)",
+  		"input": ""
+  	},
+  	{
+  		"point": "npa.ui.tools.core.component",
+  		"id": "npa.ui.icon.picker.component",
+  		"namespace": "npaIconPicker",
+  		"name": "IconPicker",
+  		"version": "1.0.0",
+  		"dependency": "/npaIconPicker/js/iconPicker.js"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.icon.picker.locale.provider.enUS",
+  		"path": "i18n/npa_ui_icon_picker_en-US.locale",
+  		"locale": "en-US"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.icon.picker.locale.provider.en",
+  		"path": "i18n/npa_ui_icon_picker_en-US.locale",
+  		"locale": "en"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.icon.picker.locale.provider.frFR",
+  		"path": "i18n/npa_ui_icon_picker_fr-FR.locale",
+  		"locale": "fr-FR"
+  	},
+  	{
+  		"point": "npa.ui.locale.provider",
+  		"id": "npa.ui.icon.picker.locale.provider.fr",
+  		"path": "i18n/npa_ui_icon_picker_fr-FR.locale",
+  		"locale": "fr"
+  	},
+  	{
+  		"point": "npa.documentation.page",
+  		"id": "npa.ui.icon.picker.doc",
+  		"label": "IconPicker",
+  		"category": "NPA UI Tools",
+  		"subcategory": "Components",
+  		"url": "/npaIconPicker/docs/npaUiIconPicker.html"
+  	}
+  ],
+  "provides": []
+}

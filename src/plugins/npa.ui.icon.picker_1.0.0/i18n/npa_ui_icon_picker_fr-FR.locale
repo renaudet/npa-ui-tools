@@ -1,0 +1,13 @@
+npa.ui.icon.picker.button.browse=Parcourir...
+npa.ui.icon.picker.button.ok=Ok
+npa.ui.icon.picker.button.cancel=Annuler
+npa.ui.icon.picker.button.clear=Effacer
+npa.ui.icon.picker.dialog.title=S&eacute;lectionner une ic&ocirc;ne
+npa.ui.icon.picker.dialog.root=Ic&ocirc;nes
+npa.ui.icon.picker.dialog.up=Dossier parent
+npa.ui.icon.picker.dialog.filter=Filtrer par nom...
+npa.ui.icon.picker.dialog.empty=Aucune ic&ocirc;ne dans ce dossier
+npa.ui.icon.picker.dialog.error=Impossible de lister les ic&ocirc;nes
+npa.ui.icon.picker.dialog.selected=S&eacute;lection :
+npa.ui.icon.picker.dialog.none=(aucune)
+npa.ui.icon.picker.placeholder=Aucune ic&ocirc;ne s&eacute;lectionn&eacute;e

@@ -1,0 +1,13 @@
+npa.ui.icon.picker.button.browse=Browse...
+npa.ui.icon.picker.button.ok=Ok
+npa.ui.icon.picker.button.cancel=Cancel
+npa.ui.icon.picker.button.clear=Clear
+npa.ui.icon.picker.dialog.title=Select an icon
+npa.ui.icon.picker.dialog.root=Icons
+npa.ui.icon.picker.dialog.up=Parent folder
+npa.ui.icon.picker.dialog.filter=Filter by name...
+npa.ui.icon.picker.dialog.empty=No icon found in this folder
+npa.ui.icon.picker.dialog.error=Unable to list the icons
+npa.ui.icon.picker.dialog.selected=Selected:
+npa.ui.icon.picker.dialog.none=(none)
+npa.ui.icon.picker.placeholder=No icon selected
