@@ -76,6 +76,21 @@
 		// later: npaUi.getComponent('myIcon').getValue()
 		</div>
 
+		<h2>Usage as a Form field ('icon' datatype)</h2>
+
+		The plugin also contributes a specialized pluggable field editor for the <code>Form</code> component (<code>npaUiCore.Form</code>) for fields of type <code>icon</code>:
+
+		<div class="code">
+		{<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"name"</span>: <span style="color:#3469e3;">"icon"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"label"</span>: <span style="color:#3469e3;">"Icon"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"type"</span>: <span style="color:#3469e3;">"icon"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"placeholder"</span>: <span style="color:#3469e3;">"@npa.ui.icon.picker.placeholder"</span>,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"previewSize"</span>: 16,<br>
+		&nbsp;&nbsp;<span style="color:#3469e3;">"help"</span>: <span style="color:#3469e3;">"Select an icon"</span><br>
+		}
+		</div>
+
 		<h2>REST API</h2>
 
 		<table>
@@ -83,9 +98,12 @@
 			<tr><td>GET</td><td><code>/npaIconPickerApis/icons?path=&lt;folder&gt;</code></td><td>Lists the sub-folders and icon files of <code>htdocs/img/&lt;folder&gt;</code>. The <code>path</code> parameter is relative to <code>htdocs/img</code> (default: root). Paths trying to leave <code>htdocs/img</code> are rejected with status 400.</td></tr>
 		</table>
 
-		<h2>Extension point</h2>
+		<h2>Extension points</h2>
 
-		The component is registered through the <code>npa.ui.tools.core.component</code> extension point with namespace <code>npaIconPicker</code> and name <code>IconPicker</code>.
+		<ul>
+			<li><code>npa.ui.tools.core.component</code>: Registers the standalone component with namespace <code>npaIconPicker</code> and name <code>IconPicker</code>.</li>
+			<li><code>npa.ui.tools.core.editor</code>: Registers the pluggable form field editor for datatype <code>icon</code> with class <code>npaIconPicker.IconFormFieldEditor</code>.</li>
+		</ul>
 
 	</body>
 </html>

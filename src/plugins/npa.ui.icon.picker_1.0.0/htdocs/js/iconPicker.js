@@ -35,6 +35,7 @@ npaIconPicker.IconPicker = class IconPicker extends NpaUiComponent{
 
 	render(then){
 		if(this.parentDiv().data('loaded')!='true'){
+			this.parentDiv().data('loaded','true');
 			let config = this.getConfiguration() || {};
 			let size = (config.previewSize==32)?32:16;
 			let placeholder = this.getLocalizedString(config.placeholder?config.placeholder:'@npa.ui.icon.picker.placeholder');

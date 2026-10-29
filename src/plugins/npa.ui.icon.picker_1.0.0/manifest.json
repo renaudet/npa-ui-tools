@@ -47,6 +47,17 @@
   		"dependency": "/npaIconPicker/js/iconPicker.js"
   	},
   	{
+  		"point": "npa.ui.tools.core.editor",
+  		"id": "npa.ui.icon.picker.field.editor",
+  		"datatype": "icon",
+  		"libraries": [
+  			{"type": "css","uri": "/npaIconPicker/css/iconPicker.css"},
+  			{"type": "js","uri": "/npaIconPicker/js/iconPicker.js"},
+  			{"type": "js","uri": "/npaIconPicker/js/editors/iconFormFieldEditor.js"}
+  		],
+  		"editor": "npaIconPicker.IconFormFieldEditor"
+  	},
+  	{
   		"point": "npa.ui.locale.provider",
   		"id": "npa.ui.icon.picker.locale.provider.enUS",
   		"path": "i18n/npa_ui_icon_picker_en-US.locale",
